@@ -1,0 +1,1 @@
+C:\libxl\package-windows\examples\c#\vs2019\generate\bin\Debug\generate.exe.config
