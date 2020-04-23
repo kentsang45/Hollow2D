@@ -130,7 +130,7 @@ bool RockParticle::Init()
 	m_pMesh->SetPivot(0.5f, 0.5f, 0.f);
 
 
-	int speed = RandomNumber::GetRandomNumber(300, 500);
+	int speed = RandomNumber::GetRandomNumber(200, 600);
 
 	m_pMovement->SetMoveSpeed((float)speed);
 
@@ -213,7 +213,7 @@ void RockParticle::Update(float fTime)
 		ClearGravity();
 		m_fGravitySpeed = 5.f;
 
-		m_fCurrentForce = RandomNumber::GetRandomNumber(0, 200);
+		m_fCurrentForce = RandomNumber::GetRandomNumber(10, 300);
 
 		m_fForce = m_fCurrentForce;
 

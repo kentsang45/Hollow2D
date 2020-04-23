@@ -23,6 +23,9 @@ Grass::Grass()
 	: m_pMesh(nullptr)
 	, m_pAnimation(nullptr)
 	, m_pBody(nullptr)
+	, m_strIdleName("GRASS_")
+	, m_strMoveName("GRASS_")
+	, m_strDeathName("GRASS_")
 {
 }
 
@@ -67,16 +70,11 @@ bool Grass::Init()
 	m_pMesh->SetRelativeScale(200.f, 200.f, 1.f);
 	m_pMesh->SetPivot(0.5f, 0.5f, 0.f);
 
-	m_pAnimation->AddAnimation2DSequence("GRASS_1_IDLE");
-	m_pAnimation->AddAnimation2DSequence("GRASS_1_MOVE");
-	m_pAnimation->AddAnimation2DSequence("GRASS_1_DEATH");
 
-	m_pMesh->SetAnimation2D(m_pAnimation);
 
 
 	SetRoot(m_pMesh);
 
-	m_pAnimation->ChangeAnimation("GRASS_1_IDLE");
 
 	return true;
 }
@@ -97,14 +95,14 @@ void Grass::Update(float fTime)
 
 	if (true == m_pAnimation->IsSequenceEnd() && m_bIsOn == true)
 	{
-		m_pAnimation->ChangeAnimation("GRASS_1_MOVE");
+		ChangeAnimation(2);
 		m_bIsOn = false;
 		return;
 	}
 
 	if (true == m_pAnimation->IsSequenceEnd() && m_bIsOn == false)
 	{
-		m_pAnimation->ChangeAnimation("GRASS_1_IDLE");
+		ChangeAnimation(1);
 		m_bIsOn = false;
 	}
 
@@ -119,8 +117,37 @@ void Grass::Render(float fTime)
 
 
 
-void Grass::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY)
+void Grass::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyle)
 {
+	m_iStyle = iStyle;
+
+	char number[20];
+	itoa(iStyle, number, 20);
+
+
+	m_strIdleName.append(number);
+	m_strIdleName.append("_IDLE");
+
+	m_strMoveName.append(number);
+	m_strMoveName.append("_MOVE");
+
+	m_strDeathName.append(number);
+	m_strDeathName.append("_DEATH");
+
+
+
+
+	m_pAnimation->AddAnimation2DSequence(m_strIdleName);
+	m_pAnimation->AddAnimation2DSequence(m_strMoveName);
+	m_pAnimation->AddAnimation2DSequence(m_strDeathName);
+
+	m_pMesh->SetAnimation2D(m_pAnimation);
+
+
+
+
+
+
 	// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
 	float X = (sizeX * 50.f) * 0.5f + leftTopX * 50.f;
 	float Y = (sizeY * 50.f) * 0.5f + leftTopY * 50.f;
@@ -131,6 +158,13 @@ void Grass::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY)
 	// m_pBody->SetRelativePos(X, -Y, 0.f);
 	SetRelativePos(X, -Y, -1.f);
 	m_pBody->SetRelativePos(0.f, 0.f, 1.f);
+
+
+
+	m_pAnimation->ChangeAnimation(m_strIdleName);
+
+
+
 }
 
 
@@ -149,7 +183,7 @@ void Grass::BeginOverlap(CColliderBase * pSrc, CColliderBase * pDest, float fTim
 
 	else
 	{
-		m_pAnimation->ChangeAnimation("GRASS_1_MOVE");
+		ChangeAnimation(2);
 	}
 }
 
@@ -193,15 +227,36 @@ void Grass::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 
 
-
-		m_pAnimation->ChangeAnimation("GRASS_1_DEATH");
+		ChangeAnimation(3);
 		m_bDead = true;
 	}
 	else
 	{
-		m_pAnimation->ChangeAnimation("GRASS_1_MOVE");
+		ChangeAnimation(2);
 		m_bIsOn = true;
 	}
 
 
+}
+
+void Grass::ChangeAnimation(int iAnim)
+{
+	switch(iAnim)
+	{
+	case 1:
+		m_pAnimation->ChangeAnimation(m_strIdleName);
+		break;
+
+	case 2:
+		m_pAnimation->ChangeAnimation(m_strMoveName);
+		break;
+
+	case 3:
+		m_pAnimation->ChangeAnimation(m_strDeathName);
+		break;
+
+	default:
+		BOOM;
+		break;
+	}
 }

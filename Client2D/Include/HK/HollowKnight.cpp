@@ -623,6 +623,20 @@ void HollowKnight::MoveX(float fScale, float fTime)
 			return;
 		}
 	}
+	else
+	{
+		if (-1.f == fScale && DIR_RIGHT == m_eDirType)
+		{
+			m_eDirType = DIR_LEFT;
+			Reverse(fTime);
+		}
+		else if (1.f == fScale && DIR_LEFT == m_eDirType)
+		{
+			m_eDirType = DIR_RIGHT;
+			Reverse(fTime);
+		}
+
+	}
 	
 
 	///////////////////////////////////////////////////////////////////////////

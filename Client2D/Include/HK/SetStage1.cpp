@@ -176,7 +176,7 @@ void HKMode::SetObject(int stageNumber)
 	{
 	case 1:
 		grass1 = m_pScene->SpawnObject<Grass>();
-		grass1->PlaceAt(4, 4, 79, 18);
+		grass1->PlaceAt(4, 4, 79, 18, 2);
 
 		// 93, 24
 		statue1 = m_pScene->SpawnObject<Statue>();

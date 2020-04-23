@@ -82,7 +82,7 @@ bool SmallBug::Init()
 
 
 
-
+	m_fGravitySpeed = 5.f;
 
 	m_pBody->SetMonster(true);
 
@@ -147,18 +147,6 @@ void SmallBug::Update(float fTime)
 		return;
 	}
 
-	if (true == m_bTurn)
-	{
-		Turn(fTime);
-		m_pMovement->SetMoveSpeed(140.f);
-		MoveX(fTime);
-		return;
-	}
-	else
-	{
-		m_pMovement->SetMoveSpeed(150.f);
-		MoveX(fTime);
-	}
 
 
 
@@ -234,6 +222,7 @@ void SmallBug::Update(float fTime)
 		}
 
 		JumpBack(fTime);
+		return;
 	}
 	else if (BS_DEAD != m_eState)
 	{
@@ -249,6 +238,25 @@ void SmallBug::Update(float fTime)
 
 
 
+
+
+
+
+	if (0 < m_iHP)
+	{
+		if (true == m_bTurn && true == m_bOnLand)
+		{
+			Turn(fTime);
+			m_pMovement->SetMoveSpeed(150.f);
+			MoveX(fTime);
+			return;
+		}
+		else
+		{
+			m_pMovement->SetMoveSpeed(150.f);
+			MoveX(fTime);
+		}
+	}
 
 
 
@@ -365,7 +373,37 @@ void SmallBug::MoveBack(float fTime)
 
 void SmallBug::JumpBack(float fTime)
 {
-	Bug::JumpBack(fTime);
+	if (false == m_bJumping)
+	{
+		m_pMovement->SetMoveSpeed(m_fMoveSpeed);
+
+		// 죽을때 항상 일정하게 날아간다.
+		ClearGravity();
+		m_fGravitySpeed = 10.f;
+
+		// 땅 위에서만
+		if (DIR_RIGHT == m_eDir)
+		{
+			m_fForce = m_fCurrentForce;
+		}
+		else
+		{
+			m_fForce = -10.f;
+		}
+
+		// 큰 먼지 생성
+		// DustEffect* dust = m_pScene->SpawnObject<DustEffect>(
+		//	GetWorldPos() - Vector3(0.f, 400.f * 0.2f, 0.f));
+		// dust->SetStaticSize(200.f);
+		// SAFE_RELEASE(dust);
+		m_bJumping = true;
+
+		m_bOnLand = false;
+	}
+
+
+	m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * m_eMoveBackDir);
+
 }
 
 void SmallBug::JumpEnd(float fTime)
@@ -504,7 +542,6 @@ void SmallBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		SAFE_RELEASE(attack);
 
 		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
-
 		m_eMoveBackDir = player->GetDirection();
 
 		m_iHP -= 1;
@@ -523,6 +560,8 @@ void SmallBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 			m_bLandPhysics = true;
 			m_bJumping = false;
 			SetCurrentState(BS_DIE);
+
+			SetWorldRotationZ(0.f);
 
 			m_pBody->SetMonster(false);
 			return;

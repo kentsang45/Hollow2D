@@ -17,10 +17,13 @@ public:
 	virtual void Render(float fTime);
 
 
-	void PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY);
+	void PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyle);
 
 	void BeginOverlap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+
+	void ChangeAnimation(int iAnim);
+
 
 private:
 	class CStaticMeshComponent* m_pMesh;
@@ -33,6 +36,12 @@ private:
 
 	bool m_bIsOn = false;
 	bool m_bDead = false;
+
+	int m_iStyle = 0;
+
+	string m_strIdleName;
+	string m_strMoveName;
+	string m_strDeathName;
 };
 
 

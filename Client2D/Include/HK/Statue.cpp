@@ -71,7 +71,7 @@ bool Statue::Init()
 	m_pMesh->SetMaterial(pMaterial);
 	SAFE_RELEASE(pMaterial);
 
-	int style = RandomNumber::GetRandomNumber(2, 8);
+	int style = RandomNumber::GetRandomNumber(3, 8);
 
 
 	// TEST

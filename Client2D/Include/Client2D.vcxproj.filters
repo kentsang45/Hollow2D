@@ -73,6 +73,9 @@
     <Filter Include="HK\04. Object\06. Statue">
       <UniqueIdentifier>{83ddc702-869f-4a3a-a087-9281149adc8d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HK\04. Object\07. Pole">
+      <UniqueIdentifier>{d80de54f-5ae2-41cc-ad6d-d8f50e66b526}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">

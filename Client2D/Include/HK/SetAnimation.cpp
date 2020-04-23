@@ -780,6 +780,178 @@ void HKMode::SetUI()
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_1_DEATH", Vector2(0.f, 0.f),
 		Vector2(200.f, 200.f));
 
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_2_IDLE", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS2/grass2_idle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_2_IDLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_2_IDLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_2_IDLE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+
+	frameCount = 3;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_2_MOVE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS2/grass2_move%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_2_MOVE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_2_MOVE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_2_MOVE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_2_DEATH", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS2/grass_02_death%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_2_DEATH%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_2_DEATH", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_2_DEATH", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_3_IDLE", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS3/grass3_idle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_3_IDLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_3_IDLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_3_IDLE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+
+	frameCount = 3;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_3_MOVE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS3/grass3_move%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_3_MOVE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_3_MOVE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_3_MOVE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_3_DEATH", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS3/grass_03_death%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_3_DEATH%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_3_DEATH", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_3_DEATH", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_4_IDLE", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS4/grass4_idle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_4_IDLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_4_IDLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_4_IDLE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+
+	frameCount = 3;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_4_MOVE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS4/grass4_move%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_4_MOVE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_4_MOVE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_4_MOVE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_4_DEATH", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS4/grass_04_death%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_4_DEATH%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_4_DEATH", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_4_DEATH", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	////////////////////////////////////////////////////////////////////////////////////////////////////// GRASS
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_5_IDLE", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS5/grass5_idle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_5_IDLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_5_IDLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_5_IDLE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+
+	frameCount = 3;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_5_MOVE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS5/grass5_move%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_5_MOVE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_5_MOVE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_5_MOVE", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("GRASS_5_DEATH", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/GRASS5/grass_05_death%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "GRASS_5_DEATH%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("GRASS_5_DEATH", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("GRASS_5_DEATH", Vector2(0.f, 0.f),
+		Vector2(200.f, 200.f));
+
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////// STATUE
