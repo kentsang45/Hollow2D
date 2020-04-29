@@ -76,6 +76,9 @@
     <Filter Include="HK\04. Object\07. Pole">
       <UniqueIdentifier>{d80de54f-5ae2-41cc-ad6d-d8f50e66b526}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HK\03. Effect\03. FalseKing">
+      <UniqueIdentifier>{bfc39c44-25f1-4a7f-ba69-7d4d02497431}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -264,6 +267,39 @@
     <ClCompile Include="HK\SmallBug.cpp">
       <Filter>HK\04. Object\01. Bug</Filter>
     </ClCompile>
+    <ClCompile Include="HK\Cart.cpp">
+      <Filter>HK\04. Object\06. Statue</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\FlyingBug.cpp">
+      <Filter>HK\04. Object\01. Bug</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BarrelParticle.cpp">
+      <Filter>HK\04. Object\06. Statue</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\FalseKing.cpp">
+      <Filter>HK\04. Object\01. Bug</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\MightyEffect.cpp">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\PowerWave.cpp">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BloodDust.cpp">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\Blob.cpp">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\FireBarrel.cpp">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BabyFace.cpp">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\WhiteBall.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -442,6 +478,39 @@
     </ClInclude>
     <ClInclude Include="HK\SmallBug.h">
       <Filter>HK\04. Object\01. Bug</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Cart.h">
+      <Filter>HK\04. Object\06. Statue</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\FlyingBug.h">
+      <Filter>HK\04. Object\01. Bug</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BarrelParticle.h">
+      <Filter>HK\04. Object\06. Statue</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\FalseKing.h">
+      <Filter>HK\04. Object\01. Bug</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\MightyEffect.h">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\PowerWave.h">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BloodDust.h">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Blob.h">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\FireBarrel.h">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BabyFace.h">
+      <Filter>HK\03. Effect\03. FalseKing</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\WhiteBall.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -116,9 +116,14 @@ void FireBall::Start(float fTime, const Vector3 & vPos)
 
 void FireBall::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	FireBallHit* hit = m_pScene->SpawnObject<FireBallHit>(pSrc->GetIntersect() + Vector3(0.f, 0.f, -0.5f));
+	if (false == pDest->IsStage())
+	{
+		FireBallHit* hit = m_pScene->SpawnObject<FireBallHit>(pSrc->GetIntersect() + Vector3(0.f, 0.f, -0.5f));
+		SAFE_RELEASE(hit);
+	}
+	
 
-	SAFE_RELEASE(hit);
+
 }
 
 CColliderRect * FireBall::GetBody() const

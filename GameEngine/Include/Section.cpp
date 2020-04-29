@@ -67,46 +67,127 @@ void CSection::Collision(float fTime)
 			{
 				if (eSrcType != CT_IGNORE || eDestType != CT_IGNORE)
 				{
-					if (pSrc->Collision(pDest))
+					///////////////////////////////////////////////////////////
+					///////////////////////////////////////////////////////////
+					///////////////////////////////////////////////////////////
+					// MK::PLAYER_VERSION
+
+					if (true == pSrc->IsPlayer())
 					{
-						// 처음 충돌되는지 계속 충될되고 있었는지를 판단한다.
-						// 처음 충돌될때
-						if (!pSrc->IsCollisionList(pDest))
+						if (pSrc->Collision(pDest))
 						{
-							if (true == pSrc->IsOn() && true == pDest->IsOn())
+							// 있으면 다시 넣지 않는다.
+							// 없으면 넣음
+							if (false == pSrc->IsCollisionList(pDest))
 							{
 								pSrc->AddCollisionList(pDest);
 								pDest->AddCollisionList(pSrc);
-
-								pSrc->CallBlock(pDest, fTime);
-								pDest->CallBlock(pSrc, fTime);
-
-								if (pSrc->IsOverlap())
-									pSrc->CallBeginOverlap(pDest, fTime);
-
-								if (pDest->IsOverlap())
-									pDest->CallBeginOverlap(pSrc, fTime);
 							}
-						}
 
-						pSrc->AddCurrentFrameCollision(pDest);
-						pDest->AddCurrentFrameCollision(pSrc);
-					}
+							
+							// 항상 콜백 호출
+							pSrc->CallBlock(pDest, fTime);
+							pDest->CallBlock(pSrc, fTime);
 
-					else
-					{
-						// 충돌되다가 지금 떨어질 경우
-						if (pSrc->IsCollisionList(pDest))
-						{
-							pSrc->DeleteCollisionList(pDest);
-							pDest->DeleteCollisionList(pSrc);
+
+							pSrc->IsColliding(true);
+							
+		
 
 							if (pSrc->IsOverlap())
-								pSrc->CallEndOverlap(pDest, fTime);
+								pSrc->CallBeginOverlap(pDest, fTime);
 
 							if (pDest->IsOverlap())
-								pDest->CallEndOverlap(pSrc, fTime);
+								pDest->CallBeginOverlap(pSrc, fTime);
 						}
+						// 충돌 중이 아니다.
+						else
+						{
+							// 충돌되다가 지금 떨어질 경우
+							if (pSrc->IsCollisionList(pDest))
+							{
+								pSrc->DeleteCollisionList(pDest);
+								pDest->DeleteCollisionList(pSrc);
+
+								if (true == pDest->IsPlayer() || true == pSrc->IsPlayer())
+								{
+									int a = 0;
+								}
+
+								if (pSrc->IsOverlap())
+								{
+									pSrc->CallEndOverlap(pDest, fTime);
+									pSrc->IsColliding(false);
+								}
+
+								if (pDest->IsOverlap())
+								{
+									pDest->CallEndOverlap(pSrc, fTime);
+								}
+							}
+						}
+					}
+					else
+					{
+						////////////////////////////////////////////////////////////////////////////////
+					////////////////////////////////////////////////////////////////////////////////
+					//////////////////////////////////////////////////////////////////////////////// 보통 충돌
+
+					// 충돌 되었다면
+						if (pSrc->Collision(pDest))
+						{
+							// 처음 충돌되는지 계속 충될되고 있었는지를 판단한다.
+							// 리스트에 들어있지 않으면 처음 충돌
+							if (!pSrc->IsCollisionList(pDest))
+							{
+								if (true == pSrc->IsOn() && true == pDest->IsOn())
+								{
+
+									pSrc->AddCollisionList(pDest);
+									pDest->AddCollisionList(pSrc);
+
+									pSrc->CallBlock(pDest, fTime);
+									pDest->CallBlock(pSrc, fTime);
+
+									if (pSrc->IsOverlap())
+										pSrc->CallBeginOverlap(pDest, fTime);
+
+									if (pDest->IsOverlap())
+										pDest->CallBeginOverlap(pSrc, fTime);
+								}
+							}
+
+							pSrc->AddCurrentFrameCollision(pDest);
+							pDest->AddCurrentFrameCollision(pSrc);
+						}
+
+						else
+						{
+							// 충돌되다가 지금 떨어질 경우
+							if (pSrc->IsCollisionList(pDest))
+							{
+								pSrc->DeleteCollisionList(pDest);
+								pDest->DeleteCollisionList(pSrc);
+
+								if (true == pDest->IsPlayer() || true == pSrc->IsPlayer())
+								{
+									int a = 0;
+								}
+
+								if (pSrc->IsOverlap())
+								{
+
+									pSrc->CallEndOverlap(pDest, fTime);
+								}
+
+								if (pDest->IsOverlap())
+								{
+									pDest->CallEndOverlap(pSrc, fTime);
+								}
+							}
+					}
+
+					
 					}
 				}
 			}

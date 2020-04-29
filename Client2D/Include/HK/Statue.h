@@ -17,7 +17,9 @@ public:
 	virtual void Render(float fTime);
 
 
-	void PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY);
+	void PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyle);
+	void ChangeAnimation(int iAnim);
+
 
 	void BeginOverlap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
@@ -39,6 +41,8 @@ private:
 
 	int m_iSizeX = 0;
 	int m_iSizeY = 0;
+
+	int m_iStyle = 0;
 };
 
 

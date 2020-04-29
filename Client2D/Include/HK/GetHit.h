@@ -18,6 +18,8 @@ public:
 
 	void Start(float fTime, const Vector3& vPos);
 
+	void SetAnimation(int style);
+
 private:
 	class CStaticMeshComponent* m_pMesh;
 	class CAnimation2D* m_pAnimation;

@@ -71,53 +71,22 @@ bool Statue::Init()
 	m_pMesh->SetMaterial(pMaterial);
 	SAFE_RELEASE(pMaterial);
 
-	int style = RandomNumber::GetRandomNumber(3, 8);
-
-
-	// TEST
-	//////////////////////////////////
-	style = 2;
-
-
-	// STATUE_08
-
-
-	char number[20];
-	
-	itoa(style, number, 20);
-
-	m_strAniName.append(number);
-	m_strBaseName.append(number);
-	m_strBaseName.append("_BASE");
-
 	
 
-	if (2 == style)
-	{
-		m_pMesh->SetRelativeScale(250.f, 281.f, 1.f);
-		m_pBody->SetExtent(250.f, 281.f);
-		m_iSizeX = 250;
-		m_iSizeY = 281;
-	}
-	else
-	{
-		m_pMesh->SetRelativeScale(250.f, 250.f, 1.f);
-		m_pBody->SetExtent(250.f, 250.f);
-		m_iSizeX = 250;
-		m_iSizeY = 250;
-	}
+
+	m_pMesh->SetRelativeScale(250.f, 250.f, 1.f);
+	m_pBody->SetExtent(200.f, 200.f);
+	m_iSizeX = 250;
+	m_iSizeY = 250;
+	
 
 	m_pBody->SetPivot(0.5f, 0.5f, 0.f);
 	m_pMesh->SetPivot(0.5f, 0.5f, 0.f);
 
-	m_pAnimation->AddAnimation2DSequence(m_strAniName);
-	m_pAnimation->AddAnimation2DSequence(m_strBaseName);
 
 
 
 	SetRoot(m_pMesh);
-
-	m_pAnimation->ChangeAnimation(m_strAniName);
 
 	return true;
 }
@@ -148,16 +117,82 @@ void Statue::Render(float fTime)
 
 
 
-void Statue::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY)
+void Statue::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyle)
 {
-	// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
-	float X = (m_iSizeX) * 0.5f + leftTopX * 50.f;
-	float Y = (m_iSizeY) * 0.5f + leftTopY * 50.f;
+	m_iStyle = iStyle;
 
-	// m_pMesh->SetRelativePos(X, -Y, -1.f);
-	// m_pBody->SetRelativePos(X, -Y, 0.f);
-	SetRelativePos(X, -Y, 0.f);
-	m_pBody->SetRelativePos(0.f, 0.f, 0.f);
+
+
+
+	char number[20];
+
+	itoa(m_iStyle, number, 20);
+
+	m_strAniName.append(number);
+	m_strBaseName.append(number);
+	m_strBaseName.append("_BASE");
+
+
+	m_pAnimation->AddAnimation2DSequence(m_strAniName);
+	m_pAnimation->AddAnimation2DSequence(m_strBaseName);
+
+	m_pMesh->SetAnimation2D(m_pAnimation);
+
+
+	if (2 == m_iStyle)
+	{
+		m_pMesh->SetRelativeScale(250.f, 281.f, 1.f);
+		m_pBody->SetExtent(200.f, 250.f);
+		m_iSizeX = 200;
+		m_iSizeY = 250;
+
+		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
+		float X = m_iSizeX * 0.5f + leftTopX * 50.f;
+		float Y = m_iSizeY * 0.5f + leftTopY * 50.f;
+
+		// m_pMesh->SetRelativePos(X, -Y, -1.f);
+		// m_pBody->SetRelativePos(X, -Y, 0.f);
+		SetRelativePos(X, -Y, 0.f);
+		m_pBody->SetRelativePos(0.f, 0.f, 0.f);
+
+		m_pAnimation->ChangeAnimation(m_strAniName);
+	}
+	else
+	{
+
+		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
+		float X = (200) * 0.5f + leftTopX * 50.f;
+		float Y = (200) * 0.5f + leftTopY * 50.f;
+
+		// m_pMesh->SetRelativePos(X, -Y, -1.f);
+		// m_pBody->SetRelativePos(X, -Y, 0.f);
+		SetRelativePos(X, -Y, 0.f);
+		m_pBody->SetRelativePos(0.f, 0.f, 0.f);
+
+		m_pAnimation->ChangeAnimation(m_strAniName);
+	}
+
+
+}
+
+void Statue::ChangeAnimation(int iAnim)
+{
+	switch (iAnim)
+	{
+	case 1:
+		m_pAnimation->ChangeAnimation(m_strAniName);
+		break;
+
+	case 2:
+		m_pAnimation->ChangeAnimation(m_strBaseName);
+		break;
+
+
+
+	default:
+		BOOM;
+		break;
+	}
 }
 
 
@@ -193,6 +228,7 @@ void Statue::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		HollowKnight* hk = (HollowKnight*)m_pScene->GetGameMode()->GetPlayer();
 		DIR_TYPE type = hk->GetDirection();
 
+	
 		for (int i = 0; i < 20; ++i)
 		{
 			int x = RandomNumber::GetRandomNumber(1, 200) - 100;
@@ -221,6 +257,7 @@ void Statue::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 
 		m_pAnimation->ChangeAnimation(m_strBaseName);
+
 		m_bDead = true;
 	}
 

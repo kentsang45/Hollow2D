@@ -38,6 +38,7 @@
 
 #include "Grass.h"
 #include "Statue.h"
+#include "Cart.h"
 
 #include <sstream>
 
@@ -45,6 +46,12 @@
 void HKMode::SetStage(int stageNumber)
 {
 	// HKTileMap* map = m_pScene->SpawnObject<HKTileMap>();
+
+	PlaceMonster(stageNumber);
+
+	
+
+
 
 	HKExcelManager* excel = new HKExcelManager;
 
@@ -60,6 +67,7 @@ void HKMode::SetStage(int stageNumber)
 		HKStage* stage4 = m_pScene->SpawnObject<HKStage>();
 		HKStage* stageF = m_pScene->SpawnObject<HKStage>();
 
+		SetObject(stageNumber);
 
 		switch (stageNumber)
 		{
@@ -71,7 +79,7 @@ void HKMode::SetStage(int stageNumber)
 			stage3->PlaceAt(1, 3);
 			stage4->PlaceAt(1, 4);
 			stageF->PlaceAt(1, 5);
-			SetObject(1);
+	
 			break;
 
 		case 2:
@@ -141,7 +149,29 @@ void HKMode::SetStage(int stageNumber)
 	}
 	else
 	{
-		excel->LoadStage(TEXT("Stage1.xls"), m_pScene);
+		switch (stageNumber)
+		{
+		case 1:
+			excel->LoadStage(TEXT("Stage1.xls"), m_pScene);
+			break;
+		case 2:
+			excel->LoadStage(TEXT("Stage2.xls"), m_pScene);
+			break;
+		case 3:
+			excel->LoadStage(TEXT("Stage3.xls"), m_pScene);
+			break;
+		case 4:
+			excel->LoadStage(TEXT("Stage4.xls"), m_pScene);
+			break;
+		case 5:
+			excel->LoadStage(TEXT("Stage5.xls"), m_pScene);
+			break;
+		default:
+			BOOM;
+			break;
+		}
+	
+		// SetObject(3);
 	}
 
 	delete excel;
@@ -170,34 +200,356 @@ void HKMode::SetStage(int stageNumber)
 void HKMode::SetObject(int stageNumber)
 {
 	Grass* grass1 = nullptr;
+	Grass* grass2 = nullptr;
+	Grass* grass3 = nullptr;
+	Grass* grass4 = nullptr;	
+	Grass* grass5 = nullptr;
+	Grass* grass6 = nullptr;
+	Grass* grass7 = nullptr;
+	Grass* grass8 = nullptr;
+	Grass* grass9 = nullptr;
+	Grass* grass10 = nullptr;
+	Grass* grass11 = nullptr;
+	Grass* grass12 = nullptr;
+	Grass* grass13 = nullptr;
+	Grass* grass14 = nullptr;
+	Grass* grass15 = nullptr;
+	Grass* grass16 = nullptr;
+	Grass* grass17 = nullptr;
+	Grass* grass18 = nullptr;
+	Grass* grass19 = nullptr;
+
+	Cart* cart1 = nullptr;
+	Cart* cart2 = nullptr;
+	Cart* cart3 = nullptr;
+	Cart* cart4 = nullptr;
+	Cart* cart5 = nullptr;
+	Cart* cart6 = nullptr;	
+	Cart* cart7 = nullptr;
+	Cart* cart8 = nullptr;
+	
+	
+	
 	Statue* statue1 = nullptr;
+	Statue* statue2 = nullptr;
+	Statue* statue3 = nullptr;
+	Statue* statue4 = nullptr;
 
-	switch (stageNumber)
+
+
+
+	bool setObject= true;
+
+	if (true == setObject)
 	{
-	case 1:
-		grass1 = m_pScene->SpawnObject<Grass>();
-		grass1->PlaceAt(4, 4, 79, 18, 2);
+		switch (stageNumber)
+		{
+		case 1:
+		{
+			grass1 = m_pScene->SpawnObject<Grass>();
+			grass1->PlaceAt(4, 4, 79, 18, 2);
 
-		// 93, 24
-		statue1 = m_pScene->SpawnObject<Statue>();
-		statue1->PlaceAt(4, 4, 93, 24);
+			grass2 = m_pScene->SpawnObject<Grass>();
+			grass2->PlaceAt(4, 4, 74, 18, 4);
+
+			grass3 = m_pScene->SpawnObject<Grass>();
+			grass3->PlaceAt(4, 4, 59, 18, 5);
+
+			grass4 = m_pScene->SpawnObject<Grass>();
+			grass4->PlaceAt(4, 4, 54, 18, 4);
+
+			grass5 = m_pScene->SpawnObject<Grass>();
+			grass5->PlaceAt(4, 4, 90, 18, 5);
+
+			grass6 = m_pScene->SpawnObject<Grass>();
+			grass6->PlaceAt(4, 4, 86, 23, 2);
+
+			grass7 = m_pScene->SpawnObject<Grass>();
+			grass7->PlaceAt(4, 4, 107, 26, 2);
+
+			grass8 = m_pScene->SpawnObject<Grass>();
+			grass8->PlaceAt(4, 4, 112, 26, 5);
+
+			grass9 = m_pScene->SpawnObject<Grass>();
+			grass9->PlaceAt(4, 4, 117, 26, 1);
+
+			grass10 = m_pScene->SpawnObject<Grass>();
+			grass10->PlaceAt(4, 4, 124, 15, 1);
+
+			grass11 = m_pScene->SpawnObject<Grass>();
+			grass11->PlaceAt(4, 4, 50, 30, 1);
+
+			//
+			grass12 = m_pScene->SpawnObject<Grass>();
+			grass12->PlaceAt(4, 4, 43, 19.5f, 1);
+			grass12->Reverse();
+
+			grass13 = m_pScene->SpawnObject<Grass>();
+			grass13->PlaceAt(4, 4, 34, 19.5f, 2);
+
+			grass14 = m_pScene->SpawnObject<Grass>();
+			grass14->PlaceAt(4, 4, 25, 19.5f, 4);
+			//
+			grass15 = m_pScene->SpawnObject<Grass>();
+			grass15->PlaceAt(4, 4, 17, 27, 2);
+
+			grass16 = m_pScene->SpawnObject<Grass>();
+			grass16->PlaceAt(4, 4, 12, 18, 4);
+			grass16->Reverse();
+
+			grass17 = m_pScene->SpawnObject<Grass>();
+			grass17->PlaceAt(4, 4, 4, 27, 1);
+
+			//////////////////////////////////
+
+			cart1 = m_pScene->SpawnObject<Cart>();
+			cart1->PlaceAt(4, 4, 38, 19.5f, 3);
+
+			////////////////////////////////// 93, 24
+			statue1 = m_pScene->SpawnObject<Statue>();
+			statue1->PlaceAt(4, 4, 93, 24, 4);
+
+			statue2 = m_pScene->SpawnObject<Statue>();
+			statue2->PlaceAt(4, 4, 102, 26, 7);
+
+			statue3 = m_pScene->SpawnObject<Statue>();
+			statue3->PlaceAt(4, 4, 9, 27, 4);
+
+			break;
+		}
+		case 2:
+		{
+			grass1 = m_pScene->SpawnObject<Grass>();
+			grass1->PlaceAt(4, 4, 0, 21, 2);
+
+			grass2 = m_pScene->SpawnObject<Grass>();
+			grass2->PlaceAt(4, 4, 11, 21, 5);
+
+			grass3 = m_pScene->SpawnObject<Grass>();
+			grass3->PlaceAt(4, 4, 16, 21, 5);
+
+			grass4 = m_pScene->SpawnObject<Grass>();
+			grass4->PlaceAt(4, 4, 23, 21, 1);
+
+			grass5 = m_pScene->SpawnObject<Grass>();
+			grass5->PlaceAt(4, 4, 22, 32, 3);
+
+			grass6 = m_pScene->SpawnObject<Grass>();
+			grass6->PlaceAt(4, 4, 90, 29, 3);
+			grass6->Reverse();
+
+			grass7 = m_pScene->SpawnObject<Grass>();
+			grass7->PlaceAt(4, 4, 93, 29, 4);
+			grass7->Reverse();
+
+			grass8 = m_pScene->SpawnObject<Grass>();
+			grass8->PlaceAt(4, 4, 99, 14, 2);
+			grass8->Reverse();
 
 
-		break;
-	case 2:
-		break;
-	case 3:
-		break;
-	case 4:
-		break;
-	case 5:
-		break;
-	default:
-		BOOM;
-		break;
+
+
+			statue1 = m_pScene->SpawnObject<Statue>();
+			statue1->PlaceAt(4, 4, 65, 29, 7);
+
+
+
+			break;
+		}
+		case 3:
+		{
+			grass1 = m_pScene->SpawnObject<Grass>();
+			grass1->PlaceAt(4, 4, 3, 14, 4);
+
+			grass2 = m_pScene->SpawnObject<Grass>();
+			grass2->PlaceAt(4, 4, 29, 16, 4);
+
+			grass3 = m_pScene->SpawnObject<Grass>();
+			grass3->PlaceAt(4, 4, 33, 16, 4);
+
+			grass4 = m_pScene->SpawnObject<Grass>();
+			grass4->PlaceAt(4, 4, 7, 25, 2);
+
+			grass5 = m_pScene->SpawnObject<Grass>();
+			grass5->PlaceAt(4, 4, 13, 25, 2);
+			grass5->Reverse();
+
+
+
+			grass6 = m_pScene->SpawnObject<Grass>();
+			grass6->PlaceAt(4, 4, 10, 32, 4);
+
+			grass7 = m_pScene->SpawnObject<Grass>();
+			grass7->PlaceAt(4, 4, 15, 32, 5);
+
+			grass8 = m_pScene->SpawnObject<Grass>();
+			grass8->PlaceAt(4, 4, 19, 32, 1);
+
+
+			grass9 = m_pScene->SpawnObject<Grass>();
+			grass9->PlaceAt(4, 4, 32, 39, 1);
+			grass9->Reverse();
+
+
+
+
+			grass10 = m_pScene->SpawnObject<Grass>();
+			grass10->PlaceAt(4, 4, 36, 51, 2);
+
+			grass11 = m_pScene->SpawnObject<Grass>();
+			grass11->PlaceAt(4, 4, 22, 53, 1);
+
+			grass12 = m_pScene->SpawnObject<Grass>();
+			grass12->PlaceAt(4, 4, 13, 58, 4);
+
+
+			grass13 = m_pScene->SpawnObject<Grass>();
+			grass13->PlaceAt(4, 4, 28, 63, 4);
+			
+
+			grass14 = m_pScene->SpawnObject<Grass>();
+			grass14->PlaceAt(4, 4, 22, 75, 3);
+
+
+
+
+			grass15 = m_pScene->SpawnObject<Grass>();
+			grass15->PlaceAt(4, 4, 7, 84, 1);
+
+			grass16 = m_pScene->SpawnObject<Grass>();
+			grass16->PlaceAt(4, 4, 5, 84, 1);
+			grass16->Reverse();
+
+			grass17 = m_pScene->SpawnObject<Grass>();
+			grass17->PlaceAt(4, 4, 1, 84, 5);
+
+			grass18 = m_pScene->SpawnObject<Grass>();
+			grass18->PlaceAt(4, 4, 28, 86, 4);
+
+			grass19 = m_pScene->SpawnObject<Grass>();
+			grass19->PlaceAt(4, 4, 10, 88, 3);
+
+
+
+
+
+
+			statue1 = m_pScene->SpawnObject<Statue>();
+			statue1->PlaceAt(4, 4, 30, 50, 6);
+		
+			statue2 = m_pScene->SpawnObject<Statue>();
+			statue2->PlaceAt(4, 4, 17, 53, 8);
+
+			statue3 = m_pScene->SpawnObject<Statue>();
+			statue3->PlaceAt(4, 4, 16, 69, 7);
+
+		
+		
+
+
+
+		
+			break; 
+		}	
+		case 4:
+		{
+			cart1 = m_pScene->SpawnObject<Cart>();
+			cart1->PlaceAt(4, 4, 48, 30, 3);
+
+			cart2 = m_pScene->SpawnObject<Cart>();
+			cart2->PlaceAt(4, 4, 60, 32, 3, false);
+			cart3 = m_pScene->SpawnObject<Cart>();
+			cart3->PlaceAt(4, 4, 58, 32, 4, false);
+			cart4 = m_pScene->SpawnObject<Cart>();
+			cart4->PlaceAt(4, 4, 55, 32, 2, false);
+
+			cart5 = m_pScene->SpawnObject<Cart>();
+			cart5->PlaceAt(4, 4, 38, 31, 4, false);
+
+			cart6 = m_pScene->SpawnObject<Cart>();
+			cart6->PlaceAt(4, 4, 71, 31, 4, false);
+
+			cart7 = m_pScene->SpawnObject<Cart>();
+			cart7->PlaceAt(4, 4, 74, 31, 4, false);
+
+
+			statue1 = m_pScene->SpawnObject<Statue>();
+			statue1->PlaceAt(4, 4, 126, 24, 4);
+
+			statue2 = m_pScene->SpawnObject<Statue>();
+			statue2->PlaceAt(4, 4, 116, 28, 2);
+
+			statue3 = m_pScene->SpawnObject<Statue>();
+			statue3->PlaceAt(4, 4, 79, 28, 2);
+
+			statue4 = m_pScene->SpawnObject<Statue>();
+			statue4->PlaceAt(4, 4, 43, 29, 3);
+
+
+			break;
+		}
+
+		case 5:
+		{
+			cart1 = m_pScene->SpawnObject<Cart>();
+			cart1->PlaceAt(4, 4, 81, 33, 4, false);
+
+			cart2 = m_pScene->SpawnObject<Cart>();
+			cart2->PlaceAt(4, 4, 72, 33, 2, false);
+
+			cart3 = m_pScene->SpawnObject<Cart>();
+			cart3->PlaceAt(4, 4, 13, 33, 3, false);
+
+			grass1 = m_pScene->SpawnObject<Grass>();
+			grass1->PlaceAt(4, 4, 18, 32.5f, 4);
+
+			grass2 = m_pScene->SpawnObject<Grass>();
+			grass2->PlaceAt(4, 4, 16, 32.5f, 2);
+
+			grass3 = m_pScene->SpawnObject<Grass>();
+			grass3->PlaceAt(4, 4, 7, 32.5f, 1);
+
+			break;
+		}
+		default:
+			BOOM;
+			break;
+		}
 	}
 
 
+
 	SAFE_RELEASE(grass1);
+	SAFE_RELEASE(grass2);
+	SAFE_RELEASE(grass3);
+	SAFE_RELEASE(grass4);
+	SAFE_RELEASE(grass5);
+	SAFE_RELEASE(grass6);
+	SAFE_RELEASE(grass7);
+	SAFE_RELEASE(grass8);
+	SAFE_RELEASE(grass9);
+	SAFE_RELEASE(grass10);
+	SAFE_RELEASE(grass11);
+	SAFE_RELEASE(grass12);
+	SAFE_RELEASE(grass13);
+	SAFE_RELEASE(grass14);
+	SAFE_RELEASE(grass15);
+	SAFE_RELEASE(grass16);
+	SAFE_RELEASE(grass17); 
+	SAFE_RELEASE(grass18); 
+	SAFE_RELEASE(grass19);
+
+	SAFE_RELEASE(cart1);
+	SAFE_RELEASE(cart2);
+	SAFE_RELEASE(cart3);
+	SAFE_RELEASE(cart4);
+	SAFE_RELEASE(cart5);
+	SAFE_RELEASE(cart6);
+	SAFE_RELEASE(cart7);
+	SAFE_RELEASE(cart8);
+
 	SAFE_RELEASE(statue1);
+	SAFE_RELEASE(statue2);
+	SAFE_RELEASE(statue3);
+	SAFE_RELEASE(statue4);
 }

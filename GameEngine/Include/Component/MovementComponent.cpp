@@ -95,9 +95,12 @@ void CMovementComponent::PostUpdate(float fTime)
 	}
 
 	fLength = m_vRotation.Length();
+
+	float fRot = m_fRotationSpeed * fTime;
+
 	if (fLength > 0.f)
 	{
-		m_pUpdateComponent->AddRelativeRotation(m_vRotation * fTime);
+		m_pUpdateComponent->AddRelativeRotation(m_vRotation * fRot);
 
 		m_vRotation = Vector3::Zero;
 	}

@@ -195,7 +195,7 @@ void HKMode::SetHK()
 
 	// TURN
 	frameCount = 2;
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("TURN_HK", true, 0.1f, frameCount);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("TURN_HK", true, 0.05f, frameCount);
 
 	for (int i = 0; i < frameCount; ++i)
 	{
@@ -956,31 +956,262 @@ void HKMode::SetUI()
 	////////////////////////////////////////////////////////////////////////////////////////////////////
 	//////////////////////////////////////////////////////////////////////////////////////////////////// STATUE
 
-	frameCount = 2;
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("STATUE_02", true, 1.f, frameCount);
-	for (int i = 0; i < frameCount; ++i)
+	for (size_t k = 2; k < 9; ++k)
 	{
-		TCHAR	strFileName[MAX_PATH] = {};
-		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/statue_02_%d.png"), i);
-		char strKey[256] = {};
-		sprintf_s(strKey, "STATUE_02%d", i);
-		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("STATUE_02", strKey, strFileName);
+		if (k == 5)
+		{
+			continue;
+		}
+
+		frameCount = 2;
+
+		char number[20];
+		itoa(k, number, 20);
+
+
+		string temp = "STATUE_0";
+		temp.append(number);
+
+		GET_SINGLE(CResourceManager)->CreateAnimation2DSequence(temp, true, 1.f, frameCount);
+		for (int i = 0; i < frameCount; ++i)
+		{
+			TCHAR	strFileName[MAX_PATH] = {};
+			wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/statue_0%d_%d.png"), k, i);
+			char strKey[256] = {};
+			sprintf_s(strKey, "STATUE_0%d%d", k, i);
+			GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture(temp, strKey, strFileName);
+		}
+
+		if (2 == k)
+		{
+			GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll(temp, Vector2(0.f, 0.f),
+				Vector2(250.f, 281.f));
+		}
+		else
+		{
+			GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll(temp, Vector2(0.f, 0.f),
+				Vector2(250.f, 250.f));
+		}
+
 	}
-	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("STATUE_02", Vector2(0.f, 0.f),
-		Vector2(250.f, 281.f));
+
+
+
+	for (size_t k = 2; k < 9; ++k)
+	{
+		if (k == 5)
+		{
+			continue;
+		}
+
+		frameCount = 2;
+
+		char number[20];
+		itoa(k, number, 20);
+
+
+		string temp = "STATUE_0";
+		temp.append(number);
+		temp.append("_BASE");
+
+		GET_SINGLE(CResourceManager)->CreateAnimation2DSequence(temp, true, 1.f, frameCount);
+		for (int i = 0; i < frameCount; ++i)
+		{
+			TCHAR	strFileName[MAX_PATH] = {};
+			wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/statue_0%d_base_%d.png"), k, i);
+			char strKey[256] = {};
+			sprintf_s(strKey, temp.c_str());
+			GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture(temp, strKey, strFileName);
+		}
+
+		if (2 == k)
+		{
+			GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll(temp, Vector2(0.f, 0.f),
+				Vector2(250.f, 281.f));
+		}
+		else
+		{
+			GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll(temp, Vector2(0.f, 0.f),
+				Vector2(250.f, 250.f));
+		}
+		
+	}
+
+
+
+
+
+
+
 
 	frameCount = 2;
-	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("STATUE_02_BASE", true, 1.f, frameCount);
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CART2", true, 1.f, frameCount);
 	for (int i = 0; i < frameCount; ++i)
 	{
 		TCHAR	strFileName[MAX_PATH] = {};
-		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/statue_02_base_%d.png"), i);
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/brk_cart_02_%d.png"), i);
 		char strKey[256] = {};
-		sprintf_s(strKey, "STATUE_02_BASE%d", i);
-		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("STATUE_02_BASE", strKey, strFileName);
+		sprintf_s(strKey, "CART2%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CART2", strKey, strFileName);
 	}
-	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("STATUE_02_BASE", Vector2(0.f, 0.f),
-		Vector2(250.f, 281.f));
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CART2", Vector2(0.f, 0.f),
+		Vector2(250.f, 250.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("CART3", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/brk_cart_03_%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "CART3%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("CART3", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("CART3", Vector2(0.f, 0.f),
+		Vector2(250.f, 250.f));
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BARREL1", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/brk_barrel_01_%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "BARREL1%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BARREL1", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BARREL1", Vector2(0.f, 0.f),
+		Vector2(150.f, 150.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BARREL2", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/brk_barrel_02_%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "BARREL2%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BARREL2", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BARREL2", Vector2(0.f, 0.f),
+		Vector2(150.f, 150.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BARREL3", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/brk_barrel_03_%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "BARREL3%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BARREL3", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BARREL3", Vector2(0.f, 0.f),
+		Vector2(150.f, 150.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BARREL4", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Statue/brk_barrel_04_%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "BARREL4%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BARREL4", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BARREL4", Vector2(0.f, 0.f),
+		Vector2(150.f, 150.f));
+
+
+
+	frameCount = 4;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("MIGHTY_EFFECT", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Player/Effect/MightyZote/MZ%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "MIGHTY_EFFECT%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("MIGHTY_EFFECT", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("MIGHTY_EFFECT", Vector2(0.f, 0.f),
+		Vector2(400.f, 178.f));
+
+
+
+	/////////////////////////////////////////////////////////////
+
+	frameCount = 5;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("FK_WAVE1_", true, 0.3f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Monster/Effect/1/FK_WAVE%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "FK_WAVE1_%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("FK_WAVE1_", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("FK_WAVE1_", Vector2(0.f, 0.f),
+		Vector2(400.f, 400.f));
+
+	frameCount = 4;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("FK_WAVE2_", true, 0.3f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Monster/Effect/2/FK_WAVE%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "FK_WAVE2_%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("FK_WAVE2_", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("FK_WAVE2_", Vector2(0.f, 0.f),
+		Vector2(400.f, 400.f));
+
+	frameCount = 4;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("FK_WAVE3_", true, 0.3f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Monster/Effect/3/FK_WAVE%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "FK_WAVE3_%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("FK_WAVE3_", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("FK_WAVE3_", Vector2(0.f, 0.f),
+		Vector2(400.f, 400.f));
+
+	frameCount = 6;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("EFFECT_BLOOD", true, 0.3f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Effect/Blood/EFFECT_BLOOD%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "EFFECT_BLOOD%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("EFFECT_BLOOD", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("EFFECT_BLOOD", Vector2(0.f, 0.f),
+		Vector2(400.f, 400.f));
+
+	frameCount = 13;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BLOOD_DUST", true, 0.6f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Effect/BloodFrame/BLOOD_FRAME%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "BLOOD_DUST%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BLOOD_DUST", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BLOOD_DUST", Vector2(0.f, 0.f),
+		Vector2(100.f, 100.f));
+
+
 
 /*
 	frameCount = 2;

@@ -46,6 +46,8 @@ bool HitEffect::Init()
 	m_pMesh->SetMaterial(pMaterial);
 
 	m_pAnimation->AddAnimation2DSequence("HIT_EFFECT");
+
+
 	m_pMesh->SetAnimation2D(m_pAnimation);
 
 	SetRoot(m_pMesh);

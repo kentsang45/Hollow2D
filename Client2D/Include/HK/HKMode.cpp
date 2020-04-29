@@ -92,14 +92,10 @@ bool HKMode::Init()
 	// ShieldBug* bug = m_pScene->SpawnObject<ShieldBug>(Vector3(500.f, 500.f, 0.f));
 	// SAFE_RELEASE(bug);
 
-	
+	int stage = 5;
 
-
-
-	SetStage(1);
-	PlaceMonster(1);
-
-	hk->PlaceAt(1, true);
+	SetStage(stage);
+	hk->PlaceAt(stage, true);
 
 	SAFE_RELEASE(hk);
 
@@ -596,6 +592,127 @@ bool HKMode::CreateMaterial()
 	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
 	SAFE_RELEASE(pMaterial);
 
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BarrelParticle0");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BarrelParticle0");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "BarrelParticle0", TEXT("HOLLOW/Particle/BarrelParticle/BarrelParticle0.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BarrelParticle1");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BarrelParticle1");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "BarrelParticle1", TEXT("HOLLOW/Particle/BarrelParticle/BarrelParticle1.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BarrelParticle2");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BarrelParticle2");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "BarrelParticle2", TEXT("HOLLOW/Particle/BarrelParticle/BarrelParticle2.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BarrelParticle3");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BarrelParticle3");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "BarrelParticle3", TEXT("HOLLOW/Particle/BarrelParticle/BarrelParticle3.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BarrelParticle4");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BarrelParticle4");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "BarrelParticle4", TEXT("HOLLOW/Particle/BarrelParticle/BarrelParticle4.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("BarrelParticle5");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BarrelParticle5");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "BarrelParticle5", TEXT("HOLLOW/Particle/BarrelParticle/BarrelParticle5.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("FireBarrel");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("FireBarrel");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "FireBarrel", TEXT("HOLLOW/Particle/FireBarrel.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("Blob0");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Blob0");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Blob0", TEXT("HOLLOW/Effect/Blob/NEW/Blob0.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("Blob1");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Blob1");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Blob1", TEXT("HOLLOW/Effect/Blob/NEW/Blob1.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("Blob2");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Blob2");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Blob2", TEXT("HOLLOW/Effect/Blob/NEW/Blob2.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("Blob3");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Blob3");
+	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	pMaterial->SetTexture(0, "Blob3", TEXT("HOLLOW/Effect/Blob/NEW/Blob3.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+
+	//for (size_t i = 0; i < 13; ++i)
+	//{
+	//	TCHAR	strFileName[MAX_PATH] = {};
+	//	wsprintf(strFileName, TEXT("HOLLOW/Monster/EFFECT/FK_WAVE%d.png"), i);
+
+	//	char	strKey[256] = {};
+	//	sprintf_s(strKey, "FK_WAVE%d", i);
+
+
+	//	GET_SINGLE(CResourceManager)->CreateMaterial(strKey);
+	//	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial(strKey);
+	//	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
+	//	pMaterial->SetTexture(0, strKey, strFileName);
+	//	pMaterial->SetRenderState("AlphaBlend");
+	//	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	//	SAFE_RELEASE(pMaterial);
+	//}
+
+
+
+
+
+
+
+
+
 	/*GET_SINGLE(CResourceManager)->CreateMaterial("Stage2");
 	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("Stage2");
 	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
@@ -647,6 +764,8 @@ void HKMode::SetCollision()
 
 	GET_SINGLE(CCollisionManager)->CreateChannel("Object", CT_OVERLAP);
 	GET_SINGLE(CCollisionManager)->CreateProfile("Object", "Object");
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Object", "Object", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Object", "Sencer", CT_IGNORE);
 
 	// GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Object", "Player", CT_OVERLAP);
 
@@ -682,6 +801,7 @@ void HKMode::SetCollision()
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "Monster", CT_IGNORE);
 	//GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "Player", CT_IGNORE);
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "MonsterProjectile", CT_IGNORE);
+	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("Monster", "Object", CT_IGNORE);
 
 	GET_SINGLE(CCollisionManager)->CreateProfile("PlayerProjectile", "PlayerProjectile");
 	GET_SINGLE(CCollisionManager)->UpdateProfileChannel("PlayerProjectile", "Player", CT_IGNORE);

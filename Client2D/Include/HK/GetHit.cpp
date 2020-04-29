@@ -46,6 +46,9 @@ bool GetHit::Init()
 	m_pMesh->SetMaterial(pMaterial);
 
 	m_pAnimation->AddAnimation2DSequence("DAMAGED_BLACK");
+
+	m_pAnimation->AddAnimation2DSequence("EFFECT_BLOOD");
+
 	m_pMesh->SetAnimation2D(m_pAnimation);
 
 	SetRoot(m_pMesh);
@@ -91,5 +94,22 @@ void GetHit::Render(float fTime)
 
 void GetHit::Start(float fTime, const Vector3 & vPos)
 {
+}
+
+void GetHit::SetAnimation(int style)
+{
+	if (0 == style)
+	{
+		m_pAnimation->ChangeAnimation("DAMAGED_BLACK");
+	}
+	else if (1 == style)
+	{
+		m_pAnimation->ChangeAnimation("EFFECT_BLOOD");
+		m_pMesh->SetRelativeScale(150.f, 150.f, 1.f);
+	}
+	else
+	{
+		BOOM;
+	}
 }
 

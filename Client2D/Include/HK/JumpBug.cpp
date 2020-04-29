@@ -11,6 +11,9 @@
 #include "TimerManager.h"
 
 #include "Sencer.h"
+#include "MonsterHitEffect.h"
+#include "HollowKnight.h"
+
 
 JumpBug::JumpBug()
 {
@@ -33,7 +36,7 @@ bool JumpBug::Init()
 	}
 
 	Bug::SetAnimation("JB");
-	m_pMesh->SetPivot(0.5f, 0.48f, 0.f);
+	m_pMesh->SetPivot(0.5f, 0.40f, 0.f);
 
 	// 플레이어 찾기위한 센서
 	m_pPlayerLeftSencer = m_pScene->SpawnObject<Sencer>();
@@ -73,7 +76,166 @@ void JumpBug::Begin()
 
 void JumpBug::Update(float fTime)
 {
-	Bug::Update(fTime);
+	CGameObject::Update(fTime);
+
+	// char	strText[256] = {};
+	// sprintf_s(strText, "LEFT = %d, RIGHT = %d\n", m_pLeftSencer->IsOverlap(), m_pRightSencer->IsOverlap());
+	// OutputDebugStringA(strText);
+
+
+	if (true == m_bOnLand)
+	{
+		ClearGravity();
+	}
+	else
+	{
+
+	}
+
+	bool anim = m_pAnimation->IsSequenceEnd();
+
+	if (true == m_bDead)
+	{
+		return;
+	}
+
+
+	if (BS_DEAD == m_eState && true == anim)
+	{
+		m_bDead = true;
+
+		return;
+	}
+
+	////////////////////////////////////////////////////
+
+
+	if (BS_TURN == m_eState && true == m_pAnimation->IsSequenceEnd())
+	{
+		// Reverse();
+		m_bChildUpdate = true;
+
+		SetCurrentState(BS_WALK);
+
+		return;
+	}
+
+
+
+
+	
+
+
+
+
+
+	// 죽었으면
+	if (true == m_bJump && 0 >= m_iHP)
+	{
+		if (false == m_bOnLand)
+		{
+			bool leftFree = m_pLeftSencer->IsOverlap();
+			bool rightFree = m_pRightSencer->IsOverlap();
+
+			// 점프중에 바닥에
+			if (false == leftFree && false == rightFree)
+			{
+				if (DIR_LEFT == m_eDir)
+				{
+					// 왼쪽으로 가고 있는데 왼쪽 센서가...
+					if (true == leftFree || true == m_bNoLeft)
+					{
+						// Reverse();
+						m_eDir = DIR_RIGHT;
+						m_eMoveBackDir = DIR_RIGHT;
+						m_bNoLeft = false;
+						m_pLeftSencer->ClearOverlap();
+						m_pRightSencer->ClearOverlap();
+
+
+					}
+				}
+				else if (DIR_RIGHT == m_eDir)
+				{
+					// 오른쪽으로 가고 있는데 왼쪽 센서가...
+					if (true == rightFree || true == m_bNoRight)
+					{
+						// Reverse();
+						m_eDir = DIR_LEFT;
+						m_eMoveBackDir = DIR_LEFT;
+						m_bNoRight = false;
+						m_pLeftSencer->ClearOverlap();
+						m_pRightSencer->ClearOverlap();
+
+					}
+				}
+			}
+			// 점프중인데 오른쪽이 걸렸다.
+			else if (true == leftFree && false == rightFree)
+			{
+				if (true == m_bNoRight)
+				{
+					// Reverse();
+					m_eDir = DIR_LEFT;
+					m_eMoveBackDir = DIR_LEFT;
+					m_bNoRight = false;
+					m_pLeftSencer->ClearOverlap();
+					m_pRightSencer->ClearOverlap();
+
+				}
+			}
+			else if (false == leftFree && true == rightFree)
+			{
+				if (true == m_bNoLeft)
+				{
+					// Reverse();
+					m_eDir = DIR_RIGHT;
+					m_eMoveBackDir = DIR_RIGHT;
+					m_bNoLeft = false;
+					m_pLeftSencer->ClearOverlap();
+					m_pRightSencer->ClearOverlap();
+				}
+				else if (true == m_bNoRight)
+				{
+					// Reverse();
+					m_eDir = DIR_LEFT;
+					m_eMoveBackDir = DIR_LEFT;
+					m_bNoRight = false;
+					m_pLeftSencer->ClearOverlap();
+					m_pRightSencer->ClearOverlap();
+				}
+
+			}
+		}
+
+		JumpBack(fTime);
+	}
+	// 안죽었으면
+	else if (BS_DEAD != m_eState)
+	{
+		if (true == m_bOnLand && false == m_bLandPhysics)
+		{
+			CheckFront();
+		}
+		else
+		{
+			// CheckCollision();
+		}
+
+
+		if (true == m_bMoveBack)
+		{
+			MoveBack(fTime);
+		}
+		else
+		{
+			MoveX(fTime);
+		}
+	}
+
+
+	// m_pMovement->AddRotationZ(180.f * fTime * rotationNumber);
+
 
 	if (true == m_bWillJump)
 	{
@@ -141,7 +303,7 @@ void JumpBug::Update(float fTime)
 		{
 			SetCurrentState(BS_BJUMP);
 			RealJump(fTime);
-			m_bWillJump = false;
+			m_bWillJump = true;
 			return;
 		}
 
@@ -186,74 +348,24 @@ void JumpBug::Update(float fTime)
 
 		Bug::CheckCollision();
 
+		if (true == m_bNoLeft && DIR_LEFT == m_eDir)
+		{
+			return;
+		}
+		else if (true == m_bNoRight && DIR_RIGHT == m_eDir)
+		{
+			return;
+		}
+
 		m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * m_eDir);
-		m_fForce -= m_fOriginForce * m_fOriginForce;
+
 		return;
 	}
 
 	
 
-	// 플레이어 찾기
-	if (false == m_bWillJump)
-	{
-		Vector3 playerVec = m_pScene->GetGameMode()->GetPlayer()->GetWorldPos();
-		Vector3 monsterVec = GetWorldPos();
-
-		m_fDisX = playerVec.x - monsterVec.x;
-		float disY = playerVec.y - monsterVec.y;
-
-		// 플레이어와 몬스터의 거리가 위아래 250 사이
-		if (disY <= 250.f && disY >= -250.f)
-		{
-			if (m_fDisX <= 400.f && m_fDisX >= -400.f)
-			{
-				if (m_fDisX <= 400.f && m_fDisX >= 0.f)
-				{
-					// 플레이어가 오른쪽
-					// 근데 나는 왼쪽
-					if (DIR_LEFT == m_eDir)
-					{
-						SetCurrentState(BS_TURN);
-						Reverse();
-						m_eDir = DIR_RIGHT;
-						m_bWillJump = true;
-						return;
-					}
-					// 나도 오른쪽
-					else
-					{
-						SetCurrentState(BS_BJUMP);
-						RealJump(fTime);
-						return;
-					}
-				}
-				else
-				{
-					// 플레이어가 왼쪽
-					// 나도 왼쪽
-					if (DIR_LEFT == m_eDir)
-					{
-						SetCurrentState(BS_BJUMP);
-						RealJump(fTime);
-						return;
-					}
-					else
-					{
-						SetCurrentState(BS_TURN);
-						Reverse();
-						m_eDir = DIR_LEFT;
-						m_bWillJump = true;
-						return;
-					}
-				}
-
-		
-			}
-		}
-	}
 	
-	
-
+	FindPlayer(fTime);
 	
 	
 
@@ -313,7 +425,7 @@ void JumpBug::RealJump(float fTime)
 	// JB
 	m_bIsJumping = true;
 
-	m_fForce = m_fOriginForce * 60;
+	m_fForce = 600.f;
 
 	m_fMoveSpeed = m_fDisX;
 
@@ -334,11 +446,222 @@ void JumpBug::SetCurrentState(BUG_STATE eState)
 
 void JumpBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	Bug::OnBlock(pSrc, pDest, fTime);
+	int a = 0;
+
+	if (nullptr == pDest)
+	{
+		return;
+	}
+
+	if ("PlayerProjectile" == pDest->GetCollisionProfile()->strName)
+	{
+		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
+
+		SAFE_RELEASE(attack);
+
+		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
+
+		m_eMoveBackDir = player->GetDirection();
+
+
+		m_iHP -= 1;
+
+		if (true == m_bDead)
+		{
+			return;
+		}
+
+		if (0 >= m_iHP)
+		{
+			m_bJump = true;
+			m_fMoveBackTimeMax = 0.2f;
+			m_fMoveSpeed = 300.f;
+			m_pMovement->SetMoveSpeed(m_fMoveSpeed);
+			m_bLandPhysics = true;
+			m_bJumping = false;
+			SetCurrentState(BS_DIE);
+
+			m_pBody->SetMonster(false);
+
+			m_pRightSencer->Kill();
+			m_pLeftSencer->Kill();
+			return;
+		}
+		else
+		{
+			m_bMoveBack = true;
+		}
+	}
+
+
+	if (true == pDest->IsStage())
+	{
+		int playerPos = (int)pSrc->GetIntersect().z;
+
+		float x;
+		float y;
+		float margin = -1.f;
+
+		switch (playerPos)
+		{
+		case 1: // LEFT
+			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * -2.f, 0.f, 0.f));
+
+			x = pDest->GetColliderSectionMin().x - pSrc->GetRelativeScale().x * 0.5f - margin;
+			SetWorldPos(Vector3(x, GetWorldPos().y, GetWorldPos().z));
+
+			m_bNoRight = true;
+			// m_bOnLand = false;
+			break;
+		case 2: // TOP
+
+			ClearGravity();
+			JumpEnd(fTime);
+			m_bOnLand = true;
+			m_bNoRight = false;
+			m_bNoLeft = false;
+			m_pLeftSencer->ClearOverlap();
+			m_pRightSencer->ClearOverlap();
+
+			y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f - margin;
+
+			SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+
+			break;
+		case 3: // RIGHT
+			x = pDest->GetColliderSectionMax().x + pSrc->GetRelativeScale().x * 0.5f + margin;
+
+			SetWorldPos(Vector3(x, GetWorldPos().y, GetWorldPos().z));
+
+
+			m_bNoLeft = true;
+			// m_bOnLand = false;
+			break;
+		case 4: // BOTTOM
+			m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
+			ClearGravity();
+			// m_bOnLand = false;
+			// m_bCeiling = true;
+			break;
+		default:
+			BOOM
+				break;
+		}
+
+		// 바운스
+		if (true == m_bJump && true == m_bOnLand)
+		{
+			m_fCurrentForce = m_fCurrentForce * 0.33;
+			m_fMoveSpeed = m_fMoveSpeed * 0.33;
+
+			if (m_fCurrentForce <= 10.f)
+			{
+				SetCurrentState(BS_DEAD);
+				m_bJump = false;
+				m_bMoveBack = false;
+				m_pBody->SetCollisionProfile("Object");
+			}
+			// 다시 한번 튕김
+			else
+			{
+				ClearGravity();
+				// m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * 2.f, 0.f));
+
+				float y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f + 5.f;
+
+				SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+
+				SetForce(m_fCurrentForce);
+				m_bJump = true;
+				m_bJumping = false;
+
+				if (true == m_bDieLand)
+				{
+					SetCurrentState(BS_DIELAND);
+				}
+
+				return;
+			}
+
+
+		}
+
+		ClearGravity();
+		JumpEnd(fTime);
+
+
+		// m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * 2.f, 0.f));
+
+		return;
+	}
 }
 
 void JumpBug::ClearState()
 {
+
+}
+
+void JumpBug::FindPlayer(float fTime)
+{
+	// 플레이어 찾기
+	if (false == m_bWillJump)
+	{
+		Vector3 playerVec = m_pScene->GetGameMode()->GetPlayer()->GetWorldPos();
+		Vector3 monsterVec = GetWorldPos();
+
+		m_fDisX = playerVec.x - monsterVec.x;
+		float disY = playerVec.y - monsterVec.y;
+
+		// 플레이어와 몬스터의 거리가 위아래 250 사이
+		if (disY <= 250.f && disY >= -250.f)
+		{
+			if (m_fDisX <= 400.f && m_fDisX >= -400.f)
+			{
+				if (m_fDisX <= 400.f && m_fDisX >= 0.f)
+				{
+					// 플레이어가 오른쪽
+					// 근데 나는 왼쪽
+					if (DIR_LEFT == m_eDir)
+					{
+						SetCurrentState(BS_TURN);
+						Reverse();
+						m_eDir = DIR_RIGHT;
+						m_bWillJump = true;
+						return;
+					}
+					// 나도 오른쪽
+					else
+					{
+						SetCurrentState(BS_BJUMP);
+						RealJump(fTime);
+						return;
+					}
+				}
+				else
+				{
+					// 플레이어가 왼쪽
+					// 나도 왼쪽
+					if (DIR_LEFT == m_eDir)
+					{
+						SetCurrentState(BS_BJUMP);
+						RealJump(fTime);
+						return;
+					}
+					else
+					{
+						SetCurrentState(BS_TURN);
+						Reverse();
+						m_eDir = DIR_LEFT;
+						m_bWillJump = true;
+						return;
+					}
+				}
+
+
+			}
+		}
+	}
+
 
 }
 

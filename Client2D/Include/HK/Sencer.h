@@ -23,7 +23,9 @@ public:
 
 	bool IsOverlap() const;
 	bool IsPlayer() const;
-	void ClearOverlap() { m_bFree = true; }
+	void ClearOverlap() { m_bFree = false; }
+	void SetOverlap(bool free);
+	void SetStyle(int style) { m_iStyle = style; }
 
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void OffBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
@@ -40,5 +42,9 @@ private:
 	bool m_bPlayer = false;
 
 	int m_iCheck = 0;
+
+	int m_iStyle = 0;
+	// left 1. up 2. right 3. bot 4
+	
 };
 

@@ -62,5 +62,11 @@ private:
 	float m_fTurnTime = 0.f;
 	float m_fTurnMaxTime = 1.f;
 
+	// 역으로 도는 중
+	bool m_bReverse = false;
+
+	bool m_bTurnOver = false;
+	float m_fTurnDelayTime = 0.f;
+	float m_fDelayTotalTime = 0.15f;
 };
 

@@ -130,7 +130,7 @@ bool RockParticle::Init()
 	m_pMesh->SetPivot(0.5f, 0.5f, 0.f);
 
 
-	int speed = RandomNumber::GetRandomNumber(200, 600);
+	int speed = RandomNumber::GetRandomNumber(400, 600);
 
 	m_pMovement->SetMoveSpeed((float)speed);
 
@@ -155,6 +155,7 @@ bool RockParticle::Init()
 	CGameObject::SetPhysics(true);
 	// SetForce(m_fCurrentForce * 1.2f);
 
+	m_fGravitySpeed = 30.f;
 
 	return true;
 }
@@ -211,7 +212,6 @@ void RockParticle::Update(float fTime)
 	if (false == m_bJump)
 	{
 		ClearGravity();
-		m_fGravitySpeed = 5.f;
 
 		m_fCurrentForce = RandomNumber::GetRandomNumber(10, 300);
 
@@ -238,6 +238,7 @@ void RockParticle::Update(float fTime)
 		else
 		{
 			m_pMovement->AddMovement(GetWorldAxis(AXIS_X));
+			m_pRotPivot->AddRelativeRotationZ(-180.f * fTime);
 		}
 
 	}
@@ -256,6 +257,7 @@ void RockParticle::Update(float fTime)
 		else
 		{
 			m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * -1.f);
+			m_pRotPivot->AddRelativeRotationZ(180.f * fTime);
 		}
 	}
 }

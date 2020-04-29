@@ -36,7 +36,7 @@ bool SmallBug::Init()
 	m_pMesh->SetPivot(0.5f, 0.56f, 0.f);
 
 	m_pBody->AddBlockCallback<SmallBug>(this, &SmallBug::OnBlock);
-	m_pBody->SetExtent(100.f, 100.f);
+	m_pBody->SetExtent(40.f, 40.f);
 
 	SetPhysics(true);
 
@@ -46,7 +46,7 @@ bool SmallBug::Init()
 	// 센서 장착
 	// RIGHT
 	m_pRTSencer = m_pScene->SpawnObject<Sencer>();
-	m_pRTSencer->SetCheck(4);
+	m_pRTSencer->SetStyle(4);
 	CColliderRect* pSencerBody = m_pRTSencer->GetBody();
 	m_pMesh->AddChild(pSencerBody, TR_POS);
 
@@ -54,7 +54,7 @@ bool SmallBug::Init()
 
 	// LEFT
 	m_pLTSencer = m_pScene->SpawnObject<Sencer>();
-	m_pLTSencer->SetCheck(3);
+	m_pLTSencer->SetStyle(3);
 	pSencerBody = m_pLTSencer->GetBody();
 	m_pMesh->AddChild(pSencerBody, TR_POS);
 
@@ -86,7 +86,7 @@ bool SmallBug::Init()
 
 	m_pBody->SetMonster(true);
 
-	
+	m_pMovement->SetRotationSpeed(50.f);
 
 	m_bParentUpdate = false;
 
@@ -124,9 +124,9 @@ void SmallBug::Update(float fTime)
 	}
 
 
-	char	strText[256] = {};
+	/*char	strText[256] = {};
 	sprintf_s(strText, "%.4f\n", GetWorldRot().z);
-	OutputDebugStringA(strText);
+	OutputDebugStringA(strText);*/
 
 
 	///////////////////////////////////////////////////////////////////////////////
@@ -148,7 +148,16 @@ void SmallBug::Update(float fTime)
 	}
 
 
+	if (true == m_bTurnOver)
+	{
+		m_fTurnDelayTime += fTime;
 
+		if (m_fTurnDelayTime >= m_fDelayTotalTime)
+		{
+			m_fTurnDelayTime = 0.f;
+			m_bTurnOver = false;
+		}
+	}
 
 
 
@@ -158,6 +167,9 @@ void SmallBug::Update(float fTime)
 		{
 			bool leftFree = m_pLeftSencer->IsOverlap();
 			bool rightFree = m_pRightSencer->IsOverlap();
+
+			// bool ltFree = m_pLTSencer->IsOverlap();
+			// bool rtFree = m_pRTSencer->IsOverlap();
 
 			// 점프중에 바닥에
 			if (false == leftFree && false == rightFree)
@@ -173,9 +185,8 @@ void SmallBug::Update(float fTime)
 						m_bNoLeft = false;
 						m_pLeftSencer->ClearOverlap();
 						m_pRightSencer->ClearOverlap();
-
-
 					}
+
 				}
 				else if (DIR_RIGHT == m_eDir)
 				{
@@ -228,11 +239,14 @@ void SmallBug::Update(float fTime)
 	{
 		if (true == m_bOnLand && false == m_bLandPhysics)
 		{
-			CheckFront();
+			if (false == m_bTurnOver)
+			{
+				CheckFront();
+			}
 		}
 		else
 		{
-			CheckCollision();
+			// CheckCollision();
 		}	
 	}
 
@@ -247,12 +261,18 @@ void SmallBug::Update(float fTime)
 		if (true == m_bTurn && true == m_bOnLand)
 		{
 			Turn(fTime);
-			m_pMovement->SetMoveSpeed(150.f);
-			MoveX(fTime);
+			m_pMovement->SetMoveSpeed(50.f);
+
+			 if (false == m_bReverse)
+			 {
+				MoveX(fTime);
+			 }
+			
 			return;
 		}
 		else
 		{
+	
 			m_pMovement->SetMoveSpeed(150.f);
 			MoveX(fTime);
 		}
@@ -293,24 +313,41 @@ void SmallBug::Reverse()
 // 항상 오른쪽으로 돌자
 void SmallBug::CheckFront()
 {
+	bool left = m_pLeftSencer->IsOverlap();
+	bool right = m_pRightSencer->IsOverlap();
+	bool lt = m_pLTSencer->IsOverlap();
+	bool rt = m_pRTSencer->IsOverlap();
+
+
 	if (DIR_LEFT == m_eDir)
 	{
+		// 왼쪽 센서들이 모두 막힘
+		if(false == lt && false == left)
+		{ 
+			m_eNewDir = DIR_BOT;
+		}
 		// 왼쪽으로 가고 있는데 왼쪽이 절벽이면 위로
-		if (true == m_pLTSencer->IsOverlap())
+		else if (true == m_bNoLeft)
+		{
+			m_eNewDir = DIR_BOT;
+		}
+		else if (true == lt)
 		{
 			m_eNewDir = DIR_UP;
 		}
 		// 왼쪽으로 가고 있는데 왼쪽이 벽이면 아래로
-		else if (true == m_bNoLeft)
-		{			
-			m_eNewDir = DIR_RIGHT;
-		}
+		
 	}
 
 	else if (DIR_RIGHT == m_eDir)
 	{
+		if (false == rt && false == right)
+		{
+			m_eNewDir = DIR_UP;
+		}
+
 		// 오른쪽으로 가고 있는데 오른쪽이 절벽이면 아래로
-		if (true == m_pRightSencer->IsOverlap())
+		else if (true == rt && true == right)
 		{
 			m_eNewDir = DIR_BOT;
 		}
@@ -322,8 +359,13 @@ void SmallBug::CheckFront()
 	}
 	else if (DIR_UP == m_eDir)
 	{
+		if (false == rt && false == lt)
+		{
+			m_eNewDir = DIR_LEFT;
+		}
+
 		// 오른쪽으로 가고 있는데 오른쪽이 절벽이면 아래로
-		if (true == m_pRTSencer->IsOverlap())
+		else if (true == rt && false == right)
 		{
 			m_eNewDir = DIR_RIGHT;
 		}
@@ -335,12 +377,14 @@ void SmallBug::CheckFront()
 	}
 	else if (DIR_BOT == m_eDir)
 	{
-		// 오른쪽으로 가고 있는데 오른쪽이 절벽이면 아래로
-		if (true == m_pLeftSencer->IsOverlap())
+		if (false == right && false == left)
+		{
+			m_eNewDir = DIR_RIGHT;
+		}
+		if (true == left && false == lt)
 		{
 			m_eNewDir = DIR_LEFT;
 		}
-		// 오른쪽으로 가고 있는데 오른쪽이 벽이면 위로
 		else if (true == m_bNoBot && false == m_pRightSencer->IsOverlap())
 		{
 			m_eNewDir = DIR_RIGHT;
@@ -420,16 +464,17 @@ void SmallBug::Turn(float fTime)
 {
 	float z = GetWorldRot().z;
 
+	float margin = 5.f;
 
 	switch (m_eDir)
 	{
-	case DIR_BOT:
+	case DIR_BOT: // 현재 -90
 		// 왼쪽 또는 오른쪽			
 	
 		if (DIR_LEFT == m_eNewDir)
 		{
 			AddRelativeRotationZ(-90.f * fTime);
-			if (z <= -180.f)
+			if (z <= -180.f + margin)
 			{
 				SetWorldRotationZ(-180.f);
 				FinishTurning();
@@ -438,47 +483,53 @@ void SmallBug::Turn(float fTime)
 		}
 		else
 		{
-			m_pMovement->AddRotationZ(-90.f * fTime);
+			// 오른쪽을 봅시다
+			AddRelativeRotationZ(90.f * fTime);
+			m_bReverse = true;
+			if (z >= 0.f - margin)
+			{
+				SetWorldRotationZ(0.f);
+				FinishTurning();
+				return;
+			}
 		}
 		break;
 	case DIR_UP:
 		// 왼쪽 또는 오른쪽
 		if (DIR_LEFT == m_eNewDir)
 		{
-			AddRelativeRotationZ(-90.f * fTime);
-			if (z <= -360.f)
+			AddRelativeRotationZ(90.f * fTime);
+			m_bReverse = true;
+			if (z >= -180.f - margin)
 			{
-				SetWorldRotationZ(0.f);
+				SetWorldRotationZ(-180.f);
 				FinishTurning();
 				return;
 			}
-
-
-
 		}
 		else
 		{
+			if (z == 90.f)
+			{
+				SetWorldRotationZ(-270.f);
+			}
+
 			AddRelativeRotationZ(-90.f * fTime);
-			if (z <= -360.f)
+
+			if (z <= -360.f + margin)
 			{
 				SetWorldRotationZ(0.f);
 				FinishTurning();
 				return;
-			}
-
-
-
+			}		
 		}
 		break;
 	case DIR_LEFT:
 		// 위 도는 아래
-
-
-
 		if (DIR_UP == m_eNewDir)
 		{
 			AddRelativeRotationZ(-90.f * fTime);
-			if (z <= -270.f)
+			if (z <= -270.f + margin)
 			{
 				SetWorldRotationZ(-270.f);
 				FinishTurning();
@@ -488,20 +539,34 @@ void SmallBug::Turn(float fTime)
 		}
 		else
 		{
-			m_pMovement->AddRotationZ(-90.f * fTime);
+			AddRelativeRotationZ(90.f * fTime);
+			m_bReverse = true;
+			if (z >= -90.f - margin)
+			{
+				SetWorldRotationZ(-90.f);
+				FinishTurning();
+				return;
+			}
 		}
 		break;
 	case DIR_RIGHT:
 		// 위 또는 아래
 		if (DIR_UP == m_eNewDir)
 		{
-			m_pMovement->AddRotationZ(-90.f * fTime);
+			AddRelativeRotationZ(90.f * fTime);
+			m_bReverse = true;
+			if (z >= 90.f - margin)
+			{
+				SetWorldRotationZ(90.f);
+				FinishTurning();
+				return;
+			}
 		}
 		else
 		{
 			AddRelativeRotationZ(-90.f * fTime);
 
-			if (z <= -90.f)
+			if (z <= -90.f + margin)
 			{
 				SetWorldRotationZ(-90.f);
 				FinishTurning();
@@ -535,9 +600,6 @@ void SmallBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 	if ("PlayerProjectile" == pDest->GetCollisionProfile()->strName)
 	{
-
-
-
 		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
 		SAFE_RELEASE(attack);
 
@@ -578,16 +640,21 @@ void SmallBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 	//	SetPhysics(false);
 
 		int playerPos = (int)pSrc->GetIntersect().z;
+		float y;
 
 		switch (playerPos)
 		{
 		case 1: // LEFT
 			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * -2.f, 0.f, 0.f));
 			m_bNoRight = true;
-			m_bOnLand = false;
+			// m_bOnLand = false;
 			break;
 		case 2: // TOP
-			m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * 2.f, 0.f));
+			y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f - 5.f;
+
+			SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+
+
 			ClearGravity();
 			JumpEnd(fTime);
 			m_bOnLand = true;
@@ -599,11 +666,11 @@ void SmallBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		case 3: // RIGHT
 			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * 2.f, 0.f, 0.f));
 			m_bNoLeft = true;
-			m_bOnLand = false;
+			// m_bOnLand = false;
 			break;
 		case 4: // BOTTOM
 			m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
-			m_bOnLand = false;
+			// m_bOnLand = false;
 			m_bNoBot = true;
 			// m_bCeiling = true;
 			break;
@@ -659,4 +726,41 @@ void SmallBug::FinishTurning()
 {
 	m_bTurn = false;
 	m_eDir = m_eNewDir;
+	m_bReverse = false;
+
+	m_bNoLeft = false;
+	m_bNoRight = false;
+
+
+	m_bTurnOver = true;
+
+	switch (m_eNewDir)
+	{
+	case DIR_UP:
+		m_pRTSencer->SetOverlap(false);
+		m_pRightSencer->SetOverlap(false);
+
+		break;
+	case DIR_BOT:
+		m_pLeftSencer->SetOverlap(false);
+		m_pLTSencer->SetOverlap(false);
+		break;
+	case DIR_RIGHT:
+		m_pLeftSencer->SetOverlap(false);
+		m_pRightSencer->SetOverlap(false);
+		m_pRTSencer->SetOverlap(true);
+		m_pLTSencer->SetOverlap(true);
+		break;
+	case DIR_LEFT:
+		m_pRTSencer->SetOverlap(false);
+		m_pLTSencer->SetOverlap(false);
+		m_pLeftSencer->SetOverlap(true);
+		m_pRightSencer->SetOverlap(true);
+		break;
+	default:
+		BOOM;
+		break;
+	}
+			
+
 }

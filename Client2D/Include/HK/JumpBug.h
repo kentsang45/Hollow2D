@@ -32,6 +32,8 @@ public:
 
 	void ClearState();
 
+	void FindPlayer(float fTime);
+
 private:
 	class Sencer* m_pPlayerLeftSencer;
 	class Sencer* m_pPlayerRightSencer;

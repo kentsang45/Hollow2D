@@ -16,7 +16,7 @@ public:
 	void MoveX(float fTime);
 	void Reverse();
 	void CheckFront();
-	void MoveBack(float fTime);
+	virtual void MoveBack(float fTime);
 	void JumpBack(float fTime);
 
 	void JumpEnd(float fTime);
@@ -49,5 +49,8 @@ private:
 	// WALK
 	float m_fWalkTime = 0.f;
 	float m_fWalkTotalTime = 3.0f;
+
+	// float m_fWalkSpeed = 0.f;
+	float m_fDashSpeed = 0.f;
 };
 

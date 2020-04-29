@@ -12,6 +12,8 @@
 
 HornBug::HornBug()
 {
+	m_fDashSpeed = 600.f;
+	m_fWalkSpeed = 100.f;
 }
 
 
@@ -84,19 +86,40 @@ void HornBug::Update(float fTime)
 	// 돌기가 끝나면
 	if (BS_TURN == m_eState && true == m_pAnimation->IsSequenceEnd())
 	{
-		SetCurrentState(BS_BDASH);
-		m_pMovement->SetMoveSpeed(0.f);
+		if (true == m_bWillDash)
+		{
+			SetCurrentState(BS_BDASH);		
+			m_bWillDash = false;
+		}
+		else
+		{
+			SetCurrentState(BS_BWALK);
+			m_pMovement->SetMoveSpeed(0.f);
+		}
+
 		return;
 	}
 
 	// 대쉬!
-	if (BS_BDASH == m_eState && true == m_pAnimation->IsSequenceEnd())
+	if (BS_BDASH == m_eState)
 	{
-		SetCurrentState(BS_DASH);
-		m_pMovement->SetMoveSpeed(500.f);
+		m_pMovement->SetMoveSpeed(0.f);
+
+		if (true == m_pAnimation->IsSequenceEnd())
+		{
+			SetCurrentState(BS_DASH);
+			m_pMovement->SetMoveSpeed(m_fDashSpeed);
+			m_fMoveSpeed = m_fDashSpeed;
+		}
+
 		return;
 	}
 	
+	if (true == m_bMoveBackOver)
+	{
+		SetCurrentState(BS_BDASH);
+		m_bMoveBackOver = false;
+	}
 
 
 	// 걷다가 또는 서있다가 플레이어를 보면
@@ -151,11 +174,12 @@ void HornBug::Update(float fTime)
 
 
 
-	// 준비동작 끝나고 달리기
+	// 준비동작 끝나고 걷기
 	if (BS_BWALK == m_eState && m_pAnimation->IsSequenceEnd())
 	{
-		SetCurrentState(BS_DASH);
-		m_pMovement->SetMoveSpeed(500.f);
+		SetCurrentState(BS_WALK);
+		m_pMovement->SetMoveSpeed(m_fWalkSpeed);
+		m_fMoveSpeed = m_fWalkSpeed;
 		return;
 	}
 
@@ -169,7 +193,8 @@ void HornBug::Update(float fTime)
 		if (m_fDashTime >= m_fDashTotalTime)
 		{
 			m_fDashTime = 0.f;
-			SetCurrentState(BS_WALK);
+			SetCurrentState(BS_BWALK);
+			m_fMoveSpeed = 0.f;
 			m_fWalkTime = 0.f;
 			return;
 		}
@@ -180,7 +205,8 @@ void HornBug::Update(float fTime)
 	{
 		m_fWalkTime += fTime;
 		SetCurrentState(BS_WALK);
-		m_pMovement->SetMoveSpeed(m_fMoveSpeed);
+		m_fMoveSpeed = m_fWalkSpeed;
+		m_pMovement->SetMoveSpeed(m_fWalkSpeed);
 
 		// 안움직이기
 		if (m_fWalkTime >= m_fWalkTotalTime)
@@ -244,6 +270,8 @@ void HornBug::CheckFront()
 void HornBug::MoveBack(float fTime)
 {
 	Bug::MoveBack(fTime);
+
+
 }
 
 void HornBug::JumpBack(float fTime)
@@ -271,6 +299,21 @@ void HornBug::SetCurrentState(BUG_STATE eState)
 void HornBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
 	Bug::OnBlock(pSrc, pDest, fTime);
+
+	if (nullptr == pDest)
+	{
+		return;
+	}
+
+	if (true == pDest->IsPlayer() && 0 < m_iHP)
+	{
+		SetCurrentState(BS_WALK);
+		m_fMoveSpeed = m_fWalkSpeed;
+		m_pMovement->SetMoveSpeed(m_fWalkSpeed);
+	}
+
+
+
 }
 
 void HornBug::ClearState()

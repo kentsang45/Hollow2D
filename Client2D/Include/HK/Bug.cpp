@@ -98,7 +98,7 @@ bool Bug::Init()
 	// ¼¾¼­ ÀåÂø
 	// RIGHT
 	m_pRightSencer = m_pScene->SpawnObject<Sencer>();
-	m_pRightSencer->SetCheck(2);
+	m_pRightSencer->SetStyle(2);
 	CColliderRect* pSencerBody = m_pRightSencer->GetBody();
 	m_pMesh->AddChild(pSencerBody, TR_POS);
 
@@ -106,7 +106,7 @@ bool Bug::Init()
 
 	// LEFT
 	m_pLeftSencer = m_pScene->SpawnObject<Sencer>();
-	m_pLeftSencer->SetCheck(1);
+	m_pLeftSencer->SetStyle(1);
 	pSencerBody = m_pLeftSencer->GetBody();
 	m_pMesh->AddChild(pSencerBody, TR_POS);
 
@@ -248,8 +248,17 @@ void Bug::Update(float fTime)
 					m_bNoLeft = false;
 					m_pLeftSencer->ClearOverlap();
 					m_pRightSencer->ClearOverlap();
-
 				}
+				else if (true == m_bNoRight)
+				{
+					// Reverse();
+					m_eDir = DIR_LEFT;
+					m_eMoveBackDir = DIR_LEFT;
+					m_bNoRight = false;
+					m_pLeftSencer->ClearOverlap();
+					m_pRightSencer->ClearOverlap();
+				}
+
 			}			
 		}
 
@@ -263,7 +272,7 @@ void Bug::Update(float fTime)
 		}
 		else
 		{
-			CheckCollision();
+			// CheckCollision();
 		}
 
 		MoveBack(fTime);
@@ -295,6 +304,15 @@ void Bug::MoveX(float fTime)
 
 
 	Flip(m_eDir);
+
+	if (true == m_bNoLeft && DIR_LEFT == m_eDir)
+	{
+		return;
+	}
+	else if (true == m_bNoRight && DIR_RIGHT == m_eDir)
+	{
+		return;
+	}
 
 	m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * m_eDir);
 }
@@ -395,8 +413,8 @@ void Bug::MoveBack(float fTime)
 	{
 		m_fMoveBackTime += fTime;
 
-		m_pMovement->SetMoveSpeed(2000.f);
-		m_fMoveSpeed = 2000.f;
+		m_pMovement->SetMoveSpeed(1500.f);
+		m_fMoveSpeed = 1500.f;
 
 		if (true == m_bNoRight && DIR_RIGHT == m_eMoveBackDir)
 		{
@@ -420,6 +438,7 @@ void Bug::MoveBack(float fTime)
 
 			m_bMoveBack = false;
 			m_fMoveBackTime = 0.f;
+			m_bMoveBackOver = true;
 		}
 	}
 	else
@@ -454,7 +473,6 @@ void Bug::JumpBack(float fTime)
 	}
 
 	m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * m_eMoveBackDir);
-	m_fForce -= m_fOriginForce * m_fOriginForce;
 }
 
 void Bug::JumpEnd(float fTime)
@@ -555,6 +573,10 @@ void Bug::SetAnimation(const string& strAniName)
 
 	m_vecStateName.push_back("BJUMP");
 	m_vecStateName.push_back("JUMP");
+
+	m_vecStateName.push_back("JUMPB");
+	m_vecStateName.push_back("LAND");
+
 	m_vecStateName.push_back("DIELAND");
 	m_vecStateName.push_back("ATTACK");
 
@@ -566,10 +588,17 @@ void Bug::SetAnimation(const string& strAniName)
 	m_vecStateName.push_back("WAIT");
 
 	m_vecStateName.push_back("AATTACK"); // After Attack
-	m_vecStateName.push_back("BTTACK"); // Before Attack
+	m_vecStateName.push_back("BATTACK"); // Before Attack
 	m_vecStateName.push_back("BLOCK");
 	m_vecStateName.push_back("BLOCKHIT");
+	m_vecStateName.push_back("GETHIT");
+	m_vecStateName.push_back("GETHIT_LAND");
+	m_vecStateName.push_back("GETHIT_IDLE");
+	m_vecStateName.push_back("GETUP");
 
+	m_vecStateName.push_back("DAMAGED");
+	m_vecStateName.push_back("OPEN");
+	m_vecStateName.push_back("LAID");
 
 	for (int i = 0; i < (int)BS_OVER; ++i)
 	{
@@ -630,6 +659,9 @@ void Bug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 			SetCurrentState(BS_DIE);
 
 			m_pBody->SetMonster(false);
+
+			m_pRightSencer->Kill();
+			m_pLeftSencer->Kill();
 			return;
 		}
 		else
@@ -648,7 +680,7 @@ void Bug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		case 1: // LEFT
 			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * -2.f, 0.f, 0.f));
 			m_bNoRight = true;
-			m_bOnLand = false;
+			// m_bOnLand = false;
 			break;
 		case 2: // TOP
 			m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * 2.f, 0.f));
@@ -660,16 +692,15 @@ void Bug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 			m_pLeftSencer->ClearOverlap();
 			m_pRightSencer->ClearOverlap();
 
-			m_bOnLand = true;
 			break;
 		case 3: // RIGHT
 			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * 2.f, 0.f, 0.f));
 			m_bNoLeft = true;
-			m_bOnLand = false;
+			// m_bOnLand = false;
 			break;
 		case 4: // BOTTOM
 			m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
-			m_bOnLand = false;
+			// m_bOnLand = false;
 			// m_bCeiling = true;
 			break;
 		default:

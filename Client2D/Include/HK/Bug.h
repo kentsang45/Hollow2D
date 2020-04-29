@@ -64,6 +64,7 @@ protected:
 	DIR_TYPE m_eMoveBackDir;
 
 	bool m_bMoveBack;
+	bool m_bMoveBackOver = false;
 	float m_fMoveBackTimeMax;
 	float m_fMoveBackTime;
 

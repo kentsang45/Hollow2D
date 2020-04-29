@@ -95,6 +95,11 @@ bool CColliderBase::IsStage() const
 	return m_bStage;
 }
 
+void CColliderBase::IsColliding(bool is)
+{
+	 m_bIsColliding = is; 
+}
+
 void CColliderBase::SetOnOff(bool bOn)
 {
 	m_bOn = bOn;
@@ -357,13 +362,13 @@ void CColliderBase::Render(float fTime)
 		if (!m_CollisionList.empty() || m_bMouseCollision)
 		{
 			m_pMaterial->SetSubsetDiffuse(Vector4::Red);
-			m_bIsColliding = true;
+
 		}
 
 		else
 		{
 			m_pMaterial->SetSubsetDiffuse(Vector4::Green);
-			m_bIsColliding = false;
+	
 		}
 
 		size_t	iContainer = m_pDebugMesh->GetContainerCount();
@@ -429,14 +434,14 @@ void CColliderBase::ComputeColor()
 	if (!m_CollisionList.empty() || m_bMouseCollision)
 	{
 		m_pMaterial->SetSubsetDiffuse(Vector4::Red);
-		m_bIsColliding = true;
+
 
 	}
 
 	else
 	{
 		m_pMaterial->SetSubsetDiffuse(Vector4::Green);
-		m_bIsColliding = false;
+
 	}
 }
 

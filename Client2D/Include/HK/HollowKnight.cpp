@@ -77,7 +77,7 @@ HollowKnight::HollowKnight()
 
 
 	m_fDamagedTime = 0.f;
-	m_fDamagedTotalTime = 0.2f;
+	m_fDamagedTotalTime = 0.15f;
 
 	m_iHP = 5;
 	m_iHPCount = 5;
@@ -119,12 +119,17 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 	int HKSixeX = 4;
 	int HKSizeY = 4;
 
+	m_iStageNumber = stageNumber;
+
+
+
 	switch (stageNumber)
 	{
 	case 1:
 		// 중앙
 		sizeX = 6700;
 		sizeY = 1800;
+
 		X = sizeX * 0.5f;
 		Y = sizeY * 0.5f;
 
@@ -136,8 +141,11 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 			// float xX = (2 * 50.f) * 0.5f + 76 * 50.f;
 			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
 
-			float xX = (2 * 50.f) * 0.5f + 23 * 50.f;
-			float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
+			// float xX = (2 * 50.f) * 0.5f + 23 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
+
+			float xX = (2 * 50.f) * 0.5f + 95 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 23 * 50.f;
 
 			SetRelativePos(xX, -yY, 0.f);
 		}
@@ -153,6 +161,28 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 		sizeY = 1750;
 		X = sizeX * 0.5f;
 		Y = sizeY * 0.5f;
+
+		// 시작점
+		if (true == bStart)
+		{
+			// leftTopX = 69
+			// leftTopY = 0
+			// float xX = (2 * 50.f) * 0.5f + 76 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
+
+			// float xX = (2 * 50.f) * 0.5f + 23 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
+
+			float xX = (2 * 50.f) * 0.5f + 0 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 22 * 50.f;
+
+			SetRelativePos(xX, -yY, 0.f);
+		}
+		else
+		{
+			// SetRelativePos(x, 0.f);
+		}
+
 		break;
 
 	case 3:
@@ -160,6 +190,35 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 		sizeY = 4800;
 		X = sizeX * 0.5f;
 		Y = sizeY * 0.5f;
+
+		// 시작점
+		if (true == bStart)
+		{
+			// leftTopX = 69
+			// leftTopY = 0
+			// float xX = (2 * 50.f) * 0.5f + 76 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
+
+			// float xX = (2 * 50.f) * 0.5f + 23 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
+
+
+
+			// test
+			float xX = (2 * 50.f) * 0.5f + 28 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 63 * 50.f;
+
+			// REAL
+			// float xX = X;
+			// float yY = 0.f;
+
+			SetRelativePos(xX, -yY, 0.f);
+		}
+		else
+		{
+			// SetRelativePos(x, 0.f);
+		}
+
 		break;
 
 	case 4:
@@ -167,6 +226,26 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 		sizeY = 1800;
 		X = sizeX * 0.5f;
 		Y = sizeY * 0.5f;
+
+		// 시작점
+		if (true == bStart)
+		{
+			// leftTopX = 69
+			// leftTopY = 0
+			// float xX = (2 * 50.f) * 0.5f + 76 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
+
+			float xX = (2 * 50.f) * 0.5f + 135 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 14 * 50.f;
+
+			
+
+			SetRelativePos(xX, -yY, 0.f);
+		}
+		else
+		{
+			// SetRelativePos(x, 0.f);
+		}
 		break;
 
 	case 5:
@@ -174,12 +253,38 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 		sizeY = 1950;
 		X = sizeX * 0.5f;
 		Y = sizeY * 0.5f;
+		// 시작점
+		if (true == bStart)
+		{
+			// leftTopX = 69
+			// leftTopY = 0
+			float xX = (2 * 50.f) * 0.5f + 46 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 31 * 50.f;
+
+			// float xX = (2 * 50.f) * 0.5f + 98 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 32 * 50.f;
+
+
+
+			SetRelativePos(xX, -yY, 0.f);
+		}
+		else
+		{
+			// SetRelativePos(x, 0.f);
+		}
+
 		break;
 
 	default:
 		BOOM;
 		break;
 	}
+
+
+
+	m_fStageSizeX = sizeX;
+	m_fStageSizeY = sizeY;
+
 }
 
 bool HollowKnight::Init()
@@ -199,7 +304,7 @@ bool HollowKnight::Init()
 
 	///////////////////////////////////////////////////////////// COLLIDER SETTING
 	m_pBody = CreateComponent<CColliderRect>("PlayerBody");
-	m_pBody->SetExtent(100.f, 100.f);
+	m_pBody->SetExtent(80.f, 100.f);
 	m_pBody->SetPivot(0.5f, 0.5f, 0.f);
 	m_pBody->AddBlockCallback<HollowKnight>(this, &HollowKnight::OnBlock);
 	m_pBody->AddBeginOverlapCallback<HollowKnight>(this, &HollowKnight::BeginOverlap);
@@ -207,8 +312,9 @@ bool HollowKnight::Init()
 	
 	// m_pBody->AddBeginOverlapCallback<HollowKnight>(this, &HollowKnight::HitStay);
 	m_pBody->SetCollisionProfile("Player");
+	m_pBody->SetPlayer(true);
 
-
+	m_pBody->EnableOverlap(true);
 
 
 	//////////////////////////////////////////////////////////// MESH
@@ -283,8 +389,19 @@ void HollowKnight::Update(float fTime)
 {
 	CGameObject::Update(fTime);
 
-	// 충돌중이 아니라면
+	// 무적 판정
+	if (true == m_bInvincible)
+	{
+		m_fInvincibleTime += fTime;
 
+		if (m_fInvincibleTime >= m_fInvincibleTotalTime)
+		{
+			m_fInvincibleTime = 0.f;
+			m_bInvincible = false;
+		}
+	}
+
+	// 충돌중이 아니라면
 	if (true == m_bAttacking)
 	{
 		m_fAttackTime += fTime;
@@ -298,7 +415,7 @@ void HollowKnight::Update(float fTime)
 	
 
 	// 중력, 충돌
-	if (true == m_bOnLand)
+	if (true == m_bOnLand && 0 == m_fDamagedTime)
 	{
 		ClearGravity();
 
@@ -313,22 +430,27 @@ void HollowKnight::Update(float fTime)
 		if (true == m_bFalling)
 		{
 			// 떨어지기
-			// m_fForce -= m_fOriginForce * fTime;
+			// m_fForce -= 100.f;
 		}
 
 	}
 
-	if (false == m_pBody->IsColliding() && true == m_bOnLand)
+	if (false == m_bColliding && false == m_bOnLand && false == m_bJumping)
 	{
-		SetCurrentState(PS_FALL);
+		if (true == m_pAnimation->IsSequenceEnd())
+		{
+			SetCurrentState(PS_FALLING);
+		}		
+
 		m_bFalling = true;
-		m_fForce = 0.f;
 		m_bOnLand = false;
 		m_bHitStage = false;
 
 		m_bNoRight = false;
 		m_bNoLeft = false;
 	}
+
+
 
 	// 땅 박힌거 복구
 	
@@ -362,7 +484,7 @@ void HollowKnight::Update(float fTime)
 		// 아직 맞아서 날아가는 중
 		if (m_fDamagedTotalTime >= m_fDamagedTime)
 		{
-			m_pMovement->SetMoveSpeed(2500.f);
+			m_pMovement->SetMoveSpeed(3000.f);
 
 			if (true == m_bNoLeft && DIR_LEFT == m_eMonsterDir)
 			{	
@@ -382,7 +504,7 @@ void HollowKnight::Update(float fTime)
 			if (false == m_bCeiling)
 			{
 				m_pMovement->AddMovement(GetWorldAxis(AXIS_Y));
-				// Jump(fTime);
+				Jump(fTime);
 			}
 			else
 			{
@@ -393,12 +515,13 @@ void HollowKnight::Update(float fTime)
 
 			m_bOnLand = false;
 			m_bHitStage = false;
+			m_bColliding = false;
 		
 			return;
 		}
 		else
 		{
-			m_bFalling = true;
+
 			JumpOver(fTime); 
 
 			m_pMovement->SetMoveSpeed(500.f);
@@ -410,45 +533,47 @@ void HollowKnight::Update(float fTime)
 			m_fForce = 0.f;
 			m_fDamagedTime = 0.f;
 		}	
+
+
+
+		if (true == m_bDamaged)
+		{
+			m_fBlackTime += fTime;
+
+			if (m_fBlackTime <= 1.5f)
+			{
+				int black = RandomNumber::GetRandomNumber(1, 10);
+
+				if (black <= 5)
+				{
+					int y = RandomNumber::GetRandomNumber(0, 100) - 50;
+					int x = RandomNumber::GetRandomNumber(0, 100) - 50;
+
+					BlackSoftEffect* bs = m_pScene->SpawnObject<BlackSoftEffect>(
+						GetWorldPos() + Vector3((float)x, (float)y, 0.f)
+						);
+
+					bs->SetVertical();
+
+					SAFE_RELEASE(bs);
+				}
+			}
+			else
+			{
+				m_bDamaged = false;
+				m_fBlackTime = 0.f;
+			}
+		}
+
+		return;
 	}
 	else
 	{
-		m_pMovement->SetMoveSpeed(500.f);
+		m_pMovement->SetMoveSpeed(m_fNormalSpeed);
 	}
 
 
 
-
-
-
-	if (true == m_bDamaged)
-	{
-		m_fBlackTime += fTime;
-
-		if (m_fBlackTime <= 1.5f)
-		{
-			int black = RandomNumber::GetRandomNumber(1, 10);
-
-			if (black <= 5)
-			{
-				int y = RandomNumber::GetRandomNumber(0, 100) - 50;
-				int x = RandomNumber::GetRandomNumber(0, 100) - 50;
-
-				BlackSoftEffect* bs = m_pScene->SpawnObject<BlackSoftEffect>(
-					GetWorldPos() + Vector3((float)x, (float)y, 0.f)
-					);
-
-				bs->SetVertical();
-
-				SAFE_RELEASE(bs);
-			}		
-		}
-		else
-		{
-			m_bDamaged = false;
-			m_fBlackTime = 0.f;
-		}
-	}
 
 
 
@@ -546,23 +671,51 @@ void HollowKnight::MoveX(float fScale, float fTime)
 		return;
 	}
 
+	char	strText[256] = {};
+	sprintf_s(strText, "NoRight : %d, NoLeft : %d\n", m_bNoRight, m_bNoLeft);
+	OutputDebugStringA(strText);
+
+	/*if (-1.f == fScale)
+	{
+		m_bNoRight = true;
+	}
+	else if (1.f == fScale)
+	{
+		m_bNoLeft = true;
+	}*/
+
 	// 충돌
 	// 오른쪽 막힌 상황에서 오른쪽 가기
 	if (1.f == fScale && true == m_bNoRight)
 	{
+		m_pMovement->SetMoveSpeed(0.f);
+		m_fNormalSpeed = 0.f;
+		// SetWorldPos(m_vNoRight);
+
 		return;
 	}
 	// 오른쪽 막힌 상황에서 왼쪽 가기
-	else if (-1 == fScale && true == m_bNoRight)
+	else if (-1.f == fScale && true == m_bNoRight)
 	{
+		int a = 0;
+		m_pMovement->SetMoveSpeed(500.f);
+		m_fNormalSpeed = 500.f;
+		m_bEscape = true;
+
 		m_bNoRight = false;
 	}
 	else if (-1 == fScale && true == m_bNoLeft)
 	{
+		m_pMovement->SetMoveSpeed(0.f);
+		m_fNormalSpeed = 0.f;
+		// SetWorldPos(m_vNoLeft);
 		return;
 	}
 	else if (1.f == fScale && true == m_bNoLeft)
 	{
+		m_pMovement->SetMoveSpeed(500.f);
+		m_fNormalSpeed = 500.f;
+		m_bEscape = true;
 		m_bNoLeft = false;
 	}
 
@@ -708,6 +861,11 @@ void HollowKnight::MoveX(float fScale, float fTime)
 
 void HollowKnight::Fire(float fTime)
 {
+	if (PS_DAMAGED == m_eState)
+	{
+		m_bHealOver = true;
+		return;
+	}
 	// RELEASE
 
 	if (true == m_bFire && false == m_bHealStart)
@@ -724,6 +882,11 @@ void HollowKnight::Fire(float fTime)
 
 void HollowKnight::Attack(float fTime)
 {
+	if (PS_DAMAGED == m_eState)
+	{
+		return;
+	}
+
 	HKAttackEffect* attack;
 
 	if (false == m_bAttacking)
@@ -770,12 +933,26 @@ void HollowKnight::Jump(float fTime)
 		return;
 	}
 
-	m_fForce = 900.f;
+
+
+
+
+	m_fForce = 1000.f;
 	m_fGravitySpeed = 20.f;
+
+	if (PS_DAMAGED == m_eState)
+	{
+		m_fForce = 500.f;
+		m_bJumping = true;
+		return;
+	}
+
 
 	// 첫 점프
 	if (false == m_bJumping)
 	{
+		m_bColliding = false;
+
 		SetCurrentState(PS_JUMP);
 
 		m_pMovement->SetMoveSpeed(500.f);
@@ -832,7 +1009,7 @@ void HollowKnight::JumpEnd(float fTime)
 {
 	m_pMovement->SetMoveSpeed(500.f);
 	m_fJumpTime = 0.f;
-	m_bFalling = true;
+	m_bFalling = false;
 	m_fGravitySpeed = 20.f;
 
 	if (false == m_bHitStage)
@@ -849,12 +1026,20 @@ void HollowKnight::JumpOver(float fTime)
 	m_pMovement->SetMoveSpeed(500.f);
 	m_fGravitySpeed = 20.f;
 
+	if (true == m_bCeiling)
+	{
+		m_bFalling = true;
+		m_bJumping = false;
+		m_fForce = -300.f;
+	}
 
-	if (false == m_bFalling)
+
+	else if (false == m_bFalling)
 	{
 		SetCurrentState(PS_FALL);
 		m_bFalling = true;
 		m_fForce = 200.f;
+		m_bJumping = false;
 	}
 
 }
@@ -1148,6 +1333,11 @@ void HollowKnight::SetHP()
 
 }
 
+void HollowKnight::UpdateCamera()
+{
+
+}
+
 
 
 
@@ -1159,65 +1349,276 @@ void HollowKnight::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fT
 		return;
 	}
 
-	float y;
+	float y = 0.f;
+	float x = 0.f;
+	float margin = 0.f;
 
-	if (true == pDest->IsStage())
+	if (true == m_bEscape)
 	{
-		
-		int playerPos = (int)pSrc->GetIntersect().z;
+		m_fEscapeTime += fTime;
 
-		switch (playerPos)
+		if (m_fEscapeTime >= m_fEscapeTotalTime)
 		{
-		case 1: // LEFT
-			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * -2.f, 0.f, 0.f));
-			m_bNoRight = true;
-			break;
-		case 2: // TOP
-			// m_pMovement->AddMovement(Vector3(0.f, /*pSrc->GetColliderSectionMin().y - pDest->GetColliderSectionMax().y*/1000.f, 0.f));
-			m_bLandUp = true;
-			m_fUp = pSrc->GetIntersect().y - pSrc->GetColliderSectionMin().y;
-			ClearGravity();
-			JumpEnd(fTime);
-			m_bOnLand = true;
-			m_bCeiling = false;
-
-			y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f - 5.f;
-
-			SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
-
-			break;
-		case 3: // RIGHT
-			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * 2.f, 0.f, 0.f));
-			m_bNoLeft = true;
-			break;
-		case 4: // BOTTOM
-			m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
-			m_bFalling = true;
-			JumpOver(fTime);
-			m_bCeiling = true;
-			m_bOnLand = false;
-			break;
-		default:
-			BOOM
-			break;
+			m_bEscape = false;
+			m_fEscapeTime = 0.f;
 		}
-			
-			
-			/*m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * 2.f, 0.f));
-			ClearGravity();
-			JumpEnd(fTime);
-			m_bOnLand = true;*/
-		
-		// else if()
 
 		return;
 	}
 
-	if (true == pDest->IsMonster())
+
+	if (true == pDest->IsStage())
 	{
+		int playerPos = (int)pSrc->GetIntersect().z;
+
+		if (false == m_bColliding)
+		{
+
+			switch (playerPos)
+			{
+			case 1: // LEFT
+				x = pDest->GetColliderSectionMin().x - pSrc->GetRelativeScale().x * 0.5f - margin;
+				
+				m_vNoRight = Vector3(x, GetWorldPos().y, GetWorldPos().z);
+				
+				SetWorldPos(m_vNoRight);
+
+
+
+				m_bNoRight = true;
+				break;
+			case 2: // TOP
+				// m_pMovement->AddMovement(Vector3(0.f, /*pSrc->GetColliderSectionMin().y - pDest->GetColliderSectionMax().y*/1000.f, 0.f));
+				if(false == m_bJumping)
+				{ 
+					m_bLandUp = true;
+					m_fUp = pSrc->GetIntersect().y - pSrc->GetColliderSectionMin().y;
+					ClearGravity();
+					JumpEnd(fTime);
+					m_bOnLand = true;
+					m_bCeiling = false;
+
+					y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f;
+
+					SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+				}
+				else
+				{
+
+					m_bColliding = false;
+				}
+				
+
+				break;
+			case 3: // RIGHT
+				x = pDest->GetColliderSectionMax().x + pSrc->GetRelativeScale().x * 0.5f + margin;
+
+				m_vNoLeft = Vector3(x, GetWorldPos().y, GetWorldPos().z);
+
+				SetWorldPos(m_vNoLeft);
+				m_bNoLeft = true;
+				break;
+			case 4: // BOTTOM
+				m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
+				m_bFalling = true;
+				JumpOver(fTime);
+				m_bCeiling = true;
+				m_bOnLand = false;
+				break;
+			default:
+				BOOM
+					break;
+			}
+
+			m_bColliding = true;
+		}
+		else
+		{
+			switch (playerPos)
+			{
+			case 1: // LEFT
+				x = pDest->GetColliderSectionMin().x - pSrc->GetRelativeScale().x * 0.5f - margin;
+				m_vNoRight = Vector3(x, GetWorldPos().y, GetWorldPos().z);
+
+				SetWorldPos(m_vNoRight);
+				m_bNoRight = true;
+				break;
+			case 2: // TOP
+				// m_pMovement->AddMovement(Vector3(0.f, /*pSrc->GetColliderSectionMin().y - pDest->GetColliderSectionMax().y*/1000.f, 0.f));
+				if (false == m_bJumping)
+				{
+					m_bLandUp = true;
+					m_fUp = pSrc->GetIntersect().y - pSrc->GetColliderSectionMin().y;
+					ClearGravity();
+					JumpEnd(fTime);
+					m_bOnLand = true;
+					m_bCeiling = false;
+
+					y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f - 5.f;
+
+					SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+				}
+				else
+				{
+					m_bColliding = false;
+				}
+				break;
+			case 3: // RIGHT
+				x = pDest->GetColliderSectionMax().x + pSrc->GetRelativeScale().x * 0.5f + margin;
+				m_vNoLeft = Vector3(x, GetWorldPos().y, GetWorldPos().z);
+
+				SetWorldPos(m_vNoLeft);
+				m_bNoLeft = true;
+				break;
+			case 4: // BOTTOM
+				m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
+				m_bFalling = true;
+				JumpOver(fTime);
+				m_bCeiling = true;
+				m_bOnLand = false;
+				break;
+			default:
+				BOOM
+					break;
+			}
+
+			m_bColliding = true;
+		}
+
+		return;
+	}
+
+	int playerPos = (int)pSrc->GetIntersect().z;
+
+	// 공중에 떠 있는 상태
+	if (false == m_bColliding)
+	{
+		if (true == pDest->IsStage())
+		{
+			
+			switch (playerPos)
+			{
+			case 1: // LEFT
+				x = pDest->GetColliderSectionMin().x - pSrc->GetRelativeScale().x * 0.5f - margin;
+				m_vNoRight = Vector3(x, GetWorldPos().y, GetWorldPos().z);
+
+				SetWorldPos(m_vNoRight);
+				m_bNoRight = true;
+				break;
+			case 2: // TOP
+				// m_pMovement->AddMovement(Vector3(0.f, /*pSrc->GetColliderSectionMin().y - pDest->GetColliderSectionMax().y*/1000.f, 0.f));
+				m_bLandUp = true;
+				m_fUp = pSrc->GetIntersect().y - pSrc->GetColliderSectionMin().y;
+				ClearGravity();
+				JumpEnd(fTime);
+				m_bOnLand = true;
+				m_bCeiling = false;
+
+				y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f - 5.f;
+
+				SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+
+				break;
+			case 3: // RIGHT
+				x = pDest->GetColliderSectionMax().x + pSrc->GetRelativeScale().x * 0.5f + margin;
+				m_vNoLeft = Vector3(x, GetWorldPos().y, GetWorldPos().z);
+
+				SetWorldPos(m_vNoLeft);
+				m_bNoLeft = true;
+				break;
+			case 4: // BOTTOM
+				m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
+				m_bFalling = true;
+				JumpOver(fTime);
+				m_bCeiling = true;
+				m_bOnLand = false;
+				break;
+			default:
+				BOOM
+					break;
+			}
+
+			m_bColliding = true;
+		}
+	}
+	// 이미 땅바닥 또는 벽에 부딛힌 상태
+	else
+	{
+		if (true == pDest->IsStage())
+		{
+			switch (playerPos)
+			{
+			case 1: // LEFT
+				m_bNoRight = true;
+
+				x = pDest->GetColliderSectionMin().x - pSrc->GetRelativeScale().x * 0.5f - margin;
+				m_vNoRight= Vector3(x, GetWorldPos().y, GetWorldPos().z);
+
+				SetWorldPos(m_vNoRight);
+
+				break;
+			case 2: // TOP		
+				m_bLandUp = true;
+				m_fUp = pSrc->GetIntersect().y - pSrc->GetColliderSectionMin().y;
+				ClearGravity();
+				JumpEnd(fTime);
+				m_bOnLand = true;
+				m_bCeiling = false;
+
+				y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f - 5.f;
+
+				SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+				break;
+			case 3: // RIGHT
+				x = pDest->GetColliderSectionMax().x + pSrc->GetRelativeScale().x * 0.5f + margin;
+				m_vNoLeft = Vector3(x, GetWorldPos().y, GetWorldPos().z);
+
+				SetWorldPos(m_vNoLeft);
+
+				
+
+				m_bNoLeft = true;
+				break;
+			case 4: // BOTTOM
+				m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * -2.f, 0.f));
+				m_bFalling = true;
+				JumpOver(fTime);
+				m_bCeiling = true;
+				m_bOnLand = false;
+				break;
+			default:
+				BOOM
+					break;
+			}
+		}
+	}
+
+
+
+
+
+
+
+	if (true == pDest->IsMonster() || "MonsterProjectile" == pDest->GetCollisionProfile()->strName)
+	{
+		if ((PS_DAMAGED == m_eState))
+		{
+			return;
+		}
+
 		GET_SINGLE(CTimerManager)->CreateSlowMotion(5.f);
 
 		m_bDamaged = true;
+		
+		if (false == m_bInvincible)
+		{
+			m_bInvincible = true;
+		}
+		else if (true == m_bInvincible)
+		{
+			return;
+		}
+
 
 		// 힐 중이었으면 리셋
 		if (nullptr != m_pHealing)
@@ -1315,26 +1716,36 @@ void HollowKnight::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fT
 
 void HollowKnight::BeginOverlap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	OutLineCBuffer	tBuffer = {};
+	/*OutLineCBuffer	tBuffer = {};
 	tBuffer.iPixelSize = 5;
 
 	Animation2DFrameInfo	tFrameInfo = m_pAnimation->GetAnimFrame();
 
 	tBuffer.vScale = Vector2(m_pMesh->GetWorldScale().x, m_pMesh->GetWorldScale().y);
-	tBuffer.vImageSize = tFrameInfo.vEnd - tFrameInfo.vStart;
+	tBuffer.vImageSize = tFrameInfo.vEnd - tFrameInfo.vStart;*/
 
-	m_pMesh->UpdateMaterialCBufferNode(OUTLINE_CBUFFER, &tBuffer);
+	// m_pMesh->UpdateMaterialCBufferNode(OUTLINE_CBUFFER, &tBuffer);
+
 }
 
 void HollowKnight::EndOverlap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	OutLineCBuffer	tBuffer = {};
+	// OutLineCBuffer	tBuffer = {};
 
 
-	m_pMesh->UpdateMaterialCBufferNode(OUTLINE_CBUFFER, &tBuffer);
+	// m_pMesh->UpdateMaterialCBufferNode(OUTLINE_CBUFFER, &tBuffer);
 
-	m_bNoRight = false;
-	m_bNoLeft = false;
+	if (true == pDest->IsStage())
+	{
+		m_bColliding = false;
+		m_bNoLeft = false;
+		m_bNoRight = false;
+		m_bCeiling = false;
+		m_bOnLand = false;
+
+		m_fNormalSpeed = 500.f;
+		m_pMovement->SetMoveSpeed(m_fNormalSpeed);
+	}
 }
 
 

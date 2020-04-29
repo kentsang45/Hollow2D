@@ -44,6 +44,8 @@ bool Sencer::Init()
 	m_pBody->AddEndOverlapCallback<Sencer>(this, &Sencer::OffBlock);
 	m_pBody->SetCollisionProfile("Sencer");
 
+	m_pBody->SetPlayer(true);
+
 	m_pBody->EnableOverlap(true);
 
 	m_pMovement = CGameObject::CreateComponent<CCharacterMovementComponent>("Movement");
@@ -79,23 +81,54 @@ bool Sencer::IsPlayer() const
 	return m_bPlayer;
 }
 
+void Sencer::SetOverlap(bool free)
+{
+	if (4 == m_iStyle)
+	{
+		int a = 0;
+	}
+
+	m_bFree = free;
+}
+
 void Sencer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-
+	if (4 == m_iStyle)
+	{
+		int a = 0;
+	}
 	
 
+	if (true == pDest->IsStage())
+	{
+		m_bFree = false;
+	}
 
-	m_bFree = false;
+	if (true == pDest->IsPlayer())
+	{
+		m_bPlayer = true;
+	}
+
 
 }
 
 void Sencer::OffBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
+	if (4 == m_iStyle)
+	{
+		int a = 0;
+	}
 
+	if (true == pDest->IsStage())
+	{
+		m_bFree = true;
+		return;
+	}
 
-
-	m_bFree = true;
-	
+	if (true == pDest->IsPlayer())
+	{
+		m_bPlayer = false;
+	}
 }
 
 void Sencer::Clear()

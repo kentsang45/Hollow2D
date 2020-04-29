@@ -51,7 +51,7 @@ public:
 	void ClearGravity();
 	void SlowGravity();
 
-	void SetForce(float fForce) { m_fForce = fForce; }
+	void SetForce(float fForce) { m_fOriginForce = fForce; }
 
 	void Jump();
 

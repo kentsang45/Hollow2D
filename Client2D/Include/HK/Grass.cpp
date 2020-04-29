@@ -117,12 +117,12 @@ void Grass::Render(float fTime)
 
 
 
-void Grass::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyle)
+void Grass::PlaceAt(int sizeX, int sizeY, float leftTopX, float leftTopY, int iStyle)
 {
 	m_iStyle = iStyle;
 
 	char number[20];
-	itoa(iStyle, number, 20);
+	itoa(m_iStyle, number, 20);
 
 
 	m_strIdleName.append(number);
@@ -259,4 +259,9 @@ void Grass::ChangeAnimation(int iAnim)
 		BOOM;
 		break;
 	}
+}
+
+void Grass::Reverse()
+{
+	Flip(-1);
 }

@@ -17,13 +17,13 @@ public:
 	virtual void Render(float fTime);
 
 
-	void PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyle);
+	void PlaceAt(int sizeX, int sizeY, float leftTopX, float leftTopY, int iStyle);
 
 	void BeginOverlap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
 	void ChangeAnimation(int iAnim);
-
+	void Reverse();
 
 private:
 	class CStaticMeshComponent* m_pMesh;

@@ -162,6 +162,11 @@ void HKAttackEffect::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float 
 	}
 	else
 	{
+		if ("Sencer" == pDest->GetCollisionProfile()->strName)
+		{
+			return;
+		}
+
 		HitEffect* attack = m_pScene->SpawnObject<HitEffect>(pSrc->GetIntersect() + Vector3(0.f, 0.f, -0.51f));
 
 		SAFE_RELEASE(attack);

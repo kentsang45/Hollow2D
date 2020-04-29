@@ -60,7 +60,7 @@ private:
 
 	void SetHP();
 
-
+	void UpdateCamera();
 
 
 private:
@@ -135,5 +135,27 @@ private:
 	// 중력
 	bool m_bLandUp = false; // true면 땅에서 꺼진 만큼 위로 올라가야한다.
 	float m_fUp = 0.f;
+
+	bool m_bColliding = false;
+
+	int m_iStageNumber;
+
+	float m_fStageSizeX;
+	float m_fStageSizeY;
+
+	float m_fNormalSpeed = 500.f;
+
+	Vector3 m_vNoRight = Vector3::Zero;
+	Vector3 m_vNoLeft = Vector3::Zero;
+
+	// 콜리젼 빠져나오기
+	bool m_bEscape = false;
+	float m_fEscapeTime = 0.f;
+	float m_fEscapeTotalTime = 0.01f;
+
+	// 잠시 무적상태
+	bool m_bInvincible = false;
+	float m_fInvincibleTime = 0.f;
+	float m_fInvincibleTotalTime = 0.5f;
 };
 

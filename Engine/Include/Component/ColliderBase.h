@@ -34,11 +34,16 @@ protected:
 	int m_iZOrder;
 
 
-	bool m_bIsColliding;
+	bool m_bIsColliding = false;
+	bool m_bIsOverlap = false;
 
 	bool m_bOn;
 	bool m_bStage;
 	bool m_bMonster;
+	bool m_bPlayer = false;
+
+
+
 	PLAYER_POSITION m_ePlayerPos;
 
 	bool m_bBlocking = false;
@@ -57,12 +62,19 @@ public:
 	void SetMonster(bool bMonster) { m_bMonster = bMonster; }
 	bool IsMonster() const { return m_bMonster; }
 
+	void SetPlayer(bool bMonster) { m_bPlayer = bMonster; }
+	bool IsPlayer() const { return m_bPlayer; }
+
+	void IsColliding(bool is);
+	bool IsColliding() const { return m_bIsColliding; }
+
+	// void IsOverlap(bool is);
+	// bool IsOverlap() const { return m_bIsOverlap; }
+
 	void SetOnOff(bool bOn);
 	bool IsOn() const;
 
 	Vector3 GetIntersect() const;
-
-	bool IsColliding() const { return m_bIsColliding; }
 
 	void SetBlock(bool bBlock) { m_bBlocking = bBlock; }
 	bool GetBlock() const { return m_bBlocking; }
