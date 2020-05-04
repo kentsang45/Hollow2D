@@ -18,7 +18,7 @@ DashingBug::DashingBug()
 DashingBug::~DashingBug()
 {
 	SAFE_RELEASE(m_pPlayerSencer);
-	SAFE_RELEASE(m_pSencerBody);
+	// SAFE_RELEASE(m_pSencerBody);
 }
 
 bool DashingBug::Init()

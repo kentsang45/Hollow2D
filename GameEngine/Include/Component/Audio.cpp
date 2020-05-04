@@ -44,6 +44,17 @@ bool CAudio::IsPlay() const
 	return bPlaying;
 }
 
+bool CAudio::IsPause() const
+{
+	if (!m_pSound)
+		return false;
+
+	bool	bPaused = false;
+	m_pSound->GetChannel()->getPaused(&bPaused);
+
+	return bPaused;
+}
+
 void CAudio::SetSound(const string & strName)
 {
 	SAFE_RELEASE(m_pSound);

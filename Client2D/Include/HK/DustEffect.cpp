@@ -37,7 +37,8 @@ bool DustEffect::Init()
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
 	m_pMesh->SetStaticMesh(pMesh);
 
-	CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimMaterial");
+	CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("DarknessMaterial");
+	pMaterial->SetSubsetDiffuse(Vector4(1.f, 1.f, 1.f, 0.5f));
 	m_pMesh->SetMaterial(pMaterial);
 
 	m_pRotPivot = CreateComponent<CSceneComponent>("RotPivot");
@@ -112,7 +113,9 @@ void DustEffect::Update(float fTime)
 	}
 	else
 	{
-		int a = 0;
+		m_pMovement->SetMoveSpeed(50.f);
+
+		m_pMovement->AddMovement(GetWorldAxis(AXIS_Y));
 	}
 
 

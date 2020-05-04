@@ -29,5 +29,7 @@ private:
 	int m_iSizeX = 0;
 	int m_iSizeY = 0;
 	int m_iDepth = 0;
+
+	int m_iStage = 0;
 };
 

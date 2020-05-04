@@ -12,6 +12,13 @@
 #include "HollowKnight.h"
 #include "Sencer.h"
 
+#include "../RandomNumber.h"
+#include "Coin.h"
+#include "HitOrange.h"
+
+#include "Blob.h"
+#include "BloodDust.h"
+
 SmallBug::SmallBug()
 {
 }
@@ -33,7 +40,7 @@ bool SmallBug::Init()
 
 	Bug::SetAnimation("SMB");
 
-	m_pMesh->SetPivot(0.5f, 0.56f, 0.f);
+	m_pMesh->SetPivot(0.5f, 0.45f, 0.f);
 
 	m_pBody->AddBlockCallback<SmallBug>(this, &SmallBug::OnBlock);
 	m_pBody->SetExtent(40.f, 40.f);
@@ -80,7 +87,7 @@ bool SmallBug::Init()
 
 
 
-
+	m_pMovement->SetMoveSpeed(200.f);
 
 	m_fGravitySpeed = 5.f;
 
@@ -100,7 +107,21 @@ void SmallBug::Begin()
 
 void SmallBug::Update(float fTime)
 {
+	if (m_pHK->GetStageNumber() != m_iStageNumber)
+	{
+		return;
+
+	}
+
+
 	Bug::Update(fTime);
+
+
+	if (m_fWait <= 3.f)
+	{
+		m_fWait += fTime;
+		return;
+	}
 
 	// 죽을 때 날아가다가 땅바닥에 ...
 	if (true == m_bOnLand)
@@ -347,7 +368,7 @@ void SmallBug::CheckFront()
 		}
 
 		// 오른쪽으로 가고 있는데 오른쪽이 절벽이면 아래로
-		else if (true == rt && true == right)
+		else if (true == rt && true == right && false == left)
 		{
 			m_eNewDir = DIR_BOT;
 		}
@@ -365,7 +386,7 @@ void SmallBug::CheckFront()
 		}
 
 		// 오른쪽으로 가고 있는데 오른쪽이 절벽이면 아래로
-		else if (true == rt && false == right)
+		else if (true == rt && false == right && true == left && true == lt)
 		{
 			m_eNewDir = DIR_RIGHT;
 		}
@@ -593,25 +614,52 @@ void SmallBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 	int a = 0;
 
-	if (nullptr == pDest)
+	if (nullptr == pDest || "Object" == pDest->GetCollisionProfile()->strName)
 	{
 		return;
 	}
 
 	if ("PlayerProjectile" == pDest->GetCollisionProfile()->strName)
 	{
+		if (true == m_bDead)
+		{
+			return;
+		}
+
 		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
 		SAFE_RELEASE(attack);
 
 		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
 		m_eMoveBackDir = player->GetDirection();
 
+		for (size_t i = 0; i < 6; ++i)
+		{
+			int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+			int y = RandomNumber::GetRandomNumber(1, 200) - 100;
+
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			bd->SetDir(m_eMoveBackDir);
+			SAFE_RELEASE(bd);
+		}
+
+		for (size_t i = 0; i < 6; ++i)
+		{
+			int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+			int y = RandomNumber::GetRandomNumber(1, 200) - 100;
+
+			Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			// 0보다 작으면 반대로 날아간다.
+
+			bd->SetDir(m_eMoveBackDir);
+
+			SAFE_RELEASE(bd);
+		}
+
+
 		m_iHP -= 1;
 
-		if (true == m_bDead)
-		{
-			return;
-		}
 
 		if (0 >= m_iHP)
 		{
@@ -626,11 +674,36 @@ void SmallBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 			SetWorldRotationZ(0.f);
 
 			m_pBody->SetMonster(false);
+
+			HitOrange* ho = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			SAFE_RELEASE(ho);
+
+			HitOrange* ho1 = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			ho1->SetBinding();
+			SAFE_RELEASE(ho1);
+
+			int count = RandomNumber::GetRandomNumber(1, 3);
+
+			for (size_t i = 0; i < count; ++i)
+			{
+				Coin* coin = m_pScene->SpawnObject<Coin>(GetWorldPos());
+				SAFE_RELEASE(coin);
+			}
+
 			return;
 		}
 		else
 		{
 			m_bMoveBack = true;
+
+			HitOrange* ho = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			SAFE_RELEASE(ho);
+
+
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos());
+			bd->SetNormalMonster();
+			SAFE_RELEASE(bd);
+
 		}
 	}
 

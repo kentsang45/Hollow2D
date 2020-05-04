@@ -21,6 +21,9 @@ public:
 
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
+	void SetDir(int dir);
+
+	void SetNormalMonster();
 private:
 	class CStaticMeshComponent* m_pMesh;
 	class CAnimation2D* m_pAnimation;

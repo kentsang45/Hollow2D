@@ -21,6 +21,7 @@
 #include "../RandomNumber.h"
 
 #include "HollowKnight.h"
+#include "EffectSound.h"
 
 Statue::Statue()
 	: m_pMesh(nullptr)
@@ -147,7 +148,7 @@ void Statue::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyl
 		m_iSizeY = 250;
 
 		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
-		float X = m_iSizeX * 0.5f + leftTopX * 50.f;
+		float X = (m_iStageNumber - 1) * 10000.f + m_iSizeX * 0.5f + leftTopX * 50.f;
 		float Y = m_iSizeY * 0.5f + leftTopY * 50.f;
 
 		// m_pMesh->SetRelativePos(X, -Y, -1.f);
@@ -161,7 +162,7 @@ void Statue::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY, int iStyl
 	{
 
 		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
-		float X = (200) * 0.5f + leftTopX * 50.f;
+		float X = (m_iStageNumber - 1) * 10000.f + (200) * 0.5f + leftTopX * 50.f;
 		float Y = (200) * 0.5f + leftTopY * 50.f;
 
 		// m_pMesh->SetRelativePos(X, -Y, -1.f);
@@ -251,7 +252,22 @@ void Statue::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		}
 
 
+		int ran = RandomNumber::GetRandomNumberTime(1, 2);
 
+		EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+			Vector3(0.f, 0.f, GetRelativeRot().z));
+
+		m_strSoundName = "Statue_Hit_";
+		char number[20];
+		itoa(ran, number, 20);
+		m_strSoundName.append(number);
+
+		m_strSoundFileName = m_strSoundName;
+		m_strSoundFileName.append(".wav");
+
+		pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+		SAFE_RELEASE(pFireSound);
 
 
 

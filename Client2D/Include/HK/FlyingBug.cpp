@@ -14,6 +14,14 @@
 #include "HollowKnight.h"
 
 #include "../RandomNumber.h"
+#include "Coin.h"
+#include "HitOrange.h"
+
+#include "Blob.h"
+#include "BloodDust.h"
+#include "EffectSound.h"
+
+#include "SoundObject.h"
 
 FlyingBug::FlyingBug()
 	: m_eDir(DIR_LEFT)
@@ -44,6 +52,7 @@ FlyingBug::~FlyingBug()
 
 	SAFE_RELEASE(m_pRightSencer);
 	SAFE_RELEASE(m_pLeftSencer);
+	SAFE_RELEASE(m_pFootsteps);
 }
 
 bool FlyingBug::Init()
@@ -52,6 +61,15 @@ bool FlyingBug::Init()
 	{
 		return false;
 	}
+
+	m_pFootsteps = m_pScene->SpawnObject<SoundObject>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+
+	m_pFootsteps->SetSound("mosquito_fly", "mosquito_fly.wav");
+	m_pFootsteps->StopSO();
+
+
+
 
 	m_pMesh = CGameObject::CreateComponent<CStaticMeshComponent>("Mesh");
 	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
@@ -167,6 +185,8 @@ void FlyingBug::Update(float fTime)
 	{
 		m_bDead = true;
 
+	
+
 		return;
 	}
 
@@ -272,15 +292,59 @@ void FlyingBug::Update(float fTime)
 			{
 				m_bFollowing = true;
 				SetCurrentState(BS_BWALK);
+
+				EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+					Vector3(0.f, 0.f, GetRelativeRot().z));
+
+
+				m_strSoundName = "mosquito_charge_prepare";
+				m_strSoundFileName = m_strSoundName;
+				m_strSoundFileName.append(".wav");
+
+
+				pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+				SAFE_RELEASE(pFireSound);
 			}
 
 			if (BS_BWALK == m_eState && true == m_pAnimation->IsSequenceEnd())
 			{
 				SetCurrentState(BS_WALK);
+
 			}
 
 
 			MoveBack(fTime);
+
+			if (false == m_bWalkSound)
+			{
+				EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+					Vector3(0.f, 0.f, GetRelativeRot().z));
+
+
+				m_strSoundName = "mosquito_fly";
+				m_strSoundFileName = m_strSoundName;
+				m_strSoundFileName.append(".wav");
+
+
+				pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+				SAFE_RELEASE(pFireSound);
+
+
+				m_bWalkSound = true;
+
+				m_fSoundTime = 0.f;
+			}
+
+			m_fSoundTime += fTime;
+
+			if (m_fSoundTime >= m_fSoundTotalTime)
+			{
+				m_fSoundTime = 0.f;
+				m_bWalkSound = false;
+			}
+
 
 
 			return;
@@ -289,6 +353,9 @@ void FlyingBug::Update(float fTime)
 		else
 		{
 			SetCurrentState(BS_STAND);
+
+			m_bWalkSound = false;
+
 			m_bFollowing = false;
 		}
 
@@ -696,6 +763,10 @@ void FlyingBug::SetAnimation(const string& strAniName)
 
 	m_vecStateName.push_back("BJUMP");
 	m_vecStateName.push_back("JUMP");
+
+	m_vecStateName.push_back("JUMPB");
+	m_vecStateName.push_back("LAND");
+
 	m_vecStateName.push_back("DIELAND");
 	m_vecStateName.push_back("ATTACK");
 
@@ -707,9 +778,17 @@ void FlyingBug::SetAnimation(const string& strAniName)
 	m_vecStateName.push_back("WAIT");
 
 	m_vecStateName.push_back("AATTACK"); // After Attack
-	m_vecStateName.push_back("BTTACK"); // Before Attack
+	m_vecStateName.push_back("BATTACK"); // Before Attack
 	m_vecStateName.push_back("BLOCK");
 	m_vecStateName.push_back("BLOCKHIT");
+	m_vecStateName.push_back("GETHIT");
+	m_vecStateName.push_back("GETHIT_LAND");
+	m_vecStateName.push_back("GETHIT_IDLE");
+	m_vecStateName.push_back("GETUP");
+
+	m_vecStateName.push_back("DAMAGED");
+	m_vecStateName.push_back("OPEN");
+	m_vecStateName.push_back("LAID");
 
 
 	for (int i = 0; i < (int)BS_OVER; ++i)
@@ -741,24 +820,68 @@ void FlyingBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 
 	if ("PlayerProjectile" == pDest->GetCollisionProfile()->strName)
 	{
+		if (true == m_bDead)
+		{
+			return;
+		}
+
+		GetHitSound();
+
 		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
 
 		SAFE_RELEASE(attack);
+
+
+	
 
 		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
 
 		m_eMoveBackDir = player->GetDirection();
 
 
-		m_iHP -= 1;
+		Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos());
+		bd->SetNormalMonster();
+		// 0보다 작으면 반대로 날아간다.
 
-		if (true == m_bDead)
+		bd->SetDir(m_eMoveBackDir);
+
+		SAFE_RELEASE(bd);
+
+
+
+		for (size_t i = 0; i < 4; ++i)
 		{
-			return;
+			int x = RandomNumber::GetRandomNumber(1, 100) - 50;
+			int y = RandomNumber::GetRandomNumber(1, 100) - 50;
+
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			bd->SetDir(m_eMoveBackDir);
+			SAFE_RELEASE(bd);
 		}
+
+		for (size_t i = 0; i < 4; ++i)
+		{
+			int x = RandomNumber::GetRandomNumber(1, 100) - 50;
+			int y = RandomNumber::GetRandomNumber(1, 100) - 50;
+
+			Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			// 0보다 작으면 반대로 날아간다.
+
+			bd->SetDir(m_eMoveBackDir);
+
+			SAFE_RELEASE(bd);
+		}
+
+
+
+		m_iHP -= 1;
 
 		if (0 >= m_iHP)
 		{
+			DeathSound();
+			
 			SetPhysics(true);
 
 			m_bJump = true;
@@ -775,11 +898,26 @@ void FlyingBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 			m_bOnLand = false;
 
 			m_pBody->SetMonster(false);
+
+			int count = RandomNumber::GetRandomNumber(1, 3);
+
+			for (size_t i = 0; i < count; ++i)
+			{
+				Coin* coin = m_pScene->SpawnObject<Coin>(GetWorldPos());
+				SAFE_RELEASE(coin);
+			}
+
+			HitOrange* ho1 = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			ho1->SetBinding();
+			SAFE_RELEASE(ho1)
+
 			return;
 		}
 		else
 		{
 			m_bMoveBack = true;
+			HitOrange* ho = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			SAFE_RELEASE(ho);
 		}
 	}
 
@@ -826,6 +964,8 @@ void FlyingBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 				// m_bCeiling = true;
 
 				m_bFlyDown = true;
+
+
 				break;
 			default:
 				BOOM
@@ -881,45 +1021,67 @@ void FlyingBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 				break;
 		}
 
-		// 바운스
-		if (true == m_bJump && true == m_bOnLand)
+		//// 바운스
+		//if (true == m_bJump && true == m_bOnLand)
+		//{
+		//	m_fCurrentForce = m_fCurrentForce * 0.33;
+		//	m_fMoveSpeed = m_fMoveSpeed * 0.33;
+
+		//	if (m_fCurrentForce <= 10.f)
+		//	{
+		//		SetCurrentState(BS_DEAD);
+		//		m_bJump = false;
+		//		m_bMoveBack = false;
+		//		m_pBody->SetCollisionProfile("Object");
+		//	}
+		//	// 다시 한번 튕김
+		//	else
+		//	{
+		if (true == m_bOnLand)
 		{
-			m_fCurrentForce = m_fCurrentForce * 0.33;
-			m_fMoveSpeed = m_fMoveSpeed * 0.33;
+			EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+				Vector3(0.f, 0.f, GetRelativeRot().z));
 
-			if (m_fCurrentForce <= 10.f)
+
+			m_strSoundName = "enemy_fly";
+			m_strSoundFileName = m_strSoundName;
+			m_strSoundFileName.append(".wav");
+
+
+			pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+			SAFE_RELEASE(pFireSound);
+
+			SetCurrentState(BS_DEAD);
+			m_bJump = false;
+			m_bMoveBack = false;
+			m_pBody->SetCollisionProfile("Object");
+
+			ClearGravity();
+			// m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * 2.f, 0.f));
+
+			y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f + 5.f;
+
+			SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
+
+
+
+			// SetForce(m_fCurrentForce);
+			// m_bJump = true;
+			// m_bJumping = false;
+
+			/*if (true == m_bDieLand)
 			{
-				SetCurrentState(BS_DEAD);
-				m_bJump = false;
-				m_bMoveBack = false;
-				m_pBody->SetCollisionProfile("Object");
-			}
-			// 다시 한번 튕김
-			else
-			{
-				ClearGravity();
-				// m_pMovement->AddMovement(Vector3(0.f, pSrc->GetIntersect().y * 2.f, 0.f));
+				SetCurrentState(BS_DIELAND);
+			}*/
 
-				float y = pDest->GetColliderSectionMax().y + pSrc->GetRelativeScale().y * 0.5f + 5.f;
-
-				SetWorldPos(Vector3(GetWorldPos().x, y, GetWorldPos().z));
-
-
-
-				SetForce(m_fCurrentForce);
-				m_bJump = true;
-				m_bJumping = false;
-
-				if (true == m_bDieLand)
-				{
-					SetCurrentState(BS_DIELAND);
-				}
-
-				return;
-			}
-
-
+			return;
 		}
+		
+		//	}
+
+
+		// }
 
 		ClearGravity();
 		JumpEnd(fTime);
@@ -934,7 +1096,9 @@ void FlyingBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 void FlyingBug::PlaceAt(int leftTopX, int leftTopY)
 {
 	// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
-	float X = (2 * 50.f) * 0.5f + leftTopX * 50.f;
+
+
+	float X = (m_iStageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + leftTopX * 50.f;
 	float Y = (2 * 50.f) * 0.5f + leftTopY * 50.f;
 
 	// m_pMesh->SetRelativePos(X, -Y + 10.f, 0.f);
@@ -993,6 +1157,40 @@ void FlyingBug::RandomIdle(float fTime)
 
 
 
+}
+
+
+
+void FlyingBug::GetHitSound()
+{
+	EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+
+
+	m_strSoundName = "enemy_damage";
+	m_strSoundFileName = m_strSoundName;
+	m_strSoundFileName.append(".wav");
+
+
+	pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+	SAFE_RELEASE(pFireSound);
+}
+
+void FlyingBug::DeathSound()
+{
+	EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+
+
+	m_strSoundName = "enemy_death";
+	m_strSoundFileName = m_strSoundName;
+	m_strSoundFileName.append(".wav");
+
+
+	pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+	SAFE_RELEASE(pFireSound);
 }
 
 

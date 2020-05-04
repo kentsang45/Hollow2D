@@ -125,7 +125,7 @@ bool HKExcelManager::LoadStage(const TCHAR * path, class HKTileMap* tileMap)
 	return true;
 }
 
-bool HKExcelManager::LoadStage(const TCHAR * path, class CScene* pScene)
+bool HKExcelManager::LoadStage(const TCHAR * path, class CScene* pScene, int iStage)
 {
 	Book* book = xlCreateBook();
 
@@ -146,7 +146,9 @@ bool HKExcelManager::LoadStage(const TCHAR * path, class CScene* pScene)
 				int num4 = sheet->readNum(row, 3); // LTY
 
 				TestStage* stage = pScene->SpawnObject<TestStage>();
+				stage->SetStageNumber(iStage);
 				stage->PlaceAt(num1, num2, num3, num4);
+			
 				SAFE_RELEASE(stage);			
 			}
 		}

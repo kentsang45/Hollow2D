@@ -60,22 +60,23 @@ bool Blob::Init()
 	m_pBody->SetCollisionProfile("Object");
 
 	m_pMesh->AddChild(m_pBody, TR_POS);
-	m_pBody->SetExtent(100.f, 100.f);
+
 	m_pBody->SetPivot(0.5f, 0.5f, 0.f);
 
 	SAFE_RELEASE(pMesh);
 	SAFE_RELEASE(pMaterial);
 
-	int scale = RandomNumber::GetRandomNumber(20, 50);
+	m_fScale = (float)RandomNumber::GetRandomNumber(50, 80);
 
-	m_pMesh->SetRelativeScale(scale, scale, 1.f);
+	m_pMesh->SetRelativeScale(m_fScale, m_fScale, 1.f);
+	m_pBody->SetExtent(m_fScale, m_fScale);
 	m_pMesh->SetPivot(0.5f, 0.5f, 0.f);
 
 	////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////
 	////////////////////////////////////////////////////////////////////////////////////////////
 
-	m_pMovement->SetMoveSpeed(700.f);
+	
 
 
 
@@ -109,13 +110,20 @@ void Blob::Update(float fTime)
 	// มกวม
 	if (false == m_bJump)
 	{
-		float m_fCurrentForce = RandomNumber::GetRandomNumber(100, 600);
+		float m_fCurrentForce = RandomNumber::GetRandomNumber(100, 1000);
 
 		m_fForce = m_fCurrentForce;
 
 		m_bJump = true;
 		m_bOnLand = false;
+
+
+		m_fMoveSpeed = 1500.f - m_fCurrentForce;
+
+		m_pMovement->SetMoveSpeed(m_fMoveSpeed);
 	}
+	
+
 
 	m_pMovement->AddMovement(GetWorldAxis(AXIS_X) * m_iDir);
 }
@@ -136,16 +144,19 @@ void Blob::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		return;
 	}
 
-	if (true == pDest->IsMonster() || "Sencer" == pDest->GetCollisionProfile()->strName || "Monster" == pDest->GetCollisionProfile()->strName)
+	if (true == pDest->IsStage() || true == pDest->IsPlayer())
 	{
-		return;
+		GetHit* gh = m_pScene->SpawnObject<GetHit>(GetWorldPos() + Vector3(0.f, 50.f, 0.f));
+		gh->SetAnimation(1);
+		gh->SetRelativeScale(m_fScale * 3, m_fScale * 3, 1.f);
+		SAFE_RELEASE(gh);
+
+		Kill();
 	}
 
-	GetHit* gh = m_pScene->SpawnObject<GetHit>(GetWorldPos() + Vector3(0.f, 50.f, 0.f));
-	gh->SetAnimation(1);
-	SAFE_RELEASE(gh);
 
-	Kill();
+
+
 
 
 
@@ -155,5 +166,13 @@ void Blob::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 CColliderRect * Blob::GetBody() const
 {
 	return m_pBody;
+}
+
+void Blob::SetNormalMonster()
+{
+	m_fScale = (float)RandomNumber::GetRandomNumber(30, 50);
+
+	m_pMesh->SetRelativeScale(m_fScale, m_fScale, 1.f);
+	m_pBody->SetExtent(m_fScale, m_fScale);
 }
 

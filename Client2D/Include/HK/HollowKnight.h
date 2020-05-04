@@ -46,6 +46,38 @@ public:
 
 	void SetEffect(class HKAttackEffect* attackEffect);
 
+	void AddCoinCount() { ++m_iCoinCount; }
+	int GetCoinCount() const { return m_iCoinCount; }
+
+	void CameraControl(float fTime);
+
+	void CameraShake(float fTime);
+	void CameraShakeOn(float fSetTime = 0.5f, int iIntensity = 30);
+
+	void SetHPCoin(int hp, int coin) { m_iHP = hp; m_iCoinCount = coin; }
+
+	void SetStage(int iStage, bool bStart);
+
+	void GoToNext();
+	void GoToPrev();
+	int GetStageNumber() const { return m_iStageNumber; }
+
+	void NextStage(float fTime);
+	void PrevStage(float fTime);
+
+	void BossOn(bool on) { m_bBossOn = on; }
+	bool BossOn() const {		return m_bBossOn;	}
+
+	void PlaceStart();
+	void ResetPosition() { m_bReset = true; }
+
+	void SetSoulEffect(float fTime);
+	void SetBugEffect(float fTime);
+
+	void SoundTestOn(float fTime);
+	void SoundTestOff(float fTime);
+
+	void SetEffectSound(const string& strKey, const char* pFileName);
 
 private:
 	void SetCurrentState(PLAYER_STATE state);
@@ -62,9 +94,17 @@ private:
 
 	void UpdateCamera();
 
+	
 
 private:
+
+	class Darkness* m_pDark = nullptr;
+
 	class CStaticMeshComponent*	m_pMesh;
+
+	class CStaticMeshComponent*	m_pDarkMesh;
+	class CAnimation2D* m_pDarkAnimation;
+
 	class CCharacterMovementComponent*	m_pMovement;
 	class CCameraComponent*		m_pCamera;
 	class CMaterial* m_pMaterial;
@@ -138,8 +178,8 @@ private:
 
 	bool m_bColliding = false;
 
+	// STAGE
 	int m_iStageNumber;
-
 	float m_fStageSizeX;
 	float m_fStageSizeY;
 
@@ -157,5 +197,43 @@ private:
 	bool m_bInvincible = false;
 	float m_fInvincibleTime = 0.f;
 	float m_fInvincibleTotalTime = 0.5f;
+
+	// 카메라 쉐이크
+	bool m_bShake = false;
+	float m_fShakeTime = 0.f;
+	float m_fShakeTotalTime = 0.5f;
+
+	int m_iIntensity;
+
+	Vector3 m_vPrevPos = Vector3::Zero;
+
+	// 동전
+	int m_iCoinCount = 0;
+
+	bool m_bNext = false;
+	bool m_bPrev = false;
+
+	// 공중부양 상태
+	bool m_bAir= false;
+	float m_fAirTime = 0.f;
+	float m_fAirTotalTime = 0.5f;
+
+	// 두둥등장
+	bool m_bBossOn = false;
+
+	bool m_bReset = false;
+	float m_fResetTime = 0.f;
+	float m_fResetTotalTime = 0.5f;
+
+
+	//bool m_bBright = false;
+	//float m_fBrightTime = 0.f;
+	//float m_fBrightTotalTime = 0.5f;
+
+
+
+	class SoundObject* m_pFootsteps = nullptr;
+
+	bool m_bWalkSound = false;
 };
 

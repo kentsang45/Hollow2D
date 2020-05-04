@@ -18,7 +18,7 @@ public:
 
 	void Start(float fTime, const Vector3& vPos);
 
-	void SetAnimation(int style);
+	void SetAnimation(int style, bool bNormal = false);
 
 private:
 	class CStaticMeshComponent* m_pMesh;

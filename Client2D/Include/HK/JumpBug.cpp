@@ -13,7 +13,12 @@
 #include "Sencer.h"
 #include "MonsterHitEffect.h"
 #include "HollowKnight.h"
+#include "../RandomNumber.h"
+#include "Coin.h"
 
+#include "Blob.h"
+#include "BloodDust.h"
+#include "HitOrange.h"
 
 JumpBug::JumpBug()
 {
@@ -36,7 +41,7 @@ bool JumpBug::Init()
 	}
 
 	Bug::SetAnimation("JB");
-	m_pMesh->SetPivot(0.5f, 0.40f, 0.f);
+	m_pMesh->SetPivot(0.5f, 0.42f, 0.f);
 
 	// 플레이어 찾기위한 센서
 	m_pPlayerLeftSencer = m_pScene->SpawnObject<Sencer>();
@@ -455,21 +460,51 @@ void JumpBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 	if ("PlayerProjectile" == pDest->GetCollisionProfile()->strName)
 	{
-		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
+		if (true == m_bDead)
+		{
+			return;
+		}
 
+		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
 		SAFE_RELEASE(attack);
+
+
+
+
+
 
 		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
 
 		m_eMoveBackDir = player->GetDirection();
 
+		for (size_t i = 0; i < 6; ++i)
+		{
+			int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+			int y = RandomNumber::GetRandomNumber(1, 200) - 100;
+
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			bd->SetDir(m_eMoveBackDir);
+			SAFE_RELEASE(bd);
+		}
+
+		for (size_t i = 0; i < 6; ++i)
+		{
+			int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+			int y = RandomNumber::GetRandomNumber(1, 200) - 100;
+
+			Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			// 0보다 작으면 반대로 날아간다.
+
+			bd->SetDir(m_eMoveBackDir);
+
+			SAFE_RELEASE(bd);
+		}
 
 		m_iHP -= 1;
 
-		if (true == m_bDead)
-		{
-			return;
-		}
+		
 
 		if (0 >= m_iHP)
 		{
@@ -485,11 +520,34 @@ void JumpBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 			m_pRightSencer->Kill();
 			m_pLeftSencer->Kill();
+
+			HitOrange* ho1 = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			ho1->SetBinding();
+			SAFE_RELEASE(ho1);
+
+			HitOrange* ho = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			SAFE_RELEASE(ho);
+
+			int count = RandomNumber::GetRandomNumber(1, 3);
+
+			for (size_t i = 0; i < count; ++i)
+			{
+				Coin* coin = m_pScene->SpawnObject<Coin>(GetWorldPos());
+				SAFE_RELEASE(coin);
+			}
+
 			return;
 		}
 		else
 		{
 			m_bMoveBack = true;
+
+			HitOrange* ho = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			SAFE_RELEASE(ho);
+
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos());
+			bd->SetNormalMonster();
+			SAFE_RELEASE(bd);
 		}
 	}
 

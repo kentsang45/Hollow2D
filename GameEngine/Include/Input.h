@@ -136,6 +136,10 @@ private:
 	bool					m_bShowCursor;
 	KeyInfo					m_tMouseInfo[MT_END];
 
+	bool m_bSet = false;
+
+	bool					m_bMouseClick;
+	class CGameObject*		m_pOnMouseObj;
 public:
 	Vector2 GetMousePos()	const;
 	Vector2 GetMouseWorldPos()	const;
@@ -147,7 +151,15 @@ public:
 	bool LButtonRelease()	const;
 	bool RButtonRelease()	const;
 
+	bool IsSet() const { return m_bSet; }
+	void Set(bool bSet) { m_bSet = bSet; }
+
+	bool IsMouseClick()	const;
+	class CGameObject* IsOnMouseObj()	const;
 public:
+	void SetMouseClick(bool bClick);
+	void SetOnMouseObj(class CGameObject* pObj);
+
 	void SetDoubleKeyTime(float fTime);
 	void CreateAnim2D();
 	void AddAnim2DSequence(const string& strName);

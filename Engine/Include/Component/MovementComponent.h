@@ -27,7 +27,7 @@ public:
 	void SetUpdateComponent(class CSceneComponent* pUpdateComponent);
 	void SetMoveSpeed(float fMoveSpeed);
 	void SetRotationSpeed(float fRotationSpeed);
-
+	float GetMoveSpeed() const { return m_fMoveSpeed; }
 public:
 	virtual bool Init();
 	virtual void Begin();

@@ -8,7 +8,7 @@ CSection::CSection()	:
 {
 	m_iColliderCount = 0;
 
-	m_vecCollider.resize(300);
+	m_vecCollider.resize(1000);
 }
 
 CSection::~CSection()
@@ -72,7 +72,7 @@ void CSection::Collision(float fTime)
 					///////////////////////////////////////////////////////////
 					// MK::PLAYER_VERSION
 
-					if (true == pSrc->IsPlayer())
+					if (true == pSrc->IsPlayer() || true == pSrc->IsSencer())
 					{
 						if (pSrc->Collision(pDest))
 						{

@@ -73,7 +73,7 @@ PS_OUTPUT_SINGLE StandardColorPS(VS_OUTPUT_COLOR input)
 
 	float4 vColor = PaperBurn(input.vColor, input.vUV);
 
-	output.vColor = vColor;
+    output.vColor = vColor * g_vMtrlDif;
 
 	return output;
 }
@@ -109,7 +109,7 @@ PS_OUTPUT_SINGLE StandardTexPS(VS_OUTPUT_TEX input)
 
 	float4	vColor = g_BaseTexture.Sample(g_LinearSmp, input.vUV);
 
-	output.vColor = vColor;
+    output.vColor = vColor * g_vMtrlDif;
 
 	return output;
 }
@@ -166,7 +166,7 @@ PS_OUTPUT_SINGLE StandardAnim2DPS(VS_OUTPUT_TEX input)
 
 	float4	vColor = g_BaseTexture.Sample(g_LinearSmp, input.vUV);
 
-	output.vColor = vColor;
+    output.vColor = vColor * g_vMtrlDif;
 
 	return output;
 }

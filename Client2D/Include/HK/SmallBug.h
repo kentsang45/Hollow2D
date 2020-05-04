@@ -67,6 +67,6 @@ private:
 
 	bool m_bTurnOver = false;
 	float m_fTurnDelayTime = 0.f;
-	float m_fDelayTotalTime = 0.15f;
+	float m_fDelayTotalTime = 0.1f;
 };
 

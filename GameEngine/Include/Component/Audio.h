@@ -21,7 +21,7 @@ private:
 
 public:
 	bool IsPlay()	const;
-
+	bool IsPause() const;
 public:
 	void SetSound(const string& strName);
 	void SetSound(const string& strName, bool bLoop, const char* pFileName, const string& strPathName = SOUND_PATH);

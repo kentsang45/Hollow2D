@@ -39,10 +39,15 @@ public:
 
 	void PlaceAt(int leftTopX, int leftTopY);
 
-
+	void SetStageNumber(int stage) { m_iStageNumber = stage; }
+	
+	void GetHitSound();
+	void DeathSound();
 
 
 protected:
+	class HollowKnight* m_pHK = nullptr;
+
 	class CStaticMeshComponent* m_pMesh;
 
 	class CCharacterMovementComponent* m_pMovement;
@@ -108,6 +113,13 @@ protected:
 
 	// ¸·±â
 	bool m_bBlocking = false;
+
+	int m_iStageNumber = 0;
+
+	float m_fWait = 0.f;
+
+	string m_strSoundName;
+	string m_strSoundFileName;
 };
 
 

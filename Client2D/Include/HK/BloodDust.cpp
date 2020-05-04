@@ -139,5 +139,51 @@ void BloodDust::Start(float fTime, const Vector3 & vPos)
 
 void BloodDust::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
+
+}
+
+void BloodDust::SetDir(int dir)
+{
+	float y = 1.f;
+	float x = 1.f;
+
+	// 오른쪽
+	if (dir > 0)
+	{
+		// 근데 왼쪽
+		if (m_vVelo.x < 0)
+		{
+			x = -1.f;
+		}
+	}
+	// 왼쪽
+	else
+	{
+		// 근데 오른쪽
+		if (m_vVelo.x > 0)
+		{
+			x = -1.f;
+		}
+	}
+
+	
+
+	if (0 > m_vVelo.y)
+	{
+		y = -1.f;
+	}
+
+
+	m_vVelo *= Vector3(x, y, 1.f);
+
+	// m_vVelo = GetWorldAxis(AXIS_X) * m_iDir * axisX + GetWorldAxis(AXIS_Y) * axisY * iDirY;
+}
+
+void BloodDust::SetNormalMonster()
+{
+	int scale = RandomNumber::GetRandomNumber(70, 100);
+
+
+	m_pMesh->SetRelativeScale(scale, scale, 1.f);
 }
 

@@ -63,7 +63,31 @@ int RandomNumber::GetRandomNumber(int min, int max)
 
 	unsigned int random = SeedRandomUInt();
 
-	random = random % max + min;
+	random = random % (max - min + 1);
+		
+	random += min;
+
+	return (int)random;
+}
+
+int RandomNumber::GetRandomNumberTime(int min, int max)
+{
+	if (max <= 0)
+	{
+		max = 1;
+	}
+
+	unsigned int seed = ++mSeed * 2;
+
+	// mSeed *= 2;
+
+	srand(seed);
+
+	unsigned int random = TimeRandomUInt();
+
+	random = random % (max - min + 1);
+
+	random += min;
 
 	return (int)random;
 }

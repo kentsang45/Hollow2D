@@ -970,9 +970,14 @@ void CResourceManager::Pause(CSound * pSound, const string & strGroup)
 	ChannelGroup*	pGroup = FindSoundChannelGroup(strGroup);
 
 	if (!pGroup)
+	{
+		BOOM;
 		return;
+	}
 
-	m_pSystem->playSound(pSound->m_pSound, pGroup, true, &pSound->m_pChannel);
+
+	FMOD_RESULT rs = m_pSystem->playSound(pSound->m_pSound, pGroup, true, &pSound->m_pChannel);
+	int a = 0;
 }
 
 void CResourceManager::Stop(const string & strGroup)

@@ -19,6 +19,9 @@ public:
 	void Start(float fTime, const Vector3& vPos);
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	class CColliderRect* GetBody() const;
+	void SetDir(int dir) { m_iDir = dir; Flip(dir); }
+
+	void SetNormalMonster();
 
 private:
 	class CStaticMeshComponent* m_pMesh;
@@ -33,6 +36,10 @@ private:
 
 	bool m_bJump = false;
 	int m_iDir = 0;
+
+	float m_fMoveSpeed = 0.f;
+
+	float m_fScale;
 };
 
 

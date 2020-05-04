@@ -14,6 +14,7 @@
 #include "HitEffect.h"
 #include "SideEffect.h"
 
+#include "HollowKnight.h"
 
 HKAttackEffect::HKAttackEffect()
 	: m_bIsOn(false)
@@ -154,6 +155,10 @@ void HKAttackEffect::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float 
 			SideEffect* side = m_pScene->SpawnObject<SideEffect>(pSrc->GetIntersect() + Vector3(0.f, 0.f, -0.52f));
 
 			SAFE_RELEASE(side);
+
+
+			HollowKnight* hk = (HollowKnight*)m_pScene->GetGameMode()->GetPlayer();
+			hk->CameraShakeOn(0.4f, 10);
 		}
 		else
 		{

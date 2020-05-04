@@ -61,6 +61,7 @@ public:
 	void SetBarrel();
 	void ResetState();
 
+	void Fall(float fTime);
 private:
 	class HollowKnight* m_pHK = nullptr;
 	Vector3 m_vHK;
@@ -97,7 +98,7 @@ private:
 	// 누워있을때 OPEN, 그리고 맞는다.
 
 	// 중간으로 가야할 상황이 생긴다.
-	float m_fCenter = 46 * 50.f + 25.f;
+	float m_fCenter = 40000.f + 46 * 50.f + 25.f;
 
 	bool m_bDead = false;
 
@@ -107,5 +108,7 @@ private:
 	bool m_bOneChange = true;
 
 	bool m_bNoGetHit = false;
+
+	bool m_bFightStart = false;
 };
 

@@ -19,6 +19,8 @@
 
 #include "../RandomNumber.h"
 
+#include "EffectSound.h"
+
 Grass::Grass()
 	: m_pMesh(nullptr)
 	, m_pAnimation(nullptr)
@@ -48,9 +50,11 @@ bool Grass::Init()
 	m_pBody->SetExtent(200.f, 200.f);
 	m_pBody->SetPivot(0.5f, 0.5f, 0.f);
 	m_pBody->AddBeginOverlapCallback<Grass>(this, &Grass::BeginOverlap);
+	m_pBody->AddEndOverlapCallback<Grass>(this, &Grass::EndOverlap);
 	m_pBody->AddBlockCallback<Grass>(this, &Grass::OnBlock);
 	m_pBody->SetCollisionProfile("Object");
 
+	m_pBody->EnableOverlap(true);
 
 	m_pMesh = CreateComponent<CStaticMeshComponent>("Mesh");
 	CStaticMesh*	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
@@ -149,7 +153,7 @@ void Grass::PlaceAt(int sizeX, int sizeY, float leftTopX, float leftTopY, int iS
 
 
 	// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
-	float X = (sizeX * 50.f) * 0.5f + leftTopX * 50.f;
+	float X = (m_iStageNumber - 1) * 10000.f + (sizeX * 50.f) * 0.5f + leftTopX * 50.f;
 	float Y = (sizeY * 50.f) * 0.5f + leftTopY * 50.f;
 
 	m_pMesh->SetRelativeScale(sizeX * 50.f, sizeY * 50.f, 1.f);
@@ -176,7 +180,8 @@ void Grass::BeginOverlap(CColliderBase * pSrc, CColliderBase * pDest, float fTim
 	{
 		return;
 	}
-	if (true == pDest->IsStage())
+	
+	/*if (true == pDest->IsStage())
 	{
 		return;
 	}
@@ -184,7 +189,18 @@ void Grass::BeginOverlap(CColliderBase * pSrc, CColliderBase * pDest, float fTim
 	else
 	{
 		ChangeAnimation(2);
+
+	}*/
+}
+
+void Grass::EndOverlap(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
+{
+	if (pDest == nullptr || true == m_bDead)
+	{
+		return;
 	}
+
+	m_bIsOn = false;
 }
 
 void Grass::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
@@ -200,7 +216,7 @@ void Grass::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 	}
 	else if (pDest->GetCollisionProfile()->strName == "PlayerProjectile")
 	{
-
+		
 
 		for (int i = 0; i < 50; ++i)
 		{
@@ -223,7 +239,23 @@ void Grass::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		}
 
 		
+		int ran = RandomNumber::GetRandomNumberTime(1, 5);
 
+		EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+			Vector3(0.f, 0.f, GetRelativeRot().z));
+
+		m_strSoundName = "Grass_Cut_";
+		char number[20];
+		itoa(ran, number, 20);
+		m_strSoundName.append(number);
+
+		m_strSoundFileName = "Grass/";
+		m_strSoundFileName.append(m_strSoundName);
+		m_strSoundFileName.append(".wav");
+
+		pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+		SAFE_RELEASE(pFireSound);
 
 
 
@@ -232,8 +264,33 @@ void Grass::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 	}
 	else
 	{
-		ChangeAnimation(2);
-		m_bIsOn = true;
+	
+
+
+		if (false == m_bIsOn)
+		{
+			ChangeAnimation(2);
+
+			int ran = RandomNumber::GetRandomNumberTime(1, 6);
+
+			EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+				Vector3(0.f, 0.f, GetRelativeRot().z));
+
+			m_strSoundName = "Grass_Move_";
+			char number[20];
+			itoa(ran, number, 20);
+			m_strSoundName.append(number);
+
+			m_strSoundFileName = "Grass/";
+			m_strSoundFileName.append(m_strSoundName);
+			m_strSoundFileName.append(".wav");
+
+			pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+			SAFE_RELEASE(pFireSound);
+
+			m_bIsOn = true;
+		}
 	}
 
 

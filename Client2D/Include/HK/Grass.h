@@ -20,6 +20,7 @@ public:
 	void PlaceAt(int sizeX, int sizeY, float leftTopX, float leftTopY, int iStyle);
 
 	void BeginOverlap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
+	void EndOverlap(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 	void OnBlock(class CColliderBase* pSrc, class CColliderBase* pDest, float fTime);
 
 	void ChangeAnimation(int iAnim);
@@ -42,6 +43,14 @@ private:
 	string m_strIdleName;
 	string m_strMoveName;
 	string m_strDeathName;
+
+	string m_strSoundName;
+	string m_strSoundFileName;
+
+	/////////////////////////////////////////////////////////////////////////
+public:
+	void SetStageNumber(int stage) { m_iStageNumber = stage; }
+	int m_iStageNumber = 0;
 };
 
 

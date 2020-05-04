@@ -41,14 +41,20 @@ protected:
 	bool m_bStage;
 	bool m_bMonster;
 	bool m_bPlayer = false;
-
+	bool m_bSencer = false;
 
 
 	PLAYER_POSITION m_ePlayerPos;
 
 	bool m_bBlocking = false;
 
+	int m_iStageNumber = 0;
+	// class CGameObject* m_pPlayer
+
 public:
+	void SetStageNumber(int iStage) { m_iStageNumber = iStage; }
+	void SetSencer(bool sencer) { m_bSencer = sencer; }
+	bool IsSencer() const { return m_bSencer; }
 
 	void SetZOrder(int iZOrder);
 	int GetZOrder()	const;

@@ -38,28 +38,37 @@
 
 #include <sstream>
 
+#include "Input.h"
+#include "CollisionManager.h"
+
 HKMode::HKMode()
 {
 }
 
 HKMode::~HKMode()
 {
+	SAFE_RELEASE(m_pHK);
 }
 
 bool HKMode::Init()
 {
+	//if (!GET_SINGLE(CInput)->Init())
+	//	return false;
+
 	CGameMode::Init();
 
 	RandomNumber::Init();
+	
+
 
 	SetCollision();
-
 	CreateMaterial();
-
- 	SetHK();
+	SetHK();
 	SetBug();
 	SetUI();
 
+	
+	
 	// SetTileMap();
 
 	////////////////////////////////////////// ¿¢¼¿ ·Îµù
@@ -74,34 +83,29 @@ bool HKMode::Init()
 	SetPlayer(pObj);
 	SAFE_RELEASE(pObj);*/
 
-	HollowKnight* hk = m_pScene->SpawnObject<HollowKnight>();
-	// hk->SetRelativePos(Vector3((131.f * 50.f) * 0.5f, 100.f, 0.f));
-	hk->SetRelativePos(2500.f, 500.f, 0.f);
-	SetPlayer(hk);
+	if (nullptr == m_pHK)
+	{
+		m_pHK = m_pScene->SpawnObject<HollowKnight>();
+		SetPlayer(m_pHK);		
+	}
 
 	/////////////////////////////////////////////////////////////////////////////
 	// SOUND
+	
+
 	BGMObject*	pBGMObj = m_pScene->SpawnObject<BGMObject>("BGMObj");
-	hk->AddChild(pBGMObj, TR_ROT | TR_POS);
+	m_pHK->AddChild(pBGMObj, TR_ROT | TR_POS);
 	SAFE_RELEASE(pBGMObj);
-
-
 
 
 
 	// ShieldBug* bug = m_pScene->SpawnObject<ShieldBug>(Vector3(500.f, 500.f, 0.f));
 	// SAFE_RELEASE(bug);
 
-	int stage = 5;
-
-	SetStage(stage);
-	hk->PlaceAt(stage, true);
-
-	SAFE_RELEASE(hk);
+	
 
 	// ÆùÆ® Â¥ÀÀ~
 	CoinCount*	pCoinCount = m_pScene->SpawnObject<CoinCount>();
-
 	SAFE_RELEASE(pCoinCount);
 
 
@@ -115,9 +119,24 @@ bool HKMode::Init()
 
 
 
+	//SetStage(3);
+	SetStage(2);
 
 
 	return true;
+}
+
+void HKMode::SetMode(int iStage, bool bStart, int iHP, int iCoin)
+{
+	if (nullptr == m_pHK)
+	{
+		m_pHK = m_pScene->SpawnObject<HollowKnight>();
+		SetPlayer(m_pHK);
+	}
+
+	// SetStage(iStage);
+	m_pHK->PlaceAt(iStage, bStart);
+
 }
 
 bool HKMode::CreateMaterial()
@@ -239,11 +258,9 @@ bool HKMode::CreateMaterial()
 	GET_SINGLE(CResourceManager)->CreateMaterial("SoftMaterial");
 	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("SoftMaterial");
 	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
-	if (false == pMaterial->SetTexture(0, "Soft", TEXT("HOLLOW/Effect/Soft.png"))) { BOOM; }
+	if (false == pMaterial->SetTexture(0, "Soft", TEXT("HOLLOW/Effect/Soft.png"))) {} //BOOM; }
 	pMaterial->SetRenderState("AlphaBlend");
 	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
-	// pMaterial->EnableInstancing();	
-	// pMaterial->AddRef();
 	SAFE_RELEASE(pMaterial);
 
 
@@ -252,11 +269,9 @@ bool HKMode::CreateMaterial()
 	GET_SINGLE(CResourceManager)->CreateMaterial("BlackSoftMaterial");
 	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("BlackSoftMaterial");
 	pMaterial->SetSubsetShader(STANDARD_TEX_SHADER);
-	if (false == pMaterial->SetTexture(0, "BlackSoft", TEXT("HOLLOW/Effect/BlackSoft.png"))) { BOOM; }
+	if (false == pMaterial->SetTexture(0, "BlackSoft", TEXT("HOLLOW/Effect/BlackSoft.png"))) {} //BOOM; }
 	pMaterial->SetRenderState("AlphaBlend");
 	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
-	// pMaterial->EnableInstancing();
-	// pMaterial->AddRef();
 	SAFE_RELEASE(pMaterial);
 
 
@@ -685,6 +700,31 @@ bool HKMode::CreateMaterial()
 	pMaterial->SetRenderState("AlphaBlend");
 	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
 	SAFE_RELEASE(pMaterial);
+
+
+
+	GET_SINGLE(CResourceManager)->CreateMaterial("DarknessMaterial");
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("DarknessMaterial");
+	pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	// pMaterial->SetTexture(0, "DarknessMaterial", TEXT("HOLLOW/Darkness.png"));
+	pMaterial->SetRenderState("AlphaBlend");
+	pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	SAFE_RELEASE(pMaterial);
+
+
+
+
+	//GET_SINGLE(CResourceManager)->CreateMaterial("PlayerAnimMaterial");
+
+	//pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimMaterial");
+
+	//pMaterial->SetSubsetShader(STANDARD_ANIM2D_SHADER);
+	//// pMaterial->SetTexture(0, "Player", TEXT("teemo.png"));
+	//pMaterial->SetRenderState("AlphaBlend");
+	//pMaterial->SetMaterialShaderStyle(MSS_ALPHA);
+	//SAFE_RELEASE(pMaterial);
+
+
 
 
 	//for (size_t i = 0; i < 13; ++i)

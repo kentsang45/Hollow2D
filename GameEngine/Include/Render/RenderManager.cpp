@@ -447,6 +447,9 @@ void CRenderManager::Render(float fTime)
 		if (m_vecRender[RG_ALPHA].size() >= 2)
 			sort(m_vecRender[RG_ALPHA].begin(), m_vecRender[RG_ALPHA].begin() + m_iAddCount[RG_ALPHA], CRenderManager::SortZ);
 
+		if (m_vecRender[RG_UI].size() >= 2)
+			sort(m_vecRender[RG_UI].begin(), m_vecRender[RG_UI].begin() + m_iAddCount[RG_UI], CRenderManager::UISortZOrder);
+
 		// 2D¿ë Main Render Target ÁöÁ¤
 		m_p2DMainTarget->ClearTarget();
 		m_p2DMainTarget->SetTarget();
@@ -636,7 +639,7 @@ bool CRenderManager::SortZ(CSceneComponent * pSrc, CSceneComponent * pDest)
 
 bool CRenderManager::UISortZOrder(CSceneComponent * pSrc, CSceneComponent * pDest)
 {
-	// return ((CUI*)pSrc)->GetZOrder() < ((CUI*)pDest)->GetZOrder();
+	return ((CUI*)pSrc)->GetZOrder() < ((CUI*)pDest)->GetZOrder();
 	return false;
 }
 

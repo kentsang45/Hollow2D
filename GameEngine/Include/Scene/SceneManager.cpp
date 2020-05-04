@@ -71,6 +71,12 @@ SCENE_CHANGE CSceneManager::ChangeScene()
 
 		GET_SINGLE(CResourceManager)->ChangeScene();
 
+		if (!m_pScene->GetGameMode()->Init())
+		{
+			m_pScene = nullptr;
+			BOOM;
+		}
+
 		return SC_CHANGE;
 	}
 

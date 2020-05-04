@@ -661,6 +661,28 @@ void HKMode::SetUI()
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("EMPTYHP", Vector2(0.f, 0.f),
 		Vector2(200.f, 200.f));
 
+	// cOIN UI
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("COIN_UI", true, 1.0f, frameCount);
+
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+
+		wsprintf(strFileName, TEXT("HOLLOW/UIEFFECT/COIN_UI%d.png"), i);
+
+		char strKey[256] = {};
+		sprintf_s(strKey, "COIN_UI%d", i);
+
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("COIN_UI", strKey, strFileName);
+	}
+
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("COIN_UI", Vector2(0.f, 0.f),
+		Vector2(62.f, 62.f));
+
+
+
+
 	// Block Hit Effect
 	frameCount = 3;
 	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BLOCKHIT_EFFECT", true, 0.6f, frameCount);
@@ -1211,7 +1233,275 @@ void HKMode::SetUI()
 	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BLOOD_DUST", Vector2(0.f, 0.f),
 		Vector2(100.f, 100.f));
 
+	frameCount = 8;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("COIN", true, 0.6f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Coin/COIN%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "COIN%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("COIN", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("COIN", Vector2(0.f, 0.f),
+		Vector2(40.f, 40.f));
 
+
+
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("SPIKE_STILL", false, 1.0f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Spike/spikes_still_%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "SPIKE_STILL%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("SPIKE_STILL", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("SPIKE_STILL", Vector2(0.f, 0.f),
+		Vector2(139.f, 105.f));
+
+
+
+	frameCount = 4;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("SPIKE", true, 0.4f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Objects/Spike/spikes000%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "SPIKE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("SPIKE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("SPIKE", Vector2(0.f, 0.f),
+		Vector2(139.f, 105.f));
+
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("DARKNESS", true, 10.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Darkness/Darkness%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "DARKNESS%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("DARKNESS", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("DARKNESS", Vector2(0.f, 0.f),
+		Vector2(3840.f, 2160.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("LIGHT", true, 10.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Effect/White_Light/white_light%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "LIGHT%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("LIGHT", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("LIGHT", Vector2(0.f, 0.f),
+		Vector2(300.f, 300.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("HP_HEAD", true, 10.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/UIEFFECT/HPUI/HealthUI%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "HP_HEAD%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("HP_HEAD", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("HP_HEAD", Vector2(0.f, 0.f),
+		Vector2(172.f, 106.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("COIN_EFFECT", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Effect/CoinEffect/CoinEffect%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "COIN_EFFECT%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("COIN_EFFECT", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("COIN_EFFECT", Vector2(0.f, 0.f),
+		Vector2(345.f, 51.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("SOUL_EFFECT", true, 1.f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Effect/SoulOrb/Default_Particle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "SOUL_EFFECT%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("SOUL_EFFECT", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("SOUL_EFFECT", Vector2(0.f, 0.f),
+		Vector2(64.f, 64.f));
+
+
+
+	///////////////////////////////////////////////////////////////////
+
+	frameCount = 5;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("DOOR_OPEN", false, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Door/Open/White_Gate000%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "DOOR_OPEN%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("DOOR_OPEN", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("DOOR_OPEN", Vector2(0.f, 0.f),
+		Vector2(90.f, 331.f));
+
+	frameCount = 5;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("DOOR_CLOSE", false, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Door/Close/White_Gate_Close%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "DOOR_CLOSE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("DOOR_CLOSE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("DOOR_CLOSE", Vector2(0.f, 0.f),
+		Vector2(90.f, 331.f));
+
+
+
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("HIT_ORANGE", false, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Effect/HitOrange/hit_orange%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "HIT_ORANGE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("HIT_ORANGE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("HIT_ORANGE", Vector2(0.f, 0.f),
+		Vector2(128.f, 128.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("BINDING_SHIELD", false, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Effect/BindingShield/binding_shield%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "BINDING_SHIELD%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("BINDING_SHIELD", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("BINDING_SHIELD", Vector2(0.f, 0.f),
+		Vector2(207.f, 207.f));
+
+
+
+
+
+	// water drop
+	frameCount = 8;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WATER_DROP", false, 0.6f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Particle/WaterDrop/WaterDrop%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "WATER_DROP%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("WATER_DROP", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("WATER_DROP", Vector2(0.f, 0.f),
+		Vector2(100.f, 100.f));
+
+	frameCount = 2;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WATER_DROPING", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Particle/WaterDrop/WaterDroping%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "WATER_DROPING%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("WATER_DROPING", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("WATER_DROPING", Vector2(0.f, 0.f),
+		Vector2(100.f, 100.f));
+
+	frameCount = 5;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("WATER_DROP_END", false, 0.4f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Particle/WaterDrop/WaterDropEnd%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "WATER_DROP_END%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("WATER_DROP_END", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("WATER_DROP_END", Vector2(0.f, 0.f),
+		Vector2(100.f, 100.f));
+
+
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	frameCount = 7;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("FB_PARTICLE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Particle/FlyBugParticle/FBParticle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "FB_PARTICLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("FB_PARTICLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("FB_PARTICLE", Vector2(0.f, 0.f),
+		Vector2(150.f, 150.f));
+
+	frameCount = 4;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("SPIDER_PARTICLE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Particle/SpiderParticle/SpiderParticle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "SPIDER_PARTICLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("SPIDER_PARTICLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("SPIDER_PARTICLE", Vector2(0.f, 0.f),
+		Vector2(150.f, 150.f));
+
+	frameCount = 4;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("TF_PARTICLE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Particle/ThinFlyParticle/ThinFlyParticle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "TF_PARTICLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("TF_PARTICLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("TF_PARTICLE", Vector2(0.f, 0.f),
+		Vector2(150.f, 150.f));
+
+	frameCount = 3;
+	GET_SINGLE(CResourceManager)->CreateAnimation2DSequence("FLY_PARTICLE", true, 0.5f, frameCount);
+	for (int i = 0; i < frameCount; ++i)
+	{
+		TCHAR	strFileName[MAX_PATH] = {};
+		wsprintf(strFileName, TEXT("HOLLOW/Particle/FlyParticle/FlyParticle%d.png"), i);
+		char strKey[256] = {};
+		sprintf_s(strKey, "FLY_PARTICLE%d", i);
+		GET_SINGLE(CResourceManager)->AddAnimation2DSequenceTexture("FLY_PARTICLE", strKey, strFileName);
+	}
+	GET_SINGLE(CResourceManager)->SetAnimation2DSequenceFrameInfoAll("FLY_PARTICLE", Vector2(0.f, 0.f),
+		Vector2(50.f, 50.f));
 
 /*
 	frameCount = 2;

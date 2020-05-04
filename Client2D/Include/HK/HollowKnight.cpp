@@ -45,9 +45,24 @@
 #include "../RandomNumber.h"
 
 #include "EffectSound.h"
+#include "SoundObject.h"
 
 #include "../HKStage.h"
+#include "CoinUI.h"
+#include "HPHead.h"
 
+#include "../GameMode/MainGameMode.h"
+#include "HKMode.h"
+
+#include "CollisionManager.h"
+#include "Engine.h"
+
+#include "Darkness.h"
+#include "LightEffect.h"
+#include "SoulParticle.h"
+#include "BugParticle.h"
+
+#include "Component/Audio.h"
 
 HollowKnight::HollowKnight()
 	: m_eState(PS_IDLE)
@@ -66,6 +81,8 @@ HollowKnight::HollowKnight()
 	, m_pHealing(nullptr)
 	, m_bHitStage(false)
 	, m_fTurningTime(0.f)
+	, m_pDarkMesh(nullptr)
+	, m_pDarkAnimation(nullptr)
 
 {
 	const int m_iStateCount = PS_END;
@@ -87,6 +104,8 @@ HollowKnight::~HollowKnight()
 {
 	SAFE_RELEASE(m_pBody);
 	SAFE_RELEASE(m_pAnimation);
+	SAFE_RELEASE(m_pDarkMesh);
+	SAFE_RELEASE(m_pDarkAnimation);
 
 	SAFE_RELEASE(m_pCamera);
 	SAFE_RELEASE(m_pMaterial);
@@ -94,7 +113,11 @@ HollowKnight::~HollowKnight()
 	SAFE_RELEASE(m_pMesh);
 	SAFE_RELEASE(m_pMovement);
 
+	SAFE_RELEASE(m_pDark);
+
 	SAFE_RELEASE(m_pAttackEffect);
+
+	SAFE_RELEASE(m_pFootsteps);
 
 	for (int i = 0; i < 5; ++i)
 	{
@@ -121,17 +144,17 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 
 	m_iStageNumber = stageNumber;
 
-
-
+	m_bAir = true;
+	SetPhysics(false);
 	switch (stageNumber)
 	{
 	case 1:
 		// 중앙
-		sizeX = 6700;
-		sizeY = 1800;
+		m_fStageSizeX = 6700;
+		m_fStageSizeY = 1800;
 
-		X = sizeX * 0.5f;
-		Y = sizeY * 0.5f;
+		X = (stageNumber - 1) * 10000.f + m_fStageSizeX * 0.5f;
+		Y = m_fStageSizeY * 0.5f;
 
 		// 시작점
 		if (true == bStart)
@@ -144,23 +167,33 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 			// float xX = (2 * 50.f) * 0.5f + 23 * 50.f;
 			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
 
-			float xX = (2 * 50.f) * 0.5f + 95 * 50.f;
-			float yY = (2 * 50.f) * 0.5f + 23 * 50.f;
+			// float xX = (2 * 50.f) * 0.5f + 95 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 23 * 50.f;
+
+
+			// REAL
+			 float xX = (2 * 50.f) * 0.5f + 69 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 0 * 50.f;
 
 			SetRelativePos(xX, -yY, 0.f);
 		}
 		else
 		{
 			// SetRelativePos(x, 0.f);
+
+			float xX = (2 * 50.f) * 0.5f + 132 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 16 * 50.f;
+
+			SetRelativePos(xX, -yY, 0.f);
 		}
 
 		break;
 
 	case 2:
-		sizeX = 5200;
-		sizeY = 1750;
-		X = sizeX * 0.5f;
-		Y = sizeY * 0.5f;
+		m_fStageSizeX = 5200;
+		m_fStageSizeY = 1750;
+		X = (stageNumber - 1) * 10000.f + m_fStageSizeX * 0.5f;
+		Y = m_fStageSizeY * 0.5f;
 
 		// 시작점
 		if (true == bStart)
@@ -173,23 +206,31 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 			// float xX = (2 * 50.f) * 0.5f + 23 * 50.f;
 			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
 
-			float xX = (2 * 50.f) * 0.5f + 0 * 50.f;
-			float yY = (2 * 50.f) * 0.5f + 22 * 50.f;
+			float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 0 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 21 * 50.f;
 
 			SetRelativePos(xX, -yY, 0.f);
+
+	
 		}
 		else
 		{
-			// SetRelativePos(x, 0.f);
+			float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 78 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 32 * 50.f;
+
+			m_fForce = 1200.f;
+			SetCurrentState(PS_JUMP);
+
+			SetRelativePos(xX, -yY, 0.f);
 		}
 
 		break;
 
 	case 3:
-		sizeX = 1950;
-		sizeY = 4800;
-		X = sizeX * 0.5f;
-		Y = sizeY * 0.5f;
+		m_fStageSizeX = 1950;
+		m_fStageSizeY = 4800;
+		X = (stageNumber - 1) * 10000.f + m_fStageSizeX * 0.5f;
+		Y = m_fStageSizeY * 0.5f;
 
 		// 시작점
 		if (true == bStart)
@@ -205,27 +246,32 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 
 
 			// test
-			float xX = (2 * 50.f) * 0.5f + 28 * 50.f;
-			float yY = (2 * 50.f) * 0.5f + 63 * 50.f;
+			//float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 28 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 63 * 50.f;
 
 			// REAL
-			// float xX = X;
-			// float yY = 0.f;
+			float xX = X - 50.f;
+			float yY = 51.f;
 
 			SetRelativePos(xX, -yY, 0.f);
 		}
 		else
 		{
+			float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 0 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 85 * 50.f;
+
+			SetRelativePos(xX, -yY, 0.f);
+
 			// SetRelativePos(x, 0.f);
 		}
 
 		break;
 
 	case 4:
-		sizeX = 6900;
-		sizeY = 1800;
-		X = sizeX * 0.5f;
-		Y = sizeY * 0.5f;
+		m_fStageSizeX = 6900;
+		m_fStageSizeY = 1800;
+		X = (stageNumber - 1) * 10000.f + m_fStageSizeX * 0.5f;
+		Y = m_fStageSizeX * 0.5f;
 
 		// 시작점
 		if (true == bStart)
@@ -235,7 +281,7 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 			// float xX = (2 * 50.f) * 0.5f + 76 * 50.f;
 			// float yY = (2 * 50.f) * 0.5f + 18 * 50.f;
 
-			float xX = (2 * 50.f) * 0.5f + 135 * 50.f;
+			float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 135 * 50.f;
 			float yY = (2 * 50.f) * 0.5f + 14 * 50.f;
 
 			
@@ -244,25 +290,32 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 		}
 		else
 		{
+			float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 0 * 50.f;
+			float yY = (2 * 50.f) * 0.5f + 28 * 50.f;
+
+
+
+
+			SetRelativePos(xX, -yY, 0.f);
 			// SetRelativePos(x, 0.f);
 		}
 		break;
 
 	case 5:
-		sizeX = 5000;
-		sizeY = 1950;
-		X = sizeX * 0.5f;
-		Y = sizeY * 0.5f;
+		m_fStageSizeX = 5000;
+		m_fStageSizeY = 1950;
+		X = (stageNumber - 1) * 10000.f + m_fStageSizeX * 0.5f;
+		Y = m_fStageSizeY * 0.5f;
 		// 시작점
 		if (true == bStart)
 		{
 			// leftTopX = 69
 			// leftTopY = 0
-			float xX = (2 * 50.f) * 0.5f + 46 * 50.f;
-			float yY = (2 * 50.f) * 0.5f + 31 * 50.f;
+			// float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 46 * 50.f;
+			// float yY = (2 * 50.f) * 0.5f + 31 * 50.f;
 
-			// float xX = (2 * 50.f) * 0.5f + 98 * 50.f;
-			// float yY = (2 * 50.f) * 0.5f + 32 * 50.f;
+			 float xX = (stageNumber - 1) * 10000.f + (2 * 50.f) * 0.5f + 98 * 50.f;
+			 float yY = (2 * 50.f) * 0.5f + 32 * 50.f;
 
 
 
@@ -280,11 +333,6 @@ void HollowKnight::PlaceAt(int stageNumber, bool bStart)
 		break;
 	}
 
-
-
-	m_fStageSizeX = sizeX;
-	m_fStageSizeY = sizeY;
-
 }
 
 bool HollowKnight::Init()
@@ -294,11 +342,15 @@ bool HollowKnight::Init()
 		return false;
 	}
 
+
+
+	m_pFootsteps = m_pScene->SpawnObject<SoundObject>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+
+	m_pFootsteps->SetSound("Footsteps", "Footsteps.wav");
+
+
 	//////////////////////////////////////////////////////////////////////////////
-	
-
-
-
 
 	m_pCamera = CreateComponent<CCameraComponent>("Camera");
 
@@ -324,6 +376,9 @@ bool HollowKnight::Init()
 
 	SAFE_RELEASE(pMesh);
 
+	
+
+
 	//////////////////////////////////////////////////////////// ANIMATION
 	m_pAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
 
@@ -335,8 +390,8 @@ bool HollowKnight::Init()
 	// m_pMaterial	= GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimMaterial");
 	// m_pMesh->SetMaterial(m_pMaterial);
 
-	CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimOutlineMtrl");
-	pMaterial->SetSubsetDiffuse(Vector4(.5f, .5f, .5f, .5f));
+	CMaterial* pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("PlayerAnimMaterial");
+	// pMaterial->SetSubsetDiffuse(Vector4(555.f, 555.f, 555.f, 1.f));
 	m_pMesh->SetMaterial(pMaterial);
 	
 	SAFE_RELEASE(pMaterial);
@@ -347,6 +402,8 @@ bool HollowKnight::Init()
 	m_pMesh->AddChild(m_pCamera, TR_POS);
 	m_pCamera->SetCameraType(CT_ORTHOGONAL);
 	m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f, _RESOLUTION.iHeight / -2.f + 100.f, -10.f);
+
+
 	///////////////////////////////////////////////////////////////////////////////
 	m_pMovement = CGameObject::CreateComponent<CCharacterMovementComponent>("Movement");
 	m_pMovement->SetUpdateComponent(m_pMesh);
@@ -377,17 +434,87 @@ bool HollowKnight::Init()
 	m_fGravitySpeed = 10.f;
 	
 
+
+
+
+
+
+	// 안개
+	/*m_pDarkMesh = CreateComponent<CStaticMeshComponent>("Mesh");
+	pMesh = (CStaticMesh*)GET_SINGLE(CResourceManager)->FindMesh("TexRect");
+	m_pDarkMesh->SetStaticMesh(pMesh);
+
+	pMaterial = GET_SINGLE(CResourceManager)->FindMaterial("DarknessMaterial");
+	m_pDarkMesh->SetMaterial(pMaterial);
+	m_pDarkMesh->SetPivot(0.5f, 0.5f, 0.f);
+
+	pMaterial->SetSubsetDiffuse(Vector4(0.5f, 0.5f, 0.5f, 0.5f));
+
+	SAFE_RELEASE(pMaterial);
+
+	m_pDarkMesh->SetRelativePos(0.f, 0.f, 1.f);
+	m_pDarkMesh->SetRelativeScale(3840.f, 2160.f, 1.f);
+
+	m_pMesh->AddChild(m_pDarkMesh, TR_POS);
+
+	m_pDarkAnimation = CAnimation2D::CreateAnimation2D<CAnimation2D>();
+	m_pDarkMesh->SetAnimation2D(m_pDarkAnimation);
+	m_pDarkAnimation->AddAnimation2DSequence("DARKNESS");
+	m_pDarkAnimation->ChangeAnimation("DARKNESS");*/
+
+	m_pDark = m_pScene->SpawnObject<Darkness>();
+
+	/*LightEffect* le = m_pScene->SpawnObject<LightEffect>();
+	SAFE_RELEASE(le);
+*/
 	return true;
 }
 
 void HollowKnight::Begin()
 {
 	CGameObject::Begin();
+
+
 }
 
 void HollowKnight::Update(float fTime)
 {
 	CGameObject::Update(fTime);
+
+	SetBugEffect(fTime);
+	SetSoulEffect(fTime);
+
+	if (true == m_bReset)
+	{
+		m_fResetTime += fTime;
+
+		if (m_fResetTime >= m_fResetTotalTime)
+		{
+			m_fResetTime = 0;
+			m_bReset = false;
+			PlaceStart();
+		}
+
+	}
+
+
+	// 공중부양 ( 씬전환 중 낙하를 막기 위해
+	if (true == m_bAir)
+	{
+		SetPhysics(false);
+
+		m_fAirTime += fTime;
+
+		if (m_fAirTime >= m_fAirTotalTime)
+		{
+			m_bAir = false;
+			m_fAirTime = 0.f;
+			SetPhysics(true);
+		}
+	}
+
+
+
 
 	// 무적 판정
 	if (true == m_bInvincible)
@@ -525,6 +652,7 @@ void HollowKnight::Update(float fTime)
 			JumpOver(fTime); 
 
 			m_pMovement->SetMoveSpeed(500.f);
+			m_fNormalSpeed = 500.f;
 			m_bOnLand = false;
 			m_bHitStage = false;
 	
@@ -617,6 +745,11 @@ void HollowKnight::Update(float fTime)
 
 			SAFE_RELEASE(fire);
 
+			if (false == m_bFireOn)
+			{
+				SetEffectSound("Fireball", "Fireball.wav");
+			}
+
 			m_bFireOn = true;
 
 			m_fFireTime = 0.f;
@@ -634,12 +767,15 @@ void HollowKnight::Update(float fTime)
 
 
 
-
 }
 
 void HollowKnight::Render(float fTime)
 {
+	CameraControl(fTime);
+	CameraShake(fTime);
+
 	CGameObject::Render(fTime);
+
 
 	// DEBUG
 	/*{
@@ -653,6 +789,17 @@ void HollowKnight::Render(float fTime)
 		sprintf_s(strText, "%d", m_iDir);
 		OutputDebugStringA(strText);
 	}*/
+
+	if (true == m_bNext)
+	{
+		SetStage(++m_iStageNumber, true);
+		m_bNext = false;
+	}
+	if (true == m_bPrev)
+	{
+		SetStage(--m_iStageNumber, false);
+		m_bPrev = false;
+	}
 }
 
 
@@ -663,17 +810,44 @@ DIR_TYPE HollowKnight::GetDirection() const
 
 void HollowKnight::MoveX(float fScale, float fTime)
 {
+	if (0.f == fScale)
+	{
+		m_pFootsteps->StopSO();
+		m_bWalkSound = false;
+	}
+	else
+	{
+		if (true == m_bOnLand)
+		{
+			if (false == m_pFootsteps->IsPlaying() && false == m_bWalkSound)
+			{
+				m_pFootsteps->PlaySO();
+				m_bWalkSound = true;
+			}
+		
+		}
+		else
+		{
+			m_pFootsteps->StopSO();
+			m_bWalkSound = false;
+		}
+	}
+
+
 	bool bAnimState = m_pAnimation->IsSequenceEnd();
 
 	if (PS_DAMAGED == m_eState)
 	{
 		m_pMovement->SetMoveSpeed(500.f);
+		m_fNormalSpeed = 500.f;
 		return;
 	}
 
-	char	strText[256] = {};
-	sprintf_s(strText, "NoRight : %d, NoLeft : %d\n", m_bNoRight, m_bNoLeft);
-	OutputDebugStringA(strText);
+	//char	strText[256] = {};
+	//sprintf_s(strText, "NoRight : %d, NoLeft : %d\n", m_bNoRight, m_bNoLeft);
+	//OutputDebugStringA(strText);
+
+
 
 	/*if (-1.f == fScale)
 	{
@@ -891,6 +1065,11 @@ void HollowKnight::Attack(float fTime)
 
 	if (false == m_bAttacking)
 	{
+		//// TEST
+		// CameraShakeOn();
+
+
+
 		m_bAttacking = true;
 
 		attack = m_pScene->SpawnObject<HKAttackEffect>(
@@ -956,16 +1135,22 @@ void HollowKnight::Jump(float fTime)
 		SetCurrentState(PS_JUMP);
 
 		m_pMovement->SetMoveSpeed(500.f);
+		m_fNormalSpeed = 500.f;
 
 		// 큰 먼지 생성
 		DustEffect* dust = m_pScene->SpawnObject<DustEffect>(
 			GetWorldPos() - Vector3(0.f, 400.f * 0.2f, 0.f));
 
 		dust->SetStaticSize(200.f);
-
 		dust->SetStop();
-
 		SAFE_RELEASE(dust);
+
+
+
+		EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+			Vector3(0.f, 0.f, GetRelativeRot().z));
+		pFireSound->SetSound("Jump", "Jump.wav");
+		SAFE_RELEASE(pFireSound);
 	}
 	else if( true == m_bFalling)
 	{
@@ -1008,6 +1193,8 @@ void HollowKnight::Jump(float fTime)
 void HollowKnight::JumpEnd(float fTime)
 {
 	m_pMovement->SetMoveSpeed(500.f);
+	m_fNormalSpeed = 500.f;
+
 	m_fJumpTime = 0.f;
 	m_bFalling = false;
 	m_fGravitySpeed = 20.f;
@@ -1016,6 +1203,11 @@ void HollowKnight::JumpEnd(float fTime)
 	{
 		SetCurrentState(PS_LAND);
 		m_bHitStage = true;
+
+		EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+			Vector3(0.f, 0.f, GetRelativeRot().z));
+		pFireSound->SetSound("Land_Soft", "Land_Soft.wav");
+		SAFE_RELEASE(pFireSound);
 	}
 }
 
@@ -1024,6 +1216,7 @@ void HollowKnight::JumpEnd(float fTime)
 void HollowKnight::JumpOver(float fTime)
 {
 	m_pMovement->SetMoveSpeed(500.f);
+	m_fNormalSpeed = 500.f;
 	m_fGravitySpeed = 20.f;
 
 	if (true == m_bCeiling)
@@ -1099,6 +1292,12 @@ void HollowKnight::SetEffect(HKAttackEffect * attackEffect)
  	m_pAttackEffect = attackEffect;
 }
 
+
+
+
+
+
+
 void HollowKnight::SetCurrentState(PLAYER_STATE state)
 {
 	if (state == m_eState)
@@ -1113,13 +1312,19 @@ void HollowKnight::SetCurrentState(PLAYER_STATE state)
 
 	m_pAnimation->ChangeAnimation(stateName);
 
-
-
-
-	if (PS_IDLE == m_eState)
+	if (PS_WALK == m_eState)
 	{
-		int a = 0;
+		if (true == m_bOnLand)
+		{
+			//m_pFootsteps->Play();
+		}	
 	}
+	else
+	{
+		// m_pFootsteps->StopSO();
+	}
+
+	
 }
 
 void HollowKnight::ReturnSequence(float fTime)
@@ -1315,6 +1520,21 @@ void HollowKnight::SetKey()
 	GET_SINGLE(CInput)->AddActionKey("JumpOver", DIK_Z);
 	GET_SINGLE(CInput)->BindAction<HollowKnight>("JumpOver", AKS_RELEASE, this, &HollowKnight::JumpOver);
 
+	GET_SINGLE(CInput)->AddActionKey("NextStage", DIK_P);
+	GET_SINGLE(CInput)->BindAction<HollowKnight>("NextStage", AKS_PRESS, this, &HollowKnight::NextStage);
+
+	GET_SINGLE(CInput)->AddActionKey("PrevStage", DIK_O);
+	GET_SINGLE(CInput)->BindAction<HollowKnight>("PrevStage", AKS_PRESS, this, &HollowKnight::PrevStage);
+
+	GET_SINGLE(CInput)->AddActionKey("SoundTest", DIK_I);
+	GET_SINGLE(CInput)->BindAction<HollowKnight>("SoundTest", AKS_PRESS, this, &HollowKnight::SoundTestOn);
+
+	GET_SINGLE(CInput)->AddActionKey("SoundTest2", DIK_U);
+	GET_SINGLE(CInput)->BindAction<HollowKnight>("SoundTest2", AKS_PRESS, this, &HollowKnight::SoundTestOff);
+	
+
+	// GET_SINGLE(CInput)->Set(true);
+
 	//GET_SINGLE(CInput)->AddActionKey("Reverse", DIK_R);
 	//GET_SINGLE(CInput)->BindAction<HollowKnight>("Reverse", AKS_PUSH, this, &HollowKnight::Reverse);
 }
@@ -1324,20 +1544,24 @@ void HollowKnight::SetHP()
 
 	for (int i = 0; i < 5; ++i)
 	{
-		UIHP* hp = m_pScene->SpawnObject<UIHP>(Vector3(330.f + i * 70, 930.f, 0.f));
+		UIHP* hp = m_pScene->SpawnObject<UIHP>(Vector3(330.f + i * 70, 930.f, 2.f));
 
 		m_stackHP.push_back(hp);
 
 
 	}
 
+	CoinUI* ch = m_pScene->SpawnObject<CoinUI>();
+	SAFE_RELEASE(ch);
+
+	HPHead* hh = m_pScene->SpawnObject<HPHead>();
+	SAFE_RELEASE(hh);
 }
 
 void HollowKnight::UpdateCamera()
 {
 
 }
-
 
 
 
@@ -1365,6 +1589,7 @@ void HollowKnight::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fT
 
 		return;
 	}
+
 
 
 	if (true == pDest->IsStage())
@@ -1478,7 +1703,7 @@ void HollowKnight::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fT
 				m_bOnLand = false;
 				break;
 			default:
-				BOOM
+				// BOOM
 					break;
 			}
 
@@ -1735,6 +1960,11 @@ void HollowKnight::EndOverlap(CColliderBase * pSrc, CColliderBase * pDest, float
 
 	// m_pMesh->UpdateMaterialCBufferNode(OUTLINE_CBUFFER, &tBuffer);
 
+	if (nullptr == pDest)
+	{
+		return;
+	}
+
 	if (true == pDest->IsStage())
 	{
 		m_bColliding = false;
@@ -1748,4 +1978,339 @@ void HollowKnight::EndOverlap(CColliderBase * pSrc, CColliderBase * pDest, float
 	}
 }
 
+
+
+
+///////////////////////////////////////////////////////////////////////////
+
+
+
+
+void HollowKnight::CameraControl(float fTime)
+{
+
+
+	float maxX = (m_iStageNumber-1) * 10000.f + m_fStageSizeX - _RESOLUTION.iWidth * 0.5f; // 우
+	float maxY = 0.f - _RESOLUTION.iHeight * 0.5f - 100.f; // 상
+	float minX = (m_iStageNumber - 1) * 10000.f + _RESOLUTION.iWidth * 0.5f; // 좌
+	float minY = -m_fStageSizeY + _RESOLUTION.iHeight * 0.5f - 100.f; // 하
+
+	bool check = false;
+
+	Vector3 pos = GetWorldPos();
+
+	float newX = pos.x;
+	float newY = pos.y;
+	float newZ = pos.z;
+
+	// 우 보다 크면 고정
+	if (pos.x >= maxX)
+	{
+		//newX = maxX;
+		check = true;
+
+		// m_pCamera->SetRelativePos(maxX + maxX - newX, _RESOLUTION.iHeight / -2.f + 100.f, -10.f);
+		m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f + maxX - newX, _RESOLUTION.iHeight / -2.f + 100.f, -10.f);
+
+		// 상 보다 크면 고정
+		if (pos.y >= maxY)
+		{
+			check = true;
+
+			m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f + maxX - newX, _RESOLUTION.iHeight / -2.f + 100.f + maxY - newY, -10.f);
+		}
+		else if (pos.y <= minY)
+		{
+			m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f + maxX - newX, _RESOLUTION.iHeight / -2.f + 100.f + minY - newY, -10.f);
+
+			check = true;
+		}
+	}
+	// 좌 보다 작으면 고정
+	else if (pos.x <= minX)
+	{
+		//newX = minX;
+		check = true;
+
+		m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f + minX - newX, _RESOLUTION.iHeight / -2.f + 100.f, -10.f);
+
+		// 상 보다 크면 고정
+		if (pos.y >= maxY)
+		{
+			check = true;
+
+			m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f + minX - newX, _RESOLUTION.iHeight / -2.f + 100.f + maxY - newY, -10.f);
+		}
+		else if (pos.y <= minY)
+		{
+			m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f + minX - newX, _RESOLUTION.iHeight / -2.f + 100.f + minY - newY, -10.f);
+
+			check = true;
+		}
+	}
+	else
+	{
+		if (pos.y >= maxY)
+		{
+			check = true;
+
+			m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f , _RESOLUTION.iHeight / -2.f + 100.f + maxY - newY, -10.f);
+		}
+		else if (pos.y <= minY)
+		{
+			m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f , _RESOLUTION.iHeight / -2.f + 100.f + minY - newY, -10.f);
+
+			check = true;
+		}
+	}
+
+	
+
+
+	// 바꾸기
+	if (true == check)
+	{
+		// m_pCamera->SetWorldPos(newX, newY, newZ);
+		// m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f + minX - newX, _RESOLUTION.iHeight / -2.f + 100.f, -10.f);
+	}
+	else
+	{
+		m_pCamera->SetRelativePos(_RESOLUTION.iWidth / -2.f, _RESOLUTION.iHeight / -2.f + 100.f, -10.f);
+	}
+
+
+
+
+	
+
+}
+
+void HollowKnight::CameraShake(float fTime)
+{
+	if (true == m_bShake)
+	{
+		//// 처음 들어옴
+		if (0.f == m_fShakeTime)
+		{
+			
+		}
+
+		m_vPrevPos = m_pCamera->GetRelativePos();
+
+		float start = 0.1f;
+		float gap = 0.05f;
+
+		m_fShakeTime += fTime;
+
+		// 90도를 30분의 1로 나눈다.
+		float x = RandomNumber::GetRandomNumber(1, m_iIntensity) - 1;
+		float y = RandomNumber::GetRandomNumber(1, m_iIntensity) - 1;
+
+		// x *= 30.f;
+		// y *= 30.f;
+
+		int dirX = RandomNumber::GetRandomNumber(1, 2);
+		int dirY = RandomNumber::GetRandomNumber(1, 2);
+
+		if (2 == dirX)
+		{
+			dirX = -1;
+		}
+		if (2 == dirY)
+		{
+			dirY = -1;
+		}
+
+		m_pCamera->SetRelativePos(m_vPrevPos + Vector3(GetWorldAxis(AXIS_X) * dirX * x + GetWorldAxis(AXIS_Y) * dirY * y));
+
+		if (m_fShakeTime >= m_fShakeTotalTime)
+		{
+			m_fShakeTime = 0.f;
+			m_bShake = false;
+		}
+		//else if (m_fShakeTime <= start) // 0.1
+		//{
+		//	m_pCamera->
+		//}
+		//else if (m_fShakeTime >= start + gap) // 0.2
+		//{
+
+		//}
+		//else if (m_fShakeTime >= start + gap * 2) // 3
+		//{
+
+		//}
+		//else if (m_fShakeTime >= start + gap * 3) // 4
+		//{
+
+		//}
+		//else if (m_fShakeTime >= start) // 5
+		//{
+
+		//}
+	}
+
+
+
+}
+
+void HollowKnight::CameraShakeOn(float fSetTime, int iIntensity)
+{
+	if (m_iStageNumber == 5 && iIntensity == 10)
+	{
+		return;
+	}
+
+	m_bShake = true;
+	m_fShakeTotalTime = fSetTime;
+	m_iIntensity = iIntensity;
+}
+
+
+
+
+void HollowKnight::SetStage(int iStage, bool bStart)
+{
+	/*DESTROY_SINGLE(CInput);
+	DESTROY_SINGLE(CCollisionManager);*/
+
+	// GET_SINGLE(CCollisionManager)->SetSkip(true);
+
+	/*CScene*	pNextScene = GET_SINGLE(CSceneManager)->CreateNextScene();
+
+	pNextScene->SetGameMode<HKMode>();
+	HKMode* mode = (HKMode*)pNextScene->GetGameMode();
+
+
+	mode->SetMode(iStage, bStart, iHP, iCoin);*/
+
+	PlaceAt(iStage, bStart);
+
+	m_iStageNumber = iStage;
+}
+
+void HollowKnight::GoToNext()
+{
+	m_bNext = true;
+}
+
+void HollowKnight::GoToPrev()
+{
+	m_bPrev = true;
+}
+
+void HollowKnight::NextStage(float fTime)
+{
+	SetStage(++m_iStageNumber, true);
+	m_bNext = false;
+}
+
+void HollowKnight::PrevStage(float fTime)
+{
+	SetStage(--m_iStageNumber, false);
+	m_bNext = false;
+}
+
+
+void HollowKnight::PlaceStart()
+{
+	SetStage(m_iStageNumber, true);
+}
+
+void HollowKnight::SetSoulEffect(float fTime)
+{
+
+		int randomX =  RandomNumber::GetRandomNumberTime(1, 3840) - 1920;
+		int randomY = RandomNumber::GetRandomNumberTime(1, 2160) - 1080;
+
+		SoulParticle* soul = m_pScene->SpawnObject<SoulParticle>(
+			GetWorldPos() + Vector3(randomX, randomY, 0.f)
+			);
+
+		SAFE_RELEASE(soul);
+}
+
+void HollowKnight::SetBugEffect(float fTime)
+{
+	int prob = RandomNumber::GetRandomNumberTime(1, 30);
+
+	// 200분의 1
+	if (1 == prob)
+	{
+		float randomX = (float)RandomNumber::GetRandomNumberTime(1, 1920) - 960;
+		float randomY = (float)RandomNumber::GetRandomNumberTime(1, 1080) - 540;
+
+		// -960~960
+		// 음수라면
+		if (randomX <= 0)
+		{
+			randomX -= 960.f;
+		}
+		else
+		{
+			randomX += 960.f;
+		}
+
+		if (randomY <= 0)
+		{
+			randomY -= 540.f;
+		}
+		else
+		{
+			randomY += 540.f;
+		}
+
+		BugParticle* soul = m_pScene->SpawnObject<BugParticle>(
+			GetWorldPos() + Vector3(randomX, randomY, 0.f)
+			);
+
+		SAFE_RELEASE(soul);
+
+	}
+
+	
+}
+
+//void HollowKnight::SetBright(float fTime)
+//{
+//	if (true == m_bBright)
+//	{
+//		m_fBrightTime += fTime;
+//
+//		if (m_fBrightTime >= m_fBrightTotalTime)
+//		{
+//			m_fBrightTime = 0.f;
+//			m_bBright = false;
+//		}
+//
+//		// 어두워지기
+//		if (m_fBrightTime >= m_fBrightTotalTime * 0.5f)
+//		{
+//
+//		}
+//		// 밝아지기
+//	}
+//}
+
+
+
+void HollowKnight::SoundTestOn(float fTime)
+{
+	
+}
+
+void HollowKnight::SoundTestOff(float fTime)
+{
+	m_pFootsteps->StopSO();
+}
+
+void HollowKnight::SetEffectSound(const string& strKey, const char* pFileName)
+{
+	EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+
+	pFireSound->SetSound(strKey, pFileName);
+
+	SAFE_RELEASE(pFireSound);
+}
 

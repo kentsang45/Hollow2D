@@ -11,6 +11,7 @@ public:
 	static unsigned int TimeRandomUInt();
 	static void SetSeed(unsigned int seed);
 	static int GetRandomNumber(int min, int max);
+	static int GetRandomNumberTime(int min, int max);
 
 private:
 	RandomNumber() {}

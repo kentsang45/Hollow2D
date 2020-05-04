@@ -93,11 +93,11 @@ public:
 
 		m_pGameMode->m_pScene = this;
 
-		if (!m_pGameMode->Init())
+		/*if (!m_pGameMode->Init())
 		{
 			SAFE_DELETE(m_pGameMode);
 			return nullptr;
-		}
+		}*/
 
 		return (T*)m_pGameMode;
 	}

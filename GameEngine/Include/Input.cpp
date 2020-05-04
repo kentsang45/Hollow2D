@@ -27,7 +27,9 @@ CInput::CInput()	:
 	m_pMouseTexture(nullptr),
 	m_pAlphaBlend(nullptr),
 	m_bShowCursor(true),
-	m_fDoubleKeyTime(0.5f)
+	m_fDoubleKeyTime(0.5f),
+	m_bMouseClick(false),
+	m_pOnMouseObj(nullptr)
 {
 }
 
@@ -97,6 +99,26 @@ bool CInput::LButtonRelease() const
 bool CInput::RButtonRelease() const
 {
 	return m_tMouseInfo[MT_RBUTTON].bOnEvent[KS_RELEASE];
+}
+
+bool CInput::IsMouseClick() const
+{
+	return m_bMouseClick;
+}
+
+CGameObject * CInput::IsOnMouseObj() const
+{
+	return m_pOnMouseObj;
+}
+
+void CInput::SetMouseClick(bool bClick)
+{
+	m_bMouseClick = bClick;
+}
+
+void CInput::SetOnMouseObj(CGameObject * pObj)
+{
+	m_pOnMouseObj = pObj;
 }
 
 void CInput::SetDoubleKeyTime(float fTime)

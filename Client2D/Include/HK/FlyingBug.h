@@ -43,6 +43,10 @@ public:
 
 	void RandomIdle(float fTime);
 
+	void SetStageNumber(int stage) { m_iStageNumber = stage; }
+
+	void GetHitSound();
+	void DeathSound();
 protected:
 	class HollowKnight* m_pHK;
 
@@ -135,6 +139,17 @@ protected:
 
 	bool m_bBounceLeft = false;
 
+	int m_iStageNumber = 0;
+
+	string m_strSoundName;
+	string m_strSoundFileName;
+
+	class SoundObject* m_pFootsteps = nullptr;
+
+	bool m_bWalkSound = false;
+
+	float m_fSoundTime = 0.f;
+	float m_fSoundTotalTime = 1.75f;
 };
 
 

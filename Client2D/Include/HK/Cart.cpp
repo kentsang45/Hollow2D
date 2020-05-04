@@ -23,6 +23,8 @@
 
 #include "HollowKnight.h"
 
+#include "EffectSound.h"
+
 Cart::Cart()
 	: m_pMesh(nullptr)
 	, m_pAnimation(nullptr)
@@ -124,7 +126,7 @@ void Cart::PlaceAt(int sizeX, int sizeY, float leftTopX, float leftTopY, int iSt
 
 	m_iStyle = iStyle;
 
-	float X = (200) * 0.5f + leftTopX * 50.f;
+	float X = (m_iStageNumber - 1) * 10000.f + (200) * 0.5f + leftTopX * 50.f;
 	float Y = (200) * 0.5f + leftTopY * 50.f;
 
 	m_bCart = bCart;
@@ -132,7 +134,7 @@ void Cart::PlaceAt(int sizeX, int sizeY, float leftTopX, float leftTopY, int iSt
 	if (true == bCart)
 	{
 		m_strAniName = "CART";
-		X = (200) * 0.5f + leftTopX * 50.f;
+		X = (m_iStageNumber - 1) * 10000.f + (200) * 0.5f + leftTopX * 50.f;
 		Y = (200) * 0.5f + leftTopY * 50.f;
 
 
@@ -140,7 +142,7 @@ void Cart::PlaceAt(int sizeX, int sizeY, float leftTopX, float leftTopY, int iSt
 	else
 	{
 		m_strAniName = "BARREL";
-		X = (100) * 0.5f + leftTopX * 50.f;
+		X = (m_iStageNumber - 1) * 10000.f + (100) * 0.5f + leftTopX * 50.f;
 		Y = (100) * 0.5f + leftTopY * 50.f;
 
 		m_pMesh->SetRelativeScale(150.f, 150.f, 1.f);
@@ -262,7 +264,29 @@ void Cart::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 			}
 		}
 
+		
 
+		EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+			Vector3(0.f, 0.f, GetRelativeRot().z));
+
+		if (false == m_bCart)
+		{
+			m_strSoundName = "Cart_Break";
+			m_strSoundFileName = m_strSoundName;
+			m_strSoundFileName.append(".wav");
+		}
+		else
+		{
+			m_strSoundName = "Barrel_Break";
+			m_strSoundFileName = m_strSoundName;
+			m_strSoundFileName.append(".wav");
+		}
+
+
+
+		pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+		SAFE_RELEASE(pFireSound);
 
 
 

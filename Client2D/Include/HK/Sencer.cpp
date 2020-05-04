@@ -44,9 +44,10 @@ bool Sencer::Init()
 	m_pBody->AddEndOverlapCallback<Sencer>(this, &Sencer::OffBlock);
 	m_pBody->SetCollisionProfile("Sencer");
 
-	m_pBody->SetPlayer(true);
-
 	m_pBody->EnableOverlap(true);
+	m_pBody->SetSencer(true);
+
+	m_pBody->SetPlayer(false);
 
 	m_pMovement = CGameObject::CreateComponent<CCharacterMovementComponent>("Movement");
 	m_pMovement->SetUpdateComponent(m_pBody);
@@ -98,6 +99,10 @@ void Sencer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 		int a = 0;
 	}
 	
+	if ("Object" == pDest->GetCollisionProfile()->strName)
+	{
+		return;
+	}
 
 	if (true == pDest->IsStage())
 	{
@@ -114,9 +119,14 @@ void Sencer::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 void Sencer::OffBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 {
-	if (4 == m_iStyle)
+	if (2 == m_iStyle)
 	{
 		int a = 0;
+	}
+
+	if ("Object" == pDest->GetCollisionProfile()->strName)
+	{
+		return;
 	}
 
 	if (true == pDest->IsStage())

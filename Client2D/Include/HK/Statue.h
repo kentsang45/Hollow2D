@@ -39,10 +39,18 @@ private:
 	string m_strAniName;
 	string m_strBaseName;
 
+	string m_strSoundName;
+	string m_strSoundFileName;
+
 	int m_iSizeX = 0;
 	int m_iSizeY = 0;
 
 	int m_iStyle = 0;
+
+	/////////////////////////////////////////////////////////////////////////
+public:
+	void SetStageNumber(int stage) { m_iStageNumber = stage; }
+	int m_iStageNumber = 0;
 };
 
 

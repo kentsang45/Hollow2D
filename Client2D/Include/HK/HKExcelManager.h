@@ -18,7 +18,7 @@ public:
 	bool LoadStage(const TCHAR* path, class HKTileMap* tileMap);
 
 	// 큰 콜라이더
-	bool LoadStage(const TCHAR* path, class CScene* pScene);
+	bool LoadStage(const TCHAR* path, class CScene* pScene, int iStage);
 
 
 

@@ -26,11 +26,16 @@ int APIENTRY wWinMain(_In_ HINSTANCE hInstance,
 	// pScene->SetGameMode<CMainGameMode>();
 	// pScene->SetGameMode<CStartGameMode>();
 
-	pScene->SetGameMode<HKMode>();
+	HKMode* mode = pScene->SetGameMode<HKMode>();
+
+	if (!pScene->GetGameMode()->Init())
+	{
+		pScene = nullptr;
+	}
 
 	pScene->Begin();
 
-
+	// mode->SetMode(1, true, 5, 0);
 
 	int iRet = GET_SINGLE(CEngine)->Run();
 

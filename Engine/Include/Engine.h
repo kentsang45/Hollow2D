@@ -15,7 +15,13 @@ private:
 
 	bool m_bEditorBegin;
 
+	bool m_bCollisionSkip = false;
+
 public:
+	void SetSkip(bool skip) { m_bCollisionSkip = skip; }
+
+
+
 	bool IsEditorBegin()	const
 	{
 		return m_bEditorBegin;

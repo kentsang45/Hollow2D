@@ -48,7 +48,12 @@ bool CCollisionManager::Init()
 
 	CreateProfile("Static", "Static");
 
-	CreateSection(Vector3(0.f, 0.f, 0.f), Vector3(10000.f, 10000.f, 1.f));
+	CreateSection(Vector3(0.f, -10000.f, 0.f), Vector3(50000.f, 10.f, 1.f));
+	/*CreateSection(Vector3(10000.f, 0.f, 0.f),  Vector3(20000.f, 0.f, 1.f));
+	CreateSection(Vector3(20000.f, 0.f, 0.f),  Vector3(30000.f, 0.f, 1.f));
+	CreateSection(Vector3(30000.f, 0.f, 0.f),  Vector3(40000.f, 0.f, 1.f));
+	CreateSection(Vector3(40000.f, 0.f, 0.f),  Vector3(50000.f, 0.f, 1.f));*/
+
 
 	return true;
 }
@@ -56,6 +61,7 @@ bool CCollisionManager::Init()
 bool CCollisionManager::CreateSection(const Vector3& vMin, const Vector3& vMax)
 {
 	if (!m_pSectionManager->CreateSection(vMin, vMax))
+		BOOM;
 		return false;
 
 	return true;
@@ -180,6 +186,12 @@ void CCollisionManager::ChangeScene()
 
 void CCollisionManager::Collision(float fTime)
 {
+	if (true == m_bSkip)
+	{
+		return;
+	}
+
+
 	auto	iter = m_ColliderList.begin();
 	auto	iterEnd = m_ColliderList.end();
 
@@ -246,6 +258,8 @@ void CCollisionManager::Collision(float fTime)
 			m_pPrevMouseCollision->CallEndOverlap(nullptr, fTime);
 			m_pPrevMouseCollision->CollisionMouse(false);
 			m_pPrevMouseCollision = nullptr;
+
+			GET_SINGLE(CInput)->SetMouseClick(true);
 		}
 	}
 
@@ -255,6 +269,20 @@ void CCollisionManager::Collision(float fTime)
 		m_pPrevMouseCollision->CallEndOverlap(nullptr, fTime);
 		m_pPrevMouseCollision->CollisionMouse(false);
 		m_pPrevMouseCollision	= nullptr;
+		GET_SINGLE(CInput)->SetMouseClick(false);
+	}
+	else
+	{
+		GET_SINGLE(CInput)->SetMouseClick(false);
+	}
+
+	if (m_pCurrentMouseCollision)
+	{
+		GET_SINGLE(CInput)->SetOnMouseObj(m_pCurrentMouseCollision->GetOwner());
+	}
+	else
+	{
+		GET_SINGLE(CInput)->SetOnMouseObj(nullptr);
 	}
 
 	m_pPrevMouseCollision	= m_pCurrentMouseCollision;

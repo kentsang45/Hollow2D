@@ -87,7 +87,7 @@ void TestStage::Update(float fTime)
 
 void TestStage::Render(float fTime)
 {
-	// CGameObject::Render(fTime);
+	CGameObject::Render(fTime);
 }
 
 void TestStage::SetScale(const Vector3 & vScale)
@@ -99,7 +99,7 @@ void TestStage::SetScale(const Vector3 & vScale)
 void TestStage::PlaceAt(int sizeX, int sizeY, int leftTopX, int leftTopY)
 {
 	// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
-	float X = (sizeX * 50.f) * 0.5f + leftTopX * 50.f;
+	float X = (m_iStageNumber - 1) * 10000.f + (sizeX * 50.f) * 0.5f + leftTopX * 50.f;
 	float Y = (sizeY * 50.f) * 0.5f + leftTopY * 50.f;
 
 	m_pMesh->SetRelativeScale(sizeX * 50.f, sizeY * 50.f, 1.f);

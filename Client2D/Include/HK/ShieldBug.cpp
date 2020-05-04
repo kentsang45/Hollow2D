@@ -16,7 +16,7 @@
 
 #include "../RandomNumber.h"
 
-
+#include "Coin.h"
 
 ShieldBug::ShieldBug()
 {
@@ -397,6 +397,20 @@ void ShieldBug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 	else
 	{
 		Bug::OnBlock(pSrc, pDest, fTime);
+
+		if (0 == m_iHP && false== m_bDead)
+		{
+			int count = RandomNumber::GetRandomNumber(1, 3);
+
+			if (1 == count)
+			{
+				Coin* coin = m_pScene->SpawnObject<Coin>(GetWorldPos());
+				SAFE_RELEASE(coin);
+
+			}
+
+
+		}
 	}
 
 }

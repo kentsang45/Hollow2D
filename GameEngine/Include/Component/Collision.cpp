@@ -12,19 +12,32 @@ bool CCollision::CollisionRectToRect(CColliderRect * pSrc, CColliderRect * pDest
 	CColliderRect* dest = pDest;
 
 	// src에 항상 Monster가 와야 한다.
-	if (pDest->GetCollisionProfile()->strName == "Monster" && pSrc->GetCollisionProfile()->strName == "Stage")
+	//if (pDest->GetCollisionProfile()->strName == "Monster" && pSrc->GetCollisionProfile()->strName == "Stage")
+	//{
+	//	src = pDest;
+	//	dest = pSrc;
+	//}
+
+	//// src에 항상 Particle가 와야 한다.
+	//else if (pDest->GetCollisionProfile()->strName == "Particle" && pSrc->GetCollisionProfile()->strName == "Stage")
+	//{
+	//	src = pDest;
+	//	dest = pSrc;
+	//}
+	//else
+	if (pSrc->GetCollisionProfile()->strName == "Stage")
 	{
 		src = pDest;
 		dest = pSrc;
 	}
 
-	// src에 항상 Particle가 와야 한다.
-	else if (pDest->GetCollisionProfile()->strName == "Particle" && pSrc->GetCollisionProfile()->strName == "Stage")
+	if (pDest->IsSencer())
 	{
 		src = pDest;
 		dest = pSrc;
 	}
-		
+
+
 	if (pSrc->GetCollisionProfile()->strName == "Particle"
 		|| pDest->GetCollisionProfile()->strName == "Particle")
 	{

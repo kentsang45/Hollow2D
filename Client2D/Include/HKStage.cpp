@@ -77,7 +77,7 @@ void HKStage::Update(float fTime)
 	Vector3 hkPos = m_pHK->GetWorldPos();
 	
 	float hkX = hkPos.x;
-	float centerX = m_iSizeX * 0.5f;
+	float centerX = m_iSizeX * 0.5f + ((m_iStage - 1 ) * 10000.f) ;
 	float centerY = m_iSizeY * 0.5f;
 
 	float distance = hkX - centerX;
@@ -117,7 +117,15 @@ void HKStage::Update(float fTime)
 
 void HKStage::Render(float fTime)
 {
-	CGameObject::Render(fTime);
+	if (m_pHK->GetStageNumber() == m_iStage)
+	{
+		if (2 == m_pHK->GetStageNumber())
+		{
+			int a = 0;
+		}
+
+		CGameObject::Render(fTime);
+	}
 }
 
 void HKStage::SetScale(const Vector3 & vScale)
@@ -128,11 +136,11 @@ void HKStage::SetScale(const Vector3 & vScale)
 // Z가 낮을수록 먼저 렌더링
 void HKStage::PlaceAt(int level, int layerLevel)
 {
-
+	m_iStage = level;
 
 	float X = 0.f;
 	float Y = 0.f;
-	int sizeX = 0;
+	int sizeX = 0 + (level-1) * 10000;
 	int sizeY = 0;
 
 	switch (level)
@@ -141,8 +149,8 @@ void HKStage::PlaceAt(int level, int layerLevel)
 		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
 		sizeX = 6700;
 		sizeY = 1800;
-		X = 6700 * 0.5f;
-		Y = 1800 * 0.5f;
+		X = (level - 1) * 10000 + sizeX * 0.5f;
+		Y = sizeY * 0.5f;
 
 		m_pMesh->SetRelativeScale(6700, 1800.f, 1.f);
 
@@ -196,10 +204,10 @@ void HKStage::PlaceAt(int level, int layerLevel)
 		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
 		sizeX = 5200;
 		sizeY = 1750;
-		X = sizeX * 0.5f;
+		X = (level - 1) * 10000 + sizeX * 0.5f;
 		Y = sizeY * 0.5f;
 
-		m_pMesh->SetRelativeScale((float)sizeX, (float)sizeY, 1.f);
+		m_pMesh->SetRelativeScale((float)5200, (float)1750, 1.f);
 
 		switch (layerLevel)
 		{
@@ -244,9 +252,9 @@ void HKStage::PlaceAt(int level, int layerLevel)
 		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
 		sizeX = 1950;
 		sizeY = 4800;
-		X = sizeX * 0.5f;
+		X = (level - 1) * 10000 + sizeX * 0.5f;
 		Y = sizeY * 0.5f;
-		m_pMesh->SetRelativeScale((float)sizeX, (float)sizeY, 1.f);
+		m_pMesh->SetRelativeScale((float)1950, (float)4800, 1.f);
 
 		switch (layerLevel)
 		{
@@ -292,10 +300,10 @@ void HKStage::PlaceAt(int level, int layerLevel)
 		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
 		sizeX = 6900;
 		sizeY = 1800;
-		X = sizeX  * 0.5f;
+		X = (level - 1) * 10000 + sizeX  * 0.5f;
 		Y = sizeY  * 0.5f;
 
-		m_pMesh->SetRelativeScale((float)sizeX, (float)sizeY, 1.f);
+		m_pMesh->SetRelativeScale((float)6900, (float)1800, 1.f);
 
 		switch (layerLevel)
 		{
@@ -341,9 +349,9 @@ void HKStage::PlaceAt(int level, int layerLevel)
 		// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
 		sizeX = 5000;
 		sizeY = 1950;
-		X = sizeX * 0.5f;
+		X = (level - 1) * 10000 + sizeX * 0.5f;
 		Y = sizeY * 0.5f;
-		m_pMesh->SetRelativeScale((float)sizeX, (float)sizeY, 1.f);
+		m_pMesh->SetRelativeScale((float)5000, (float)1950, 1.f);
 
 		switch (layerLevel)
 		{

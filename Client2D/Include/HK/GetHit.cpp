@@ -12,7 +12,7 @@
 
 #include "HKMode.h"
 
-
+#include "../RandomNumber.h"
 
 
 
@@ -96,7 +96,7 @@ void GetHit::Start(float fTime, const Vector3 & vPos)
 {
 }
 
-void GetHit::SetAnimation(int style)
+void GetHit::SetAnimation(int style, bool bNormal)
 {
 	if (0 == style)
 	{
@@ -104,8 +104,19 @@ void GetHit::SetAnimation(int style)
 	}
 	else if (1 == style)
 	{
+		float scale = (float)RandomNumber::GetRandomNumber(120, 220);
+
 		m_pAnimation->ChangeAnimation("EFFECT_BLOOD");
-		m_pMesh->SetRelativeScale(150.f, 150.f, 1.f);
+		m_pMesh->SetRelativeScale(scale, scale, 1.f);
+		m_pMesh->SetPivot(0.5f, 0.53f, 0.f);
+
+		if (true == bNormal)
+		{
+			float scale = (float)RandomNumber::GetRandomNumber(70, 100);
+
+			m_pMesh->SetRelativeScale(scale, scale, 1.f);
+		}
+
 	}
 	else
 	{

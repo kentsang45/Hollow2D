@@ -82,7 +82,13 @@ void CStaticMeshComponent::SetStaticMesh(CStaticMesh * pMesh)
 
 void CStaticMeshComponent::SetMaterial(CMaterial * pMaterial)
 {
-
+	//if (nullptr != m_pMaterial)
+	//{
+	//	SAFE_RELEASE(m_pMaterial);
+	//	m_pMaterial = new CMaterial;
+	//	m_pMaterial->Init();
+	//}
+	
 	m_pMaterial->CopyMaterial(pMaterial);
 
 	if (m_pMaterial && m_pAnimation2D)

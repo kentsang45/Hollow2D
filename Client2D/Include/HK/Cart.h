@@ -37,6 +37,8 @@ private:
 	bool m_bDead = false;
 
 	string m_strAniName;
+	string m_strSoundName;
+	string m_strSoundFileName;
 
 	int m_iSizeX = 0;
 	int m_iSizeY = 0;
@@ -44,6 +46,11 @@ private:
 	int m_iStyle = 0;
 
 	bool m_bCart = true;
+
+	/////////////////////////////////////////////////////////////////////////
+public:
+	void SetStageNumber(int stage) { m_iStageNumber = stage; }
+	int m_iStageNumber = 0;
 };
 
 

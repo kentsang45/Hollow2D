@@ -79,6 +79,21 @@
     <Filter Include="HK\03. Effect\03. FalseKing">
       <UniqueIdentifier>{bfc39c44-25f1-4a7f-ba69-7d4d02497431}</UniqueIdentifier>
     </Filter>
+    <Filter Include="HK\04. Object\08. Coin">
+      <UniqueIdentifier>{7cd834af-3463-4eec-8dba-4eb8e6e816b9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HK\03. Effect\04. Darkness">
+      <UniqueIdentifier>{767a94a8-9dd4-4737-b8da-dabdd88a877f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HK\03. Effect\00.">
+      <UniqueIdentifier>{3182d34c-f1c7-4900-a9d8-4f8e9fb83bdf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HK\03. Effect\05. CoinEffect">
+      <UniqueIdentifier>{e96fb860-a2d8-47bb-a0ec-bfed59c528a2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="HK\04. Object\09. Door">
+      <UniqueIdentifier>{3f50d4d9-234a-4a8d-b99d-d7d4742d018a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -120,18 +135,6 @@
     <ClCompile Include="RandomNumber.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="HK\BlackSoftEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\BurstEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\CrackEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\DustEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
     <ClCompile Include="HK\FireBall.cpp">
       <Filter>HK\03. Effect\01. FireBall</Filter>
     </ClCompile>
@@ -150,15 +153,6 @@
     <ClCompile Include="HK\HealStart.cpp">
       <Filter>HK\03. Effect\02. Heal</Filter>
     </ClCompile>
-    <ClCompile Include="HK\GetHit.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\HitEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\HKAttackEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
     <ClCompile Include="HK\HKButton.cpp">
       <Filter>HK\02. UI</Filter>
     </ClCompile>
@@ -171,20 +165,8 @@
     <ClCompile Include="HK\HKMouse.cpp">
       <Filter>HK\02. UI</Filter>
     </ClCompile>
-    <ClCompile Include="HK\HPEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\MonsterHitEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
     <ClCompile Include="HK\Sencer.cpp">
       <Filter>HK\04. Object</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\SideEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\SoftEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
     </ClCompile>
     <ClCompile Include="HK\TestStage.cpp">
       <Filter>HK\04. Object</Filter>
@@ -218,12 +200,6 @@
     </ClCompile>
     <ClCompile Include="HK\ShieldBug.cpp">
       <Filter>HK\04. Object\01. Bug</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\BlockHitEffect.cpp">
-      <Filter>HK\03. Effect</Filter>
-    </ClCompile>
-    <ClCompile Include="HK\BlockHitB.cpp">
-      <Filter>HK\03. Effect</Filter>
     </ClCompile>
     <ClCompile Include="HK\HKTileMap.cpp">
       <Filter>HK\05. HKTileMap</Filter>
@@ -300,6 +276,93 @@
     <ClCompile Include="HK\WhiteBall.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
+    <ClCompile Include="HK\Coin.cpp">
+      <Filter>HK\04. Object\08. Coin</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\CoinUI.cpp">
+      <Filter>HK\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\Portal.cpp">
+      <Filter>HK\04. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\Switch.cpp">
+      <Filter>HK\04. Object</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\Thorns.cpp">
+      <Filter>HK\04. Object\05. Grass</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\Darkness.cpp">
+      <Filter>HK\03. Effect\04. Darkness</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BlackSoftEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BlockHitB.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BlockHitEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BurstEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\CrackEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\DustEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\GetHit.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\HitEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\HKAttackEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\HPEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\MonsterHitEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\SideEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\SoftEffect.cpp">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\LightEffect.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\HPHead.cpp">
+      <Filter>HK\02. UI</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\CoinEffect.cpp">
+      <Filter>HK\03. Effect\05. CoinEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\SoulParticle.cpp">
+      <Filter>HK\03. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\Door.cpp">
+      <Filter>HK\04. Object\09. Door</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\HitOrange.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BossText.cpp">
+      <Filter>HK\04. Object\03. Text</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\WaterDrop.cpp">
+      <Filter>HK\03. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\BugParticle.cpp">
+      <Filter>HK\03. Effect</Filter>
+    </ClCompile>
+    <ClCompile Include="HK\SoundObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Client.h">
@@ -344,18 +407,6 @@
     <ClInclude Include="RandomNumber.h">
       <Filter>소스 파일</Filter>
     </ClInclude>
-    <ClInclude Include="HK\BlackSoftEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\BurstEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\CrackEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\DustEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
     <ClInclude Include="HK\FireBall.h">
       <Filter>HK\03. Effect\01. FireBall</Filter>
     </ClInclude>
@@ -374,15 +425,6 @@
     <ClInclude Include="HK\HealStart.h">
       <Filter>HK\03. Effect\02. Heal</Filter>
     </ClInclude>
-    <ClInclude Include="HK\GetHit.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\HKAttackEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\HitEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
     <ClInclude Include="HK\HKButton.h">
       <Filter>HK\02. UI</Filter>
     </ClInclude>
@@ -395,20 +437,8 @@
     <ClInclude Include="HK\HKMouse.h">
       <Filter>HK\02. UI</Filter>
     </ClInclude>
-    <ClInclude Include="HK\HPEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\MonsterHitEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
     <ClInclude Include="HK\Sencer.h">
       <Filter>HK\04. Object</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\SideEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\SoftEffect.h">
-      <Filter>HK\03. Effect</Filter>
     </ClInclude>
     <ClInclude Include="HK\TestStage.h">
       <Filter>HK\04. Object</Filter>
@@ -436,12 +466,6 @@
     </ClInclude>
     <ClInclude Include="HK\ShieldBug.h">
       <Filter>HK\04. Object\01. Bug</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\BlockHitEffect.h">
-      <Filter>HK\03. Effect</Filter>
-    </ClInclude>
-    <ClInclude Include="HK\BlockHitB.h">
-      <Filter>HK\03. Effect</Filter>
     </ClInclude>
     <ClInclude Include="HK\HKTileMap.h">
       <Filter>HK\05. HKTileMap</Filter>
@@ -510,6 +534,93 @@
       <Filter>HK\03. Effect\03. FalseKing</Filter>
     </ClInclude>
     <ClInclude Include="HK\WhiteBall.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Coin.h">
+      <Filter>HK\04. Object\08. Coin</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\CoinUI.h">
+      <Filter>HK\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Portal.h">
+      <Filter>HK\04. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Switch.h">
+      <Filter>HK\04. Object</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Thorns.h">
+      <Filter>HK\04. Object\05. Grass</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Darkness.h">
+      <Filter>HK\03. Effect\04. Darkness</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BlackSoftEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BlockHitB.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BlockHitEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BurstEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\CrackEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\DustEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\GetHit.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\HitEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\HKAttackEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\HPEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\MonsterHitEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\SideEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\SoftEffect.h">
+      <Filter>HK\03. Effect\00.</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\LightEffect.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\HPHead.h">
+      <Filter>HK\02. UI</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\CoinEffect.h">
+      <Filter>HK\03. Effect\05. CoinEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\SoulParticle.h">
+      <Filter>HK\03. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\Door.h">
+      <Filter>HK\04. Object\09. Door</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\HitOrange.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BossText.h">
+      <Filter>HK\04. Object\03. Text</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\WaterDrop.h">
+      <Filter>HK\03. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\BugParticle.h">
+      <Filter>HK\03. Effect</Filter>
+    </ClInclude>
+    <ClInclude Include="HK\SoundObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>

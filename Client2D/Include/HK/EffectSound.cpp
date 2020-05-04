@@ -17,6 +17,11 @@ void EffectSound::SetSound(const string & strKey, const char * pFileName)
 	m_pAudio->Play();
 }
 
+void EffectSound::SetVol(int vol)
+{
+	m_pAudio->SetVolume(vol);
+}
+
 bool EffectSound::Init()
 {
 	if (!CGameObject::Init())

@@ -10,9 +10,14 @@ private:
 	class CColliderBase*	m_pPrevMouseCollision;
 	class CColliderBase*	m_pCurrentMouseCollision;
 
+	bool m_bSkip = false;
+
 public:
+	void SetSkip(bool skip) { m_bSkip = skip; }
+	
 	void SetPrevMouseCollision(class CColliderBase* pCollider);
 	void SetCurrentMouseCollision(class CColliderBase* pCollider);
+
 
 private:
 	list<PCollisionChannel>	m_ChannelList;

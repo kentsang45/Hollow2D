@@ -84,9 +84,12 @@ bool FalseKing::Init()
 
 	m_iHP = 30;
 
-	SetCurrentState(BS_STAND);
+	SetCurrentState(BS_WALK);
 
 	m_pBody->SetMonster(true);
+
+	m_eDir = DIR_LEFT;
+	Flip(-1);
 
 	return true;
 }
@@ -102,6 +105,14 @@ void FalseKing::Begin()
 
 void FalseKing::Update(float fTime)
 {
+	if (false == m_pHK->BossOn())
+	{
+		return;
+	}
+
+
+
+
 	CGameObject::Update(fTime);
 
 	m_vHK = m_pHK->GetWorldPos();
@@ -128,6 +139,7 @@ void FalseKing::Update(float fTime)
 	switch (m_eState)
 	{
 	case BS_WALK:
+		Fall(fTime);
 		break;
 	case BS_TURN:
 		break;
@@ -288,14 +300,29 @@ void FalseKing::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 	if ("PlayerProjectile" == pDest->GetCollisionProfile()->strName)
 	{
 		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
-
 		SAFE_RELEASE(attack);
 
 		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
 
 		m_eMoveBackDir = player->GetDirection();
 
-		if (BS_GETHIT_IDLE == m_eAnimState)
+
+
+		int count = RandomNumber::GetRandomNumber(3, 6);
+		for (size_t i = 0; i < count; ++i)
+		{
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos());
+			bd->SetDir(m_eMoveBackDir);
+			SAFE_RELEASE(bd);
+		}
+		
+		if (true == m_bDead || 0 >= m_iHP)
+		{
+			return;
+		}
+
+
+		if (BS_GETHIT_IDLE == m_eAnimState && false == m_bDead)
 		{
 			SetAnim(BS_DAMAGED);
 		}
@@ -304,8 +331,6 @@ void FalseKing::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 		
 		if (m_iHP < 10)
 		{
-			m_bLowHP = true;
-
 			ResetState();
 
 	
@@ -314,6 +339,10 @@ void FalseKing::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 		
 			if (true == m_bOneChange)
 			{
+				if (false == m_bLowHP)
+				{
+					m_bLowHP = true;
+				}
 				m_iHP = 30;
 				SetCurrentState(BS_GETHIT);
 				return;
@@ -326,6 +355,11 @@ void FalseKing::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 				m_bNoGetHit = true;
 				return;
 			}
+
+			if (0 >= m_iHP)
+			{
+				SetCurrentState(BS_GETHIT);
+			}
 		}
 
 
@@ -334,26 +368,26 @@ void FalseKing::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 			return;
 		}
 
-		if (0 >= m_iHP)
-		{
-			m_bJump = true;
-			m_fMoveBackTimeMax = 0.2f;
-			m_fMoveSpeed = 300.f;
-			m_pMovement->SetMoveSpeed(m_fMoveSpeed);
-			m_bLandPhysics = true;
-			m_bJumping = false;
-			SetCurrentState(BS_DIE);
+		//if (0 >= m_iHP)
+		//{
+		///*	m_bJump = true;
+		//	m_fMoveBackTimeMax = 0.2f;
+		//	m_fMoveSpeed = 300.f;
+		//	m_pMovement->SetMoveSpeed(m_fMoveSpeed);
+		//	m_bLandPhysics = true;
+		//	m_bJumping = false;
+		//	SetCurrentState(BS_DIE);
 
-			m_pBody->SetMonster(false);
+		//	m_pBody->SetMonster(false);
 
-			m_pRightSencer->Kill();
-			m_pLeftSencer->Kill();
-			return;
-		}
-		else
-		{
-			m_bMoveBack = true;
-		}
+		//	m_pRightSencer->Kill();
+		//	m_pLeftSencer->Kill();*/
+		//	return;
+		//}
+		//else
+		//{
+		//	m_bMoveBack = true;
+		//}
 	}
 
 
@@ -367,8 +401,9 @@ void FalseKing::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 		switch (playerPos)
 		{
 		case 1: // LEFT
-			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * -2.f, 0.f, 0.f));
+			// m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * -2.f, 0.f, 0.f));
 			m_bNoRight = true;
+			SetWorldPos(GetWorldPos() + Vector3(pSrc->GetIntersect().x * -2.f, 0.f, 0.f));
 			// m_bOnLand = false;
 			break;
 		case 2: // TOP
@@ -383,11 +418,12 @@ void FalseKing::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime
 			m_bNoLeft = false;
 			m_pLeftSencer->ClearOverlap();
 			m_pRightSencer->ClearOverlap();
-
+			m_pHK->CameraShakeOn();
 			break;
 		case 3: // RIGHT
-			m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * 2.f, 0.f, 0.f));
+			//m_pMovement->AddMovement(Vector3(pSrc->GetIntersect().x * 2.f, 0.f, 0.f));
 			m_bNoLeft = true;
+			SetWorldPos(GetWorldPos() + Vector3(pSrc->GetIntersect().x * 2.f, 0.f, 0.f));
 			// m_bOnLand = false;
 			break;
 		case 4: // BOTTOM
@@ -456,20 +492,6 @@ void FalseKing::ClearState()
 void FalseKing::Stand(float fTime)
 {	
 	CheckDir();
-
-	if (true == m_bLowHP)
-	{
-		SetCurrentState(BS_ATTACKC);
-		m_bLowHP = false;
-
-		if (true == m_bOneChange)
-		{
-			m_iHP = 30;
-		}
-
-		m_bOneChange = false;
-		return;
-	}
 
 	SetAnim(BS_STAND);
 
@@ -680,6 +702,8 @@ void FalseKing::Attack(float fTime)
 
 	if (false == m_bEffect)
 	{
+		m_pHK->CameraShakeOn();
+
 		MightyEffect* hit = m_pScene->SpawnObject<MightyEffect>(GetWorldPos() + Vector3((250.f * 0.5f + 100.f) * m_eDir, -50.f, 0.f));
 		SAFE_RELEASE(hit);
 
@@ -749,6 +773,7 @@ void FalseKing::AttackB(float fTime)
 	{
 		SetAnim(BS_LAND);
 
+		
 		if (true == m_pAnimation->IsSequenceEnd())
 		{
 			SetCurrentState(BS_ATTACKC);
@@ -802,6 +827,8 @@ void FalseKing::AttackC(float fTime)
 	{
 		if (false == m_bEffect)
 		{
+			m_pHK->CameraShakeOn();
+
 			MightyEffect* hit = m_pScene->SpawnObject<MightyEffect>(GetWorldPos() + Vector3((250.f * 0.5f + 100.f) * m_eDir, -50.f, 0.f));
 			SAFE_RELEASE(hit);
 
@@ -907,9 +934,27 @@ void FalseKing::GetUp(float fTime)
 {
 	SetAnim(BS_GETUP);
 
+
+
 	// 돌아가기
 	if (m_pAnimation->IsSequenceEnd())
 	{
+		if (true == m_bLowHP)
+		{
+			SetCurrentState(BS_ATTACKB);
+			m_bLowHP = false;
+
+			if (true == m_bOneChange)
+			{
+				m_iHP = 30;
+			}
+
+			m_bOneChange = false;
+
+			return;
+		}
+
+
 		SetCurrentState(BS_STAND);
 	}
 }
@@ -936,6 +981,8 @@ void FalseKing::Die(float fTime)
 	// 마무으리
 	else if (m_fTimer3 >= 10.f)
 	{
+		m_pHK->CameraShakeOn();
+
 		SetAnim(BS_DAMAGED);
 
 		if (false == m_bEffect)
@@ -944,8 +991,8 @@ void FalseKing::Die(float fTime)
 
 			for (size_t i = 0; i < 12; ++i)
 			{
-				int x = RandomNumber::GetRandomNumber(1, 300) - 150;
-				int y = RandomNumber::GetRandomNumber(1, 300) - 150;
+				int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+				int y = RandomNumber::GetRandomNumber(1, 200) - 100;
 
 				BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
 				SAFE_RELEASE(bd);
@@ -957,6 +1004,11 @@ void FalseKing::Die(float fTime)
 				int y = RandomNumber::GetRandomNumber(1, 300) - 150;
 
 				Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+				// 0보다 작으면 반대로 날아간다.
+				if (x <= 0)
+				{
+					bd->SetDir(-1);
+				}
 				SAFE_RELEASE(bd);
 			}
 
@@ -989,10 +1041,11 @@ void FalseKing::Die(float fTime)
 
 	for (size_t i = 0; i < count; ++i)
 	{
-		int x = RandomNumber::GetRandomNumber(1, 300) - 150;
-		int y = RandomNumber::GetRandomNumber(1, 300) - 150;
+		int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+		int y = RandomNumber::GetRandomNumber(1, 200) - 100;
 
 		BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+
 		SAFE_RELEASE(bd);
 	}
 
@@ -1002,6 +1055,11 @@ void FalseKing::Die(float fTime)
 		int y = RandomNumber::GetRandomNumber(1, 300) - 150;
 
 		Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+		// 150보다 작으면 반대로 날아간다.
+		if (x <= 0)
+		{
+			bd->SetDir(-1);
+		}
 		SAFE_RELEASE(bd);
 	}
 
@@ -1048,6 +1106,11 @@ void FalseKing::Dead(float fTime)
 			int y = RandomNumber::GetRandomNumber(1, 300) - 150;
 
 			Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			// 150보다 작으면 반대로 날아간다.
+			if (x <= 0)
+			{
+				bd->SetDir(-1);
+			}
 			SAFE_RELEASE(bd);
 		}
 
@@ -1118,7 +1181,7 @@ void FalseKing::SetBarrel()
 		int x = RandomNumber::GetRandomNumber(1, 17) - 1;
 		int y = RandomNumber::GetRandomNumber(1, 6) - 1;
 
-		Vector3 pos = Vector3(27 * 50.f + 25.f + x * 100.f, -(25.f + y * 100.f), 0.f);
+		Vector3 pos = Vector3(40000.f + 27 * 50.f + 25.f + x * 100.f, -(25.f + y * 100.f), 0.f);
 
 		FireBarrel* fb = m_pScene->SpawnObject<FireBarrel>(pos);
 		SAFE_RELEASE(fb);
@@ -1128,6 +1191,16 @@ void FalseKing::SetBarrel()
 void FalseKing::ResetState()
 {
 
+}
+
+void FalseKing::Fall(float fTime)
+{
+	SetAnim(BS_JUMP);
+
+	if (true == m_bOnLand)
+	{
+		SetCurrentState(BS_STAND);
+	}
 }
 
 

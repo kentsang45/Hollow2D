@@ -13,6 +13,15 @@
 #include "MonsterHitEffect.h"
 #include "HollowKnight.h"
 
+#include "../RandomNumber.h"
+
+#include "Coin.h"
+#include "HitOrange.h"
+#include "BloodDust.h"
+#include "Blob.h"
+
+#include "EffectSound.h"
+
 Bug::Bug()
 	: m_eDir(DIR_LEFT)
 	, m_eMoveBackDir(DIR_LEFT)
@@ -59,7 +68,7 @@ bool Bug::Init()
 
 	m_pMesh->AddChild(m_pBody, TR_POS | TR_ROT);
 
-
+	m_pHK = (HollowKnight*)m_pScene->GetGameMode()->GetPlayer();
 
 
 
@@ -132,7 +141,20 @@ void Bug::Begin()
 
 void Bug::Update(float fTime)
 {
+	if (m_pHK->GetStageNumber() != m_iStageNumber)
+	{
+		return;
+	}
+
+	if (m_fWait <= 3.f)
+	{
+		m_fWait += fTime;
+		return;
+	}
+
 	CGameObject::Update(fTime);
+
+
 
 	// char	strText[256] = {};
 	// sprintf_s(strText, "LEFT = %d, RIGHT = %d\n", m_pLeftSencer->IsOverlap(), m_pRightSencer->IsOverlap());
@@ -285,7 +307,11 @@ void Bug::Update(float fTime)
 
 void Bug::Render(float fTime)
 {
-	CGameObject::Render(fTime);
+	if (m_pHK->GetStageNumber() == m_iStageNumber)
+	{
+		CGameObject::Render(fTime);
+	}
+
 }
 
 void Bug::MoveX(float fTime)
@@ -629,27 +655,59 @@ void Bug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 	if ("PlayerProjectile" == pDest->GetCollisionProfile()->strName)
 	{
-
-		
-
-		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
-
-		SAFE_RELEASE(attack);
-
-		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
-
-		m_eMoveBackDir = player->GetDirection();
-
-
-		m_iHP -= 1;
-
 		if (true == m_bDead)
 		{
 			return;
 		}
+		
+		GetHitSound();
+
+		MonsterHitEffect* attack = m_pScene->SpawnObject<MonsterHitEffect>(GetWorldPos());
+		SAFE_RELEASE(attack);
+
+		
+
+		HollowKnight* player = (HollowKnight*)(m_pScene->GetGameMode()->GetPlayer());
+		m_eMoveBackDir = player->GetDirection();
+
+		for (size_t i = 0; i < 6; ++i)
+		{
+			int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+			int y = RandomNumber::GetRandomNumber(1, 200) - 100;
+
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			bd->SetDir(m_eMoveBackDir);
+			SAFE_RELEASE(bd);
+		}
+
+		for (size_t i = 0; i < 6; ++i)
+		{
+			int x = RandomNumber::GetRandomNumber(1, 200) - 100;
+			int y = RandomNumber::GetRandomNumber(1, 200) - 100;
+
+			Blob* bd = m_pScene->SpawnObject<Blob>(GetWorldPos() + Vector3((float)x, (float)y, 0.f));
+			bd->SetNormalMonster();
+			// 0보다 작으면 반대로 날아간다.
+
+			bd->SetDir(m_eMoveBackDir);
+			
+			SAFE_RELEASE(bd);
+		}
+
+
+		m_iHP -= 1;
+
+	
 
 		if (0 >= m_iHP)
 		{
+			DeathSound();
+
+			HitOrange* ho1 = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			ho1->SetBinding();
+			SAFE_RELEASE(ho1);
+
 			m_bJump = true;
 			m_fMoveBackTimeMax = 0.2f;
 			m_fMoveSpeed = 300.f;
@@ -660,13 +718,34 @@ void Bug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 			m_pBody->SetMonster(false);
 
-			m_pRightSencer->Kill();
-			m_pLeftSencer->Kill();
+			// m_pRightSencer->Kill();
+			// m_pLeftSencer->Kill();
+
+			// 동전이 나온다.
+
+			HitOrange* ho = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			SAFE_RELEASE(ho);
+
+			int count = RandomNumber::GetRandomNumber(1, 3);
+
+			for (size_t i = 0; i < count; ++i)
+			{
+				Coin* coin = m_pScene->SpawnObject<Coin>(GetWorldPos());
+				SAFE_RELEASE(coin);
+			}		
+
 			return;
 		}
 		else
 		{
 			m_bMoveBack = true;
+
+			HitOrange* ho = m_pScene->SpawnObject<HitOrange>(pDest->GetIntersect());
+			SAFE_RELEASE(ho);
+
+			BloodDust* bd = m_pScene->SpawnObject<BloodDust>(GetWorldPos());
+			bd->SetNormalMonster();
+			SAFE_RELEASE(bd);
 		}
 	}
 
@@ -758,13 +837,47 @@ void Bug::OnBlock(CColliderBase * pSrc, CColliderBase * pDest, float fTime)
 
 void Bug::PlaceAt(int leftTopX, int leftTopY)
 {
+	
+
 	// 사이즈의 절반만큼 간다. + 여태까지 위치만큼 간다.
-	float X = (3 * 50.f) * 0.5f + leftTopX * 50.f;
+	float X = (m_iStageNumber - 1) * 10000.f + (3 * 50.f) * 0.5f + leftTopX * 50.f;
 	float Y = (3 * 50.f) * 0.5f + leftTopY * 50.f;
 	
 	// m_pMesh->SetRelativePos(X, -Y + 10.f, 0.f);
 	SetRelativePos(X, -Y + 10.f, 0.f);
 
+}
+
+void Bug::GetHitSound()
+{
+	EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+
+	
+		m_strSoundName = "enemy_damage";
+		m_strSoundFileName = m_strSoundName;
+		m_strSoundFileName.append(".wav");
+	
+
+	pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+	SAFE_RELEASE(pFireSound);
+}
+
+void Bug::DeathSound()
+{
+	EffectSound*	pFireSound = m_pScene->SpawnObject<EffectSound>(GetWorldPos() + GetWorldAxis(AXIS_Y) * 200.f,
+		Vector3(0.f, 0.f, GetRelativeRot().z));
+
+
+	m_strSoundName = "enemy_death";
+	m_strSoundFileName = m_strSoundName;
+	m_strSoundFileName.append(".wav");
+
+
+	pFireSound->SetSound(m_strSoundName, m_strSoundFileName.c_str());
+
+	SAFE_RELEASE(pFireSound);
 }
 
 

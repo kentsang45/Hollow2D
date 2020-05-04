@@ -95,7 +95,7 @@ bool CEngine::Init(HINSTANCE hInst, HWND hWnd, int iWidth, int iHeight,
 	if (!GET_SINGLE(CCollisionManager)->Init())
 		return false;
 
-	// 입력 관리자 초기화
+	//// 입력 관리자 초기화
 	if (!GET_SINGLE(CInput)->Init())
 		return false;
 
@@ -146,10 +146,15 @@ void CEngine::Logic()
 
 	GET_SINGLE(CInput)->Update(fTime);
 
-	if(Update(fTime) == SC_CHANGE)
+	SCENE_CHANGE sc = (SCENE_CHANGE)Update(fTime);
+
+	if(sc == SC_CHANGE)
 		return;
 
-	if(PostUpdate(fTime) == SC_CHANGE)
+	sc = (SCENE_CHANGE)PostUpdate(fTime);
+
+
+	if(sc == SC_CHANGE)
 		return;
 
 	GET_SINGLE(CScheduler)->Update(fTime);
@@ -186,7 +191,10 @@ void CEngine::Render(float fTime)
 
 	GET_SINGLE(CDevice)->Present();
 
+
 	GET_SINGLE(CCollisionManager)->Clear();
+	
+
 }
 
 ATOM CEngine::Register(const TCHAR * pClass, int iIconID, int iSmallIconID)

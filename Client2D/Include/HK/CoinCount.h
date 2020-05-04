@@ -12,6 +12,7 @@ public:
 
 private:
 	class CText*	m_pText;
+	class HollowKnight* m_pHK;
 
 public:
 	virtual bool Init();
